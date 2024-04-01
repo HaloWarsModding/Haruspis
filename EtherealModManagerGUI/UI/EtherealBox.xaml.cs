@@ -1,0 +1,38 @@
+﻿using System.Windows;
+
+namespace EtherealModManagerGUI.UI
+{
+    public partial class EtherealBox : Window
+    {
+        public EtherealBox(EtherealBoxDialog dialog, string title, string description, string yesText, string noText = "")
+        {
+            InitializeComponent();
+            TxtTitle.Content = title;
+            TxtDescription.Text = description;
+            BtnResultYes.Content = yesText;
+            BtnResultNo.Content = noText;
+
+            if(dialog == EtherealBoxDialog.Yes)
+            {
+                BtnResultNo.Visibility = Visibility.Collapsed;
+                BtnResultYes.Width = 118;
+            }
+        }
+
+        public enum EtherealBoxDialog
+        {
+            YesNo,
+            Yes
+        }
+
+        private void BtnResultYes_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private void BtnResultNo_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+        }
+    }
+}
