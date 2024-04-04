@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EtherealModManagerGUI"
+    xmlns:properties="clr-namespace:EtherealModManagerGUI.Properties"
         mc:Ignorable="d"
-        Title="Ethereal: Mod Manager" Height="720" Width="1280" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" Icon="/Assets/Ethereal.png" WindowStartupLocation="CenterScreen" Foreground="{x:Null}" Loaded="Window_Loaded">
+        Title="Ethereal: Mod Manager" Height="720" Width="1280" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" Icon="/Assets/Ethereal.png" WindowStartupLocation="CenterScreen" Foreground="{x:Null}" Initialized="Window_Initialized"
+   >
     <Window.OpacityMask>
         <ImageBrush ImageSource="/Assets/OpacityMask.png" Stretch="Fill"/>
     </Window.OpacityMask>
@@ -14,7 +15,8 @@
     </Window.Background>
     <Grid>
         <Image Margin="0,450,0,28" Source="/Assets/MenuBar.png" RenderTransformOrigin="0.5,1" Width="1280" Stretch="UniformToFill" HorizontalAlignment="Center"/>
-        <Button x:Name="BtnExitMainWindow" Content="" HorizontalAlignment="Left" Margin="1242,10,0,0" VerticalAlignment="Top" Height="30" Width="28" BorderBrush="{x:Null}" Click="BtnExitMainWindow_Click" Foreground="{x:Null}" Cursor="Hand">
+        <Button x:Name="BtnExitMainWindow" Content="" HorizontalAlignment="Left" Margin="1242,10,0,0" VerticalAlignment="Top" Height="30" Width="30
+" BorderBrush="{x:Null}" Click="BtnExitMainWindow_Click" Foreground="{x:Null}" Cursor="Hand">
             <Button.Background>
                 <ImageBrush ImageSource="/Assets/Exit.png" Stretch="Uniform"/>
             </Button.Background>
@@ -28,28 +30,28 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </WrapPanel.RenderTransform>
-            <Button x:Name="BtnModsWindow" Content="My Mods" HorizontalAlignment="Center" VerticalAlignment="Top" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+            <Button x:Name="BtnModsWindow" Content="{x:Static properties:Resources.BtnMods}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand" Click="BtnModsWindow_Click">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="BtnModDBWindow" Content="Browse ModDB" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+            <Button x:Name="BtnWorkshop" Content="{x:Static properties:Resources.BtnWorkshop}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="BtnSettingsWindow" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+            <Button x:Name="BtnSettingsWindow" Content="{x:Static properties:Resources.BtnSettings}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="BtnSettingsWindow_Copy" Content="Help" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+            <Button x:Name="BtnHelp" Content="{x:Static properties:Resources.BtnHelp}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
         </WrapPanel>
-        <Button x:Name="BtnPlay" Content="Play" HorizontalAlignment="Left" Margin="814,595,0,0" VerticalAlignment="Top" Height="66" Width="442" Foreground="White" FontSize="48" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Click="BtnPlay_Click">
+        <Button x:Name="BtnPlay" HorizontalAlignment="Left" Margin="814,595,0,0" VerticalAlignment="Top" Height="66" Width="442" Foreground="White" FontSize="48" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Click="BtnPlay_Click" Content="{x:Static properties:Resources.BtnPlay}">
             <Button.Background>
                 <ImageBrush ImageSource="/Assets/MenuBackground.png"/>
             </Button.Background>
@@ -65,7 +67,7 @@
                 <ImageBrush ImageSource="/Assets/ChangelogMask.png"/>
             </Rectangle.OpacityMask>
         </Rectangle>
-        <Label Content="Changelog" HorizontalAlignment="Left" Margin="872,45,0,0" VerticalAlignment="Top" Width="326" Height="48" Foreground="White" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label x:Name="LblChangelog" Content="{x:Static properties:Resources.LblChangelog}" HorizontalAlignment="Left" Margin="872,45,0,0" VerticalAlignment="Top" Width="326" Height="48" Foreground="White" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <RichTextBox x:Name="TxBoxChangelog" Margin="814,98,24,270" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="White" FontSize="18" IsDocumentEnabled="True" IsReadOnly="True" IsUndoEnabled="False" IsHitTestVisible="False" Loaded="TxBoxChangelog_Loaded">
             <FlowDocument>
                 <Paragraph>

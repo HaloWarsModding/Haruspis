@@ -1,5 +1,4 @@
 ﻿using DiscordRPC;
-using EtherealModManagerGUI.Logging;
 
 namespace EtherealModManagerGUI.Handlers
 {
@@ -11,7 +10,7 @@ namespace EtherealModManagerGUI.Handlers
         {
             client = new DiscordRpcClient("1224459522278555711");
             client.Initialize();
-            EtherealLogging.Log(EtherealLogging.LogLevel.Information, "Discord RPC client initialized.");
+            ETHLogging.Log(ETHLogging.LogLevel.Information, "Discord RPC client initialized.");
         }
 
         public static void UpdatePresence(string details, string state)
@@ -31,17 +30,17 @@ namespace EtherealModManagerGUI.Handlers
                 },
                 Buttons =
                 [
-                        new Button() { Label = "W.I.P", Url = "https://github.com/CinderellaKuru" }
+                        new Button() { Label = "W.I.P", Url = "https://github.com/HaloWarsModding/EtherealModManager" }
                 ]
             });
 
-            EtherealLogging.Log(EtherealLogging.LogLevel.Information, $"Updated Discord presence: Details = {details}, State = {state}");
+            ETHLogging.Log(ETHLogging.LogLevel.Information, $"Updated Discord presence: Details = {details}, State = {state}");
         }
 
         public static void ClearPresence()
         {
             client.ClearPresence();
-            EtherealLogging.Log(EtherealLogging.LogLevel.Information, "Cleared Discord presence.");
+            ETHLogging.Log(ETHLogging.LogLevel.Information, "Cleared Discord presence.");
         }
     }
 }

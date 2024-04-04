@@ -1,11 +1,10 @@
-﻿using EtherealModManagerGUI.Paths;
-using Serilog;
+﻿using Serilog;
 using Serilog.Events;
 using System.IO;
 
-namespace EtherealModManagerGUI.Logging
+namespace EtherealModManagerGUI
 {
-    internal class EtherealLogging
+    internal class ETHLogging
     {
         private static readonly Serilog.Core.Logger logger;
 
@@ -20,10 +19,10 @@ namespace EtherealModManagerGUI.Logging
 
         public static LogLevel MinimumLogLevel { get; set; } = LogLevel.Verbose;
 
-        static EtherealLogging()
+        static ETHLogging()
         {
             string path = $"log-{DateTime.Now:yyyyMMddHHmmss}.log";
-            string text = Path.Combine(EtherealPaths.LogDirectory, path);
+            string text = Path.Combine(ETHPath.Logging.Paths, path);
             logger = new LoggerConfiguration().MinimumLevel.Is((LogEventLevel)MinimumLogLevel).WriteTo.File(text, LogEventLevel.Verbose, "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}", null, retainedFileCountLimit: 15, fileSizeLimitBytes: 1073741824L).CreateLogger();
         }
 

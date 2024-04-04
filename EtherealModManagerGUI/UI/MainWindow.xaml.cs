@@ -1,7 +1,7 @@
-﻿using EtherealModManagerGUI.Configuration;
+﻿using EtherealModManagerGUI.Data.Dialogs;
 using EtherealModManagerGUI.Handlers;
 using EtherealModManagerGUI.UI;
-using Microsoft.Win32;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,56 +12,157 @@ namespace EtherealModManagerGUI
         public MainWindow()
         {
             InitializeComponent();
-            Game.GameExited += () => Dispatcher.Invoke(() => { BtnPlay.Content = "Play"; BtnPlay.IsHitTestVisible = true; WindowState = WindowState.Normal; Topmost = true; Topmost = false; Discord.ClearPresence(); });
-            Game.GameStarted += () => Dispatcher.Invoke(() => { if (EtherealConfig.Config.DiscordPresence) Discord.UpdatePresence("Playing", "Halo Wars: Definitive Edition"); });
+
+            Game.GameExited += OnGameExited;
+            Game.GameStarted += OnGameStarted;
         }
 
-        private void BtnExitMainWindow_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
-        private void PnlDragWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e) { if (e.ChangedButton == MouseButton.Left) this.DragMove(); }
-        private void TxBoxChangelog_Loaded(object sender, RoutedEventArgs e) => TxBoxChangelog.Document = Changelog.ToDocument();
-        private void Window_Loaded(object sender, RoutedEventArgs e) => ShowWelcomeAndDistributionMessages();
+        private void OnGameExited()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                ResetPlayButton();
+                ResetWindowState();
+                Discord.ClearPresence();
+            });
+        }
+
+        private void ResetPlayButton()
+        {
+            BtnPlay.Content = Properties.Resources.BtnPlay;
+            BtnPlay.IsHitTestVisible = true;
+        }
+
+        private void ResetWindowState()
+        {
+            WindowState = WindowState.Normal;
+            Topmost = true;
+            Topmost = false;
+        }
+
+        private void OnGameStarted()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                UpdateDiscordPresence();
+            });
+        }
+
+        private static void UpdateDiscordPresence()
+        {
+            if (ETHConfig.CurrentConfiguration.Settings.DiscordRichPresence)
+            {
+                var modName = ETHManager.currentMod.Name;
+                Discord.UpdatePresence($"Playing {modName}", "Halo Wars: Definitive Edition");
+            }
+        }
+
+        private void BtnExitMainWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void PnlDragWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+
+        private void TxBoxChangelog_Loaded(object sender, RoutedEventArgs e)
+        {
+            TxBoxChangelog.Document = Changelog.ToDocument();
+        }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(EtherealConfig.Config.CachedExePath))
+            if (string.IsNullOrWhiteSpace(ETHConfig.CurrentConfiguration.Game.GameExecutablePath))
             {
-                if (PromptForGameDetection())
+                if (DBoxes.GameNotFoundBox().ShowDialog() == true)
                 {
-                    Game.StartAndKill();
+                    Game.SilentStart();
                     return;
                 }
 
-                string selectedFilePath = PromptForGameExecutable();
-                if (!string.IsNullOrEmpty(selectedFilePath))
+                string selectedFilePath = DFiles.GameExecutable().ShowDialog() == true ? DFiles.GameExecutable().FileName : string.Empty; ;
+                if (!string.IsNullOrWhiteSpace(selectedFilePath))
                 {
-                    EtherealConfig.Config.CachedExePath = selectedFilePath;
-                    EtherealConfig.Config.Save();
+                    UpdateGameExecutablePath(selectedFilePath);
                     return;
                 }
             }
 
-            if (string.IsNullOrEmpty(EtherealConfig.Config.CachedExePath))
-                return;
-
             StartGame();
         }
 
-        private static bool PromptForGameDetection() => new EtherealBox(EtherealBox.EtherealBoxDialog.YesNo, "Game not found", "The game was not found. The program can attempt to automatically detect the game by running it for a few seconds.", "Yes", "No").ShowDialog() == true;
-        private static string PromptForGameExecutable()
+        private static void UpdateGameExecutablePath(string selectedFilePath)
         {
-            OpenFileDialog fileDialog = new()
-            {
-                Filter = "Game Executable|*.exe",
-                Title = "Select the game executable"
-            };
-            return fileDialog.ShowDialog() == true ? fileDialog.FileName : string.Empty;
-        }
-        private void StartGame() { Game.Start(); BtnPlay.Content = "Playing"; BtnPlay.IsHitTestVisible = false; WindowState = WindowState.Minimized; }
+            ETHConfig.CurrentConfiguration.Game.GameExecutablePath = selectedFilePath;
+            ETHConfig.CurrentConfiguration.Save();
 
-        private static void ShowWelcomeAndDistributionMessages()
+            ETHManifest.Clear();
+            ETHManager.TryCacheVideo();
+        }
+
+        private void BtnModsWindow_Click(object sender, RoutedEventArgs e)
         {
-            if (EtherealConfig.Config.WelcomeMessage) { new EtherealBox(EtherealBox.EtherealBoxDialog.Yes, "Welcome to Ethereal Mod Manager!", "This is a simple mod manager for Halo Wars: Definitive Edition. You can use this tool to install, update, and remove mods with ease. Enjoy!", "Got it!").ShowDialog(); EtherealConfig.Config.WelcomeMessage = false; EtherealConfig.Config.Save(); }
-            if (EtherealConfig.Config.DistributionMessage) { EtherealConfig.Config.Distribution = new EtherealBox(EtherealBox.EtherealBoxDialog.YesNo, "Distribution", "Please select your distributed version of the game. \nYou can change your distribution in the settings.", "Steam", "MS").ShowDialog() == true ? "Steam" : "MS"; EtherealConfig.Config.DistributionMessage = false; EtherealConfig.Config.Save(); }
+            ShowModsPage();
+        }
+
+        private static void ShowModsPage()
+        {
+            ModsPage modsPage = new();
+            modsPage.ShowDialog();
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            SetCulture();
+            ShowWelcomeMessage();
+            ShowDistributionMessage();
+        }
+
+        private static void SetCulture()
+        {
+            CultureInfo culture = new(ETHConfig.CurrentConfiguration.Settings.Language);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+        }
+
+        private void StartGame()
+        {
+            Game.Start();
+            SetPlayingState();
+        }
+
+        private void SetPlayingState()
+        {
+            BtnPlay.Content = Properties.Resources.BtnPlaying;
+            BtnPlay.IsHitTestVisible = false;
+            WindowState = WindowState.Minimized;
+        }
+
+        private static void ShowWelcomeMessage()
+        {
+            if (ETHConfig.CurrentConfiguration.Boxes.ShowWelcomeBox)
+            {
+                DBoxes.Welcome().ShowDialog();
+
+                ETHConfig.CurrentConfiguration.Boxes.ShowWelcomeBox = false;
+                ETHConfig.CurrentConfiguration.Save();
+            }
+        }
+
+        private static void ShowDistributionMessage()
+        {
+            if (ETHConfig.CurrentConfiguration.Boxes.ShowDistributionBox)
+            {
+                DBoxes.Distribution().ShowDialog();
+
+                ETHConfig.CurrentConfiguration.Boxes.ShowDistributionBox = false;
+                ETHConfig.CurrentConfiguration.Save();
+            }
         }
     }
 }

@@ -13,6 +13,8 @@
         <Button x:Name="BtnResultYes" Content="YES" HorizontalAlignment="Left" Margin="545,164,0,0" VerticalAlignment="Top" Width="63" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" Click="BtnResultYes_Click"/>
         <Button x:Name="BtnResultNo" Content="NO" HorizontalAlignment="Left" Margin="608,164,0,0" VerticalAlignment="Top" Width="63" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" Click="BtnResultNo_Click"/>
         <Label x:Name="TxtTitle" Content="TITLE" HorizontalAlignment="Left" VerticalAlignment="Top" Width="383" Foreground="White" Height="25" Margin="10,0,0,0" FontWeight="Bold"/>
-        <TextBlock x:Name="TxtDescription" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="DESCRIPTION" VerticalAlignment="Center" Height="129" Width="661" FontSize="16"/>
+        <Viewbox Stretch="Uniform" Margin="14,28,14,34">
+            <TextBlock x:Name="TxtDescription" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        </Viewbox>
     </Grid>
 </Window>

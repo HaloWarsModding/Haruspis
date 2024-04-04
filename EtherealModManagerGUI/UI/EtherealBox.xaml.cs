@@ -4,26 +4,29 @@ namespace EtherealModManagerGUI.UI
 {
     public partial class EtherealBox : Window
     {
+        public enum EtherealBoxDialog
+        {
+            YesNo,
+            Yes
+        }
+
         public EtherealBox(EtherealBoxDialog dialog, string title, string description, string yesText, string noText = "")
         {
             InitializeComponent();
+
             TxtTitle.Content = title;
             TxtDescription.Text = description;
             BtnResultYes.Content = yesText;
             BtnResultNo.Content = noText;
 
-            if(dialog == EtherealBoxDialog.Yes)
+            if (dialog == EtherealBoxDialog.Yes)
             {
                 BtnResultNo.Visibility = Visibility.Collapsed;
                 BtnResultYes.Width = 118;
             }
         }
 
-        public enum EtherealBoxDialog
-        {
-            YesNo,
-            Yes
-        }
+        #region UI Event Handlers
 
         private void BtnResultYes_Click(object sender, RoutedEventArgs e)
         {
@@ -34,5 +37,7 @@ namespace EtherealModManagerGUI.UI
         {
             DialogResult = false;
         }
+
+        #endregion
     }
 }

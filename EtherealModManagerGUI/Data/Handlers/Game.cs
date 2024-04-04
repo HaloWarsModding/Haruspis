@@ -1,6 +1,4 @@
-﻿using EtherealModManagerGUI.Configuration;
-using EtherealModManagerGUI.Logging;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace EtherealModManagerGUI.Handlers
 {
@@ -21,6 +19,13 @@ namespace EtherealModManagerGUI.Handlers
             StartGameProcess();
 
             await AutomaticExeScanning();
+
+            if(ETHManager.currentMod == null)
+            {
+                await ETHManifest.Clear();
+            }
+
+            ETHManager.TryCacheVideo();
         }
 
         public static async Task AutomaticExeScanning()
@@ -32,11 +37,11 @@ namespace EtherealModManagerGUI.Handlers
             }
             else
             {
-                EtherealLogging.Log(EtherealLogging.LogLevel.Warning, "Game process not found after 70 attempts.");
+                ETHLogging.Log(ETHLogging.LogLevel.Warning, "Game process not found after 70 attempts.");
             }
         }
 
-        public static async void StartAndKill()
+        public static async void SilentStart()
         {
             if (IsGameRunning())
             {
@@ -46,6 +51,9 @@ namespace EtherealModManagerGUI.Handlers
             StartGameProcess();
 
             await CatchAndCloseProcess();
+
+            await ETHManifest.Clear();
+            ETHManager.TryCacheVideo();
         }
 
         public static async Task CatchAndCloseProcess()
@@ -55,11 +63,11 @@ namespace EtherealModManagerGUI.Handlers
             {
                 HandleGameProcessFound(gameProcess);
                 gameProcess.Kill();
-                EtherealLogging.Log(EtherealLogging.LogLevel.Information, "Game process closed.");
+                ETHLogging.Log(ETHLogging.LogLevel.Information, "Game process closed.");
             }
             else
             {
-                EtherealLogging.Log(EtherealLogging.LogLevel.Warning, "Game process not found after 70 attempts.");
+                ETHLogging.Log(ETHLogging.LogLevel.Warning, "Game process not found after 70 attempts.");
             }
         }
 
@@ -73,26 +81,26 @@ namespace EtherealModManagerGUI.Handlers
             p = new Process();
             p.StartInfo.CreateNoWindow = true;
 
-            if (!string.IsNullOrEmpty(EtherealConfig.Config.CachedExePath))
+            if (!string.IsNullOrEmpty(ETHConfig.CurrentConfiguration.Game.GameExecutablePath))
             {
-                p.StartInfo.FileName = EtherealConfig.Config.CachedExePath;
+                p.StartInfo.FileName = ETHConfig.CurrentConfiguration.Game.GameExecutablePath;
             }
             else
             {
                 p.StartInfo.FileName = "cmd.exe";
 
-                if (EtherealConfig.Config.Distribution == "Steam")
+                if (ETHConfig.CurrentConfiguration.Game.CurrentDistribution == "Steam")
                 {
                     p.StartInfo.Arguments = "/C start steam://rungameid/459220";
                 }
-                else if (EtherealConfig.Config.Distribution == "MS")
+                else if (ETHConfig.CurrentConfiguration.Game.CurrentDistribution == "MS")
                 {
                     p.StartInfo.Arguments = "/C start shell:AppsFolder\\Microsoft.BulldogThreshold_8wekyb3d8bbwe!xgameFinal";
                 }
             }
 
             p.Start();
-            EtherealLogging.Log(EtherealLogging.LogLevel.Information, "Game process started.");
+            ETHLogging.Log(ETHLogging.LogLevel.Information, "Game process started.");
         }
 
         private static async Task<Process> GetGameProcess()
@@ -110,18 +118,18 @@ namespace EtherealModManagerGUI.Handlers
 
         private static void HandleGameProcessFound(Process gameProcess)
         {
-            EtherealConfig.Config.CachedExePath = gameProcess.MainModule.FileName;
-            EtherealConfig.Config.Save();
-            EtherealLogging.Log(EtherealLogging.LogLevel.Information, $"Game process found: {gameProcess.MainModule.FileName}");
+            ETHConfig.CurrentConfiguration.Game.GameExecutablePath = gameProcess.MainModule.FileName;
+            ETHConfig.CurrentConfiguration.Save();
+            ETHLogging.Log(ETHLogging.LogLevel.Information, $"Game process found: {gameProcess.MainModule.FileName}");
 
-            if (EtherealConfig.Config.DiscordPresence)
+            if (ETHConfig.CurrentConfiguration.Settings.DiscordRichPresence)
             {
                 GameStarted?.Invoke();
 
                 gameProcess.EnableRaisingEvents = true;
                 gameProcess.Exited += (sender, e) =>
                 {
-                    EtherealLogging.Log(EtherealLogging.LogLevel.Information, "Game process exited.");
+                    ETHLogging.Log(ETHLogging.LogLevel.Information, "Game process exited.");
                     GameExited?.Invoke();
                 };
             }
