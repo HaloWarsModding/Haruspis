@@ -1,4 +1,4 @@
-﻿namespace EtherealModManagerGUI.Data
+﻿namespace EtherealModManager.Data
 {
     class Mod
     {

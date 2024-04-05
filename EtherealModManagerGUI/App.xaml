@@ -1,7 +1,7 @@
-﻿<Application x:Class="EtherealModManagerGUI.App"
+﻿<Application x:Class="EtherealModManager.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:EtherealModManagerGUI"
+             xmlns:local="clr-namespace:EtherealModManager"
              StartupUri="/UI/MainWindow.xaml">
     <Application.Resources>
          

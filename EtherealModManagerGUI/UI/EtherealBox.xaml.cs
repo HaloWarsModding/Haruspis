@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace EtherealModManagerGUI.UI
+namespace EtherealModManager.UI
 {
     public partial class EtherealBox : Window
     {

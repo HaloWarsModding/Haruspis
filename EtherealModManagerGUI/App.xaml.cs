@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace EtherealModManagerGUI
+namespace EtherealModManager
 {
     /// <summary>
     /// Interaction logic for App.xaml

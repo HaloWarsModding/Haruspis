@@ -1,23 +1,10 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-
-namespace EtherealModManagerGUI
+﻿namespace EtherealModManager
 {
     public class Configuration
     {
         public AppConfig Settings { get; set; } = new AppConfig();
         public GameConfig Game { get; set; } = new GameConfig();
         public BoxesConfig Boxes { get; set; } = new BoxesConfig();
-
-        public void Save()
-        {
-            ETHLogging.Log(ETHLogging.LogLevel.Information, "Saving config to file");
-
-            var configJson = JsonConvert.SerializeObject(this, Formatting.Indented);
-            File.WriteAllText(ETHPath.Data.ConfigFile, configJson);
-
-            ETHLogging.Log(ETHLogging.LogLevel.Information, "Config saved successfully");
-        }
     }
 
     public class AppConfig
@@ -28,7 +15,7 @@ namespace EtherealModManagerGUI
 
     public class GameConfig
     {
-        public string ModsDirectory { get; set; } = ETHPath.Mods.Paths;
+        public string ModsDirectory { get; set; } = "TODO";
         public string CurrentDistribution { get; set; } = "Steam";
         public string GameExecutablePath { get; set; } = string.Empty;
     }

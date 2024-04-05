@@ -1,24 +1,24 @@
-﻿using EtherealModManagerGUI.Data;
+﻿using EtherealModManager.Data;
 using System.Windows;
 using System.Windows.Input;
 
-namespace EtherealModManagerGUI.UI
+namespace EtherealModManager.UI
 {
     public partial class ModsPage : Window
     {
-        private List<Mod> mods;
-
+        private readonly List<Mod> mods;
+        private readonly string yes = "Yes";
         public ModsPage()
         {
             InitializeComponent();
 
-            mods = ETHManager.Mods.GetMods();
+            mods = ETHManager.GetMods(yes);
             foreach (var mod in mods)
             {
                 ListBoxMods.Items.Add(mod.Name);
             }
 
-            Mod vanilla = new Mod { Name = "Vanilla" };
+            Mod vanilla = new() { Name = "Vanilla" };
             ListBoxMods.Items.Add(vanilla.Name);
 
             ListBoxMods.MouseDoubleClick += ListBoxMods_MouseDoubleClick;
@@ -33,7 +33,8 @@ namespace EtherealModManagerGUI.UI
 
             if (selectedMod != null)
             {
-                ETHManager.SetCurrentMod(selectedMod);
+                ETHManager eth = new(yes);
+                eth.SetCurrentMod(selectedMod);
             }
         }
 

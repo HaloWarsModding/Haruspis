@@ -1,20 +1,102 @@
-﻿using EtherealModManagerGUI.Data.Dialogs;
-using EtherealModManagerGUI.Handlers;
-using EtherealModManagerGUI.UI;
+﻿using EtherealEngine;
+using EtherealEngine.HaloWars;
+using EtherealModManager.Dialogs;
+using EtherealModManager.UI;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
-namespace EtherealModManagerGUI
+namespace EtherealModManager
 {
     public partial class MainWindow : Window
     {
+        public static Configuration CurrentConfiguration = new();
+        public string Changelog;
+        private static readonly string baseDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        public static LogWriter logWriter = new(LogLevel.Verbose, Path.Combine(baseDirectory, "data", "logs"), "EtherealModManager", 2);
+        public static LogReader logReader;
+        public static DynamicProperties dynamicProperties;
+        public static ConfigWriter configWriter;
+        public static ConfigReader configReader;
+        public static DiscordRichPresence discord;
+        public static GameProcess gameProcess;
+        public static ConvertMarkdown convertMarkdown;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            Game.GameExited += OnGameExited;
-            Game.GameStarted += OnGameStarted;
+            logReader = new LogReader(Path.Combine(baseDirectory, "data", "logs"), logWriter);
+            dynamicProperties = new DynamicProperties();
+            DynProperties.GenerateProperties(dynamicProperties);
+            discord = new DiscordRichPresence("1224459522278555711", logWriter);
+            convertMarkdown = new ConvertMarkdown();
+            Changelog = File.ReadAllText(Path.Combine(baseDirectory, "changelog.md"));
+            gameProcess = new GameProcess(logWriter);
+            if (dynamicProperties.TryGetProperty("configFile", out object configPath))
+            {
+                configWriter = new ConfigWriter((string)configPath, logWriter);
+                configReader = new ConfigReader((string)configPath, logWriter);
+            }
+            if (configReader.IsConfigFileValid())
+            {
+                configReader.ReadConfigFile<Configuration>();
+            }
+            else
+            {
+                configWriter.WriteConfigFile(CurrentConfiguration);
+                configReader.ReadConfigFile<Configuration>();
+            }
+
+            CurrentConfiguration = (Configuration)ConfigReader.ConfigObject;
+
+            GameProcess.GameExited += OnGameExited;
+            GameProcess.GameStarted += OnGameStarted;
+
+            var culture = new CultureInfo(CurrentConfiguration.Settings.Language);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+            if (CurrentConfiguration.Boxes.ShowWelcomeBox)
+            {
+                var welcomeBox = DBoxes.CreateDialogBox(DBoxType.Welcome);
+                welcomeBox.ShowDialog();
+
+                CurrentConfiguration.Boxes.ShowWelcomeBox = false;
+                configWriter.WriteConfigFile(CurrentConfiguration);
+            }
+            if (CurrentConfiguration.Boxes.ShowDistributionBox)
+            {
+                var distributionBox = DBoxes.CreateDialogBox(DBoxType.Distribution);
+                distributionBox.ShowDialog();
+
+                if (distributionBox.DialogResult == true)
+                {
+                    CurrentConfiguration.Game.CurrentDistribution = "Steam";
+                    configWriter.WriteConfigFile(CurrentConfiguration);
+                }
+                else
+                {
+                    CurrentConfiguration.Game.CurrentDistribution = "MS";
+                    configWriter.WriteConfigFile(CurrentConfiguration);
+                }
+
+                CurrentConfiguration.Boxes.ShowDistributionBox = false;
+                configWriter.WriteConfigFile(CurrentConfiguration);
+            }
+        }
+
+        private void OnGameStarted()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (CurrentConfiguration.Settings.DiscordRichPresence)
+                {
+                    discord.UpdatePresence($"Playing ", "Halo Wars: Definitive Edition", "ethereal", "Ethereal", "VIP", "https://github.com/HaloWarsModding/Ethereal");
+                }
+            });
         }
 
         private void OnGameExited()
@@ -23,146 +105,93 @@ namespace EtherealModManagerGUI
             {
                 ResetPlayButton();
                 ResetWindowState();
-                Discord.ClearPresence();
+                discord.ClearPresence();
             });
         }
 
         private void ResetPlayButton()
         {
-            BtnPlay.Content = Properties.Resources.BtnPlay;
-            BtnPlay.IsHitTestVisible = true;
+            UpdateButtonContent(Properties.Resources.BtnPlay, true);
         }
 
         private void ResetWindowState()
         {
-            WindowState = WindowState.Normal;
-            Topmost = true;
-            Topmost = false;
+            SetWindowState(WindowState.Normal, true, false);
         }
 
-        private void OnGameStarted()
+        private void SetPlayingState()
         {
-            Dispatcher.Invoke(() =>
-            {
-                UpdateDiscordPresence();
-            });
+            UpdateButtonContent(Properties.Resources.BtnPlaying, false);
+            SetWindowState(WindowState.Minimized, false, true);
         }
 
-        private static void UpdateDiscordPresence()
-        {
-            if (ETHConfig.CurrentConfiguration.Settings.DiscordRichPresence)
-            {
-                var modName = ETHManager.currentMod.Name;
-                Discord.UpdatePresence($"Playing {modName}", "Halo Wars: Definitive Edition");
-            }
-        }
+        private void BtnModsWindow_Click(object sender, RoutedEventArgs e) => ShowModsPage();
 
-        private void BtnExitMainWindow_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
+        private static void ShowModsPage() => new ModsPage().ShowDialog();
 
         private void PnlDragWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                this.DragMove();
+                DragMove();
             }
         }
 
-        private void TxBoxChangelog_Loaded(object sender, RoutedEventArgs e)
-        {
-            TxBoxChangelog.Document = Changelog.ToDocument();
-        }
+        private void TxBoxChangelog_Loaded(object sender, RoutedEventArgs e) => TxBoxChangelog.Document = convertMarkdown.ToFlowDocument(Changelog);
 
-        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        private async void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ETHConfig.CurrentConfiguration.Game.GameExecutablePath))
+            if (string.IsNullOrWhiteSpace(CurrentConfiguration.Game.GameExecutablePath))
             {
-                if (DBoxes.GameNotFoundBox().ShowDialog() == true)
+                var gameNotFoundDialog = DBoxes.CreateDialogBox(DBoxType.GameNotFound);
+                gameNotFoundDialog.ShowDialog();
+
+                if (gameNotFoundDialog.DialogResult == true)
                 {
-                    Game.SilentStart();
+                    await gameProcess.StartGame(true, CurrentConfiguration.Game.CurrentDistribution);
+
+                    CurrentConfiguration.Game.GameExecutablePath = GameProcess.GameExecutablePath;
+                    configWriter.WriteConfigFile(CurrentConfiguration);
                     return;
                 }
 
-                string selectedFilePath = DFiles.GameExecutable().ShowDialog() == true ? DFiles.GameExecutable().FileName : string.Empty; ;
+                var gameExecutable = DFiles.CreateDialogFile(DFileType.GameExecutable);
+                var selectedFilePath = gameExecutable.ShowDialog() == true ? gameExecutable.FileName : string.Empty;
+
                 if (!string.IsNullOrWhiteSpace(selectedFilePath))
                 {
-                    UpdateGameExecutablePath(selectedFilePath);
-                    return;
+                    CurrentConfiguration.Game.GameExecutablePath = selectedFilePath;
+                    configWriter.WriteConfigFile(CurrentConfiguration);
                 }
             }
-
-            StartGame();
+            else
+            {
+                StartGame();
+            }
         }
 
-        private static void UpdateGameExecutablePath(string selectedFilePath)
+        private async void StartGame()
         {
-            ETHConfig.CurrentConfiguration.Game.GameExecutablePath = selectedFilePath;
-            ETHConfig.CurrentConfiguration.Save();
-
-            ETHManifest.Clear();
-            ETHManager.TryCacheVideo();
-        }
-
-        private void BtnModsWindow_Click(object sender, RoutedEventArgs e)
-        {
-            ShowModsPage();
-        }
-
-        private static void ShowModsPage()
-        {
-            ModsPage modsPage = new();
-            modsPage.ShowDialog();
-        }
-
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-            SetCulture();
-            ShowWelcomeMessage();
-            ShowDistributionMessage();
-        }
-
-        private static void SetCulture()
-        {
-            CultureInfo culture = new(ETHConfig.CurrentConfiguration.Settings.Language);
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
-        }
-
-        private void StartGame()
-        {
-            Game.Start();
+            await gameProcess.StartGame(false, CurrentConfiguration.Game.CurrentDistribution);
             SetPlayingState();
         }
 
-        private void SetPlayingState()
+        private void UpdateButtonContent(object content, bool isHitTestVisible)
         {
-            BtnPlay.Content = Properties.Resources.BtnPlaying;
-            BtnPlay.IsHitTestVisible = false;
-            WindowState = WindowState.Minimized;
+            BtnPlay.Content = content;
+            BtnPlay.IsHitTestVisible = isHitTestVisible;
         }
 
-        private static void ShowWelcomeMessage()
+        private void SetWindowState(WindowState windowState, bool isTopmost, bool isNormal)
         {
-            if (ETHConfig.CurrentConfiguration.Boxes.ShowWelcomeBox)
-            {
-                DBoxes.Welcome().ShowDialog();
-
-                ETHConfig.CurrentConfiguration.Boxes.ShowWelcomeBox = false;
-                ETHConfig.CurrentConfiguration.Save();
-            }
+            WindowState = windowState;
+            Topmost = isTopmost;
+            Topmost = isNormal;
         }
 
-        private static void ShowDistributionMessage()
+        private void BtnExitMainWindow_Click(object sender, RoutedEventArgs e)
         {
-            if (ETHConfig.CurrentConfiguration.Boxes.ShowDistributionBox)
-            {
-                DBoxes.Distribution().ShowDialog();
-
-                ETHConfig.CurrentConfiguration.Boxes.ShowDistributionBox = false;
-                ETHConfig.CurrentConfiguration.Save();
-            }
+            Application.Current.Shutdown();
         }
     }
 }
