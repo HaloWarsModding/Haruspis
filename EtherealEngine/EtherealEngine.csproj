@@ -54,4 +54,8 @@
     <Folder Include="Resources\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Vita\Games\Phoenix\PhxGui\PhxGui.csproj" />
+  </ItemGroup>
+
 </Project>

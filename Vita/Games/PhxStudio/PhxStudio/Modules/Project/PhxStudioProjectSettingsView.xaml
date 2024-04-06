@@ -1,0 +1,43 @@
+﻿<UserControl
+    x:Class="PhxStudio.Modules.Project.PhxStudioProjectSettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:KSoftWpfControls="clr-namespace:KSoft.WPF.Controls;assembly=KSoft.WPF"
+    xmlns:local="clr-namespace:PhxStudio.Modules.Project"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Content="Project Name" />
+        <TextBox Grid.Row="0" Grid.Column="1"
+                ToolTip="Where files inside .ERAs will be extracted to"
+                Text="{Binding ProjectName}" />
+
+        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Content="Game Version" />
+        <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
+                ToolTip="What version of Halo Wars 1 are you operating on?"
+                SelectedItem="{Binding GameVersion}" ItemsSource="{Binding Source={StaticResource GameVersionTypeDataProvider}}" />
+
+        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Content="Work Directory" />
+        <KSoftWpfControls:SelectableFolderControl Grid.Row="2" Grid.Column="1"
+                ToolTip="Where files inside .ERAs will be extracted to"
+                Text="{Binding WorkDirectory}" />
+
+        <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Content="Final Directory" />
+        <KSoftWpfControls:SelectableFolderControl Grid.Row="3" Grid.Column="1"
+                ToolTip="Where to save final .ERA files when building from .ERADEF files"
+                Text="{Binding FinalDirectory}" />
+    </Grid>
+</UserControl>

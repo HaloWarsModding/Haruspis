@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup Label="Globals">
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Let the user say when they want this info spewed out, else just don't even -->
+    <PhxCppDumpVectorizerInfo Condition=" '$(PhxCppDumpVectorizerInfo)' == '' ">false</PhxCppDumpVectorizerInfo>
+    <!-- Force this off in X360, was added in VS2012+ -->
+    <PhxCppDumpVectorizerInfo Condition=" '$(Platform)'=='Xbox 360' ">false</PhxCppDumpVectorizerInfo>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(VitaCurrentProjectKind)' == 'DynamicLibrary' OR '$(VitaCurrentProjectKind)' == 'Application'">
+      <PropertyGroup>
+        <OutDir>$(VitaBinPath)</OutDir>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(VitaCurrentProjectKind)' == 'StaticLibrary' ">
+      <PropertyGroup>
+        <OutDir>$(VitaLibPath)</OutDir>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+      <OutDir>$(VitaBinPath)</OutDir>
+    </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <PropertyGroup Label="Configuration">
+    <IntDir>$(VitaObjPath)</IntDir>
+    <LinkIncremental Condition=" '$(Configuration.Contains(Release))' ">false</LinkIncremental>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <!-- fix intellisense being dumb, thinking it can't resolve a project include -->
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(VitaPlatformCppLibDir);$(LibraryPath)</LibraryPath>
+    <RunCodeAnalysis Condition=" '$(Configuration.Contains(CodeAnalysis))' ">true</RunCodeAnalysis>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(VitaRequiresDirectX)' != '' " Label="Configuration">
+    <IncludePath>$(LocalDirectXDir)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LocalDirectXDir)Lib\$(VitaPlatformType);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(VitaRequiresCppBoost)' != '' " Label="Configuration">
+    <IncludePath>$(LocalUserBoostDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(LocalUserBoostDir)stage\lib\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration.Contains(Debug))' " Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration.Contains(Release))' " Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(VitaUseSolutionFamilyDirs)' == 'false' ">
+    <OutDir>$(VitaBinPath)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(VitaUseSolutionFamilyDirs)' == 'true' ">
+    <OutDir>$(VitaSolutionFamilyBinPath)</OutDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup Condition=" '$(VitaRequiresDirectX)' == 'true' ">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(LocalDirectXDir)Include\;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalIncludeDirectories);$(LocalDirectXDir)Lib\$(PhxPlatformType)\;</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>%(AdditionalIncludeDirectories);$(LocalDirectXDir)Lib\$(PhxPlatformType)\;</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(VitaRootDir)shared\source\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <AdditionalOptions> /J /Zc:trigraphs</AdditionalOptions> <!--unsigned char, enable trigraphs-->
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <!--<PrecompiledHeaderFile>Precompile.hpp</PrecompiledHeaderFile>-->
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="Exists('$(ProjectDir)Precompile.hpp')">
+    <ClCompile>
+      <PrecompiledHeaderFile>Precompile.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="Exists('$(ProjectDir)Common\Precompile.hpp')">
+    <ClCompile>
+      <PrecompiledHeaderFile>Common\Precompile.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition=" '$(Configuration.Contains(Debug))' ">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <!-- INCR wasn't added until VS2012 and VS2010 was the first IDE that used msbuild for C++ -->
+      <AdditionalOptions Condition=" '$(PlatformToolset)' != 'v100'"> /verbose:incr %(AdditionalOptions)</AdditionalOptions>
+      <AssemblyDebug Condition=" '$(CLRSupport)'=='true' " >true</AssemblyDebug>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(Configuration.Contains(Release))' ">
+    <ClCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+
+      <!-- http://randomascii.wordpress.com/2013/09/11/debugging-optimized-codenew-in-visual-studio-2012/ -->
+      <AdditionalOptions> /d2Zi+ %(AdditionalOptions)</AdditionalOptions>
+
+      <!-- http://visualstudiogallery.msdn.microsoft.com/2f679f81-5154-4bd7-9907-adafde05a428 -->
+      <AdditionalOptions Condition="'$(VitaCppDumpVectorizerInfo)'=='true'"> /Qvec-report:2 %(AdditionalOptions)</AdditionalOptions>
+
+      <MultiProcessorCompilation>true</MultiProcessorCompilation> <!--release only, not compat with minimal rebuild (enabled in debug)-->
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition=" '$(VitaPlatformType)' == 'x86' ">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(VitaPlatformType)' == 'x64' ">
+    <ClCompile>
+      <PreprocessorDefinitions>_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition=" '$(Configuration)' == 'DebugCodeAnalysis' ">
+    <ClCompile>
+      <EnablePREfast>true</EnablePREfast>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

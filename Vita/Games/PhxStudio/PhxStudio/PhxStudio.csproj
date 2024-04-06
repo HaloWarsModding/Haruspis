@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C643B043-00A2-4D8D-8F78-7E57E194B2E6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PhxStudio</RootNamespace>
+    <AssemblyName>PhxStudio</AssemblyName>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <Import Project="$(MSBuildProjectDirectory)\..\PhxStudio.props" />
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Caliburn.Micro.Core.2.0.2\lib\net45\Caliburn.Micro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Caliburn.Micro.2.0.2\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gemini, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\GeminiWpf.0.6.2\lib\net45\Gemini.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gemini.Modules.ErrorList, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Gemini.Modules.ErrorList.0.6.2\lib\net45\Gemini.Modules.ErrorList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gemini.Modules.GraphEditor, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Gemini.Modules.GraphEditor.0.6.2\lib\net45\Gemini.Modules.GraphEditor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gemini.Modules.Inspector, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Gemini.Modules.Inspector.0.6.2\lib\net45\Gemini.Modules.Inspector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gemini.Modules.Output, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Gemini.Modules.Output.0.6.2\lib\net45\Gemini.Modules.Output.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gemini.Modules.PropertyGrid, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Gemini.Modules.PropertyGrid.0.6.2\lib\net45\Gemini.Modules.PropertyGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MahApps.Metro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\MahApps.Metro.1.0.0.0\lib\net45\MahApps.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\MahApps.Metro.1.0.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WpfApplicationFramework, Version=3.2.0.450, Culture=neutral, PublicKeyToken=1d6a5af5fe952afb, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\waf.3.2.0\lib\net45\WpfApplicationFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2013, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\GeminiWpf.0.6.2\lib\net45\Xceed.Wpf.AvalonDock.Themes.VS2013.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(VitaNugetPackagesDir)\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Debug\Trace.cs" />
+    <Compile Include="Modules\Main\IEditorProviderSelector.cs" />
+    <Compile Include="Modules\Main\MainCommandDefinitions.cs" />
+    <Compile Include="Modules\Main\MainCommandHandlers.cs" />
+    <Compile Include="Modules\Main\MainModule.cs" />
+    <Compile Include="Modules\Main\MenuDefinitions.cs" />
+    <Compile Include="Modules\Main\ShellView.xaml.cs">
+      <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Main\ShellViewModel.cs" />
+    <Compile Include="Modules\Main\ToolBarDefinitions.cs" />
+    <Compile Include="Modules\PhxInspectors\Controls\PhxInspectorGrid.cs" />
+    <Compile Include="Modules\PhxInspectors\Controls\PhxInspectorItemTemplateSelector.cs" />
+    <Compile Include="Modules\PhxInspectors\Conventions\DefaultPropertyInspectors.cs" />
+    <Compile Include="Modules\PhxInspectors\Conventions\PropertyEditorBuilder.cs" />
+    <Compile Include="Modules\PhxInspectors\Conventions\RangePropertyEditorBuilder.cs" />
+    <Compile Include="Modules\PhxInspectors\InspectableObject.cs" />
+    <Compile Include="Modules\PhxInspectors\InspectorBuilder.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\BitmapSourceEditorView.xaml.cs">
+      <DependentUpon>BitmapSourceEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\BitmapSourceEditorViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\ChangeObjectValueAction.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\CheckBoxEditorView.xaml.cs">
+      <DependentUpon>CheckBoxEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\CheckBoxEditorViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\CollapsibleGroupView.xaml.cs">
+      <DependentUpon>CollapsibleGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\CollapsibleGroupViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\ColorEditorView.xaml.cs">
+      <DependentUpon>ColorEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\ColorEditorViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\EnumEditorView.xaml.cs">
+      <DependentUpon>EnumEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\EnumEditorViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\IEditor.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\IInspector.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\Point3DEditorView.xaml.cs">
+      <DependentUpon>Point3DEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\Point3DEditorViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\ProtoDataReferenceView.xaml.cs">
+      <DependentUpon>ProtoDataReferenceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\ProtoDataReferenceViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\RangeEditorView.xaml.cs">
+      <DependentUpon>RangeEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\RangeEditorViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\ResetObjectValueAction.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\SlimMathVector4View.xaml.cs">
+      <DependentUpon>SlimMathVector4View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\Inspectors\SlimMathVector4ViewModel.cs" />
+    <Compile Include="Modules\PhxInspectors\Inspectors\TextBoxEditorView.xaml.cs">
+      <DependentUpon>TextBoxEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\PhxInspectorView.xaml.cs">
+      <DependentUpon>PhxInspectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PhxInspectors\PhxInspectorViewModel.cs" />
+    <Compile Include="Modules\ProjectExplorer\ProjectExplorerCommandDefinitions.cs" />
+    <Compile Include="Modules\ProjectExplorer\ProjectExplorerCommandHandlers.cs" />
+    <Compile Include="Modules\ProjectExplorer\ProjectExplorerView.xaml.cs">
+      <DependentUpon>ProjectExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ProjectExplorer\ProjectExplorerViewModel.cs" />
+    <Compile Include="Modules\Project\IProjectService.cs" />
+    <Compile Include="Modules\Project\PhxStudioProjectSettingsView.xaml.cs">
+      <DependentUpon>PhxStudioProjectSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Project\ProjectCommandDefinitions.cs" />
+    <Compile Include="Modules\Project\ProjectCommandHandlers.cs" />
+    <Compile Include="Modules\Project\ProjectService.cs" />
+    <Compile Include="Modules\Project\ProjectWorkDirectoryChangedEventArgs.cs" />
+    <Compile Include="Modules\ProtoData\ProtoDataObjectEditorView.xaml.cs">
+      <DependentUpon>ProtoDataObjectEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ProtoData\ProtoDataObjectEditorViewModel.cs" />
+    <Compile Include="Modules\ProtoData\ProtoDataObjectExplorerView.xaml.cs">
+      <DependentUpon>ProtoDataObjectExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ProtoData\ProtoDataObjectExplorerViewModel.cs" />
+    <Compile Include="Modules\ProtoData\ProtoDataObjectLookupViewModel.cs" />
+    <Compile Include="Modules\TraceList\ITraceList.cs" />
+    <Compile Include="Modules\TraceList\MenuDefinitions.cs" />
+    <Compile Include="Modules\TraceList\ToolBarDefinitions.cs" />
+    <Compile Include="Modules\TraceList\Inspectors\TraceDataArrayControl.xaml.cs">
+      <DependentUpon>TraceDataArrayControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\TraceList\TraceListCommandDefinitions.cs" />
+    <Compile Include="Modules\TraceList\TraceListCommandHandlers.cs" />
+    <Compile Include="Modules\TraceList\TraceListItem.cs" />
+    <Compile Include="Modules\TraceList\Inspectors\TraceDataEditorView.xaml.cs">
+      <DependentUpon>TraceDataEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\TraceList\Inspectors\TraceDataEditorViewModel.cs" />
+    <Compile Include="Modules\TraceList\TraceListItemType.cs" />
+    <Compile Include="Modules\TraceList\TraceListItemTypeToImageConverter.cs" />
+    <Compile Include="Modules\TraceList\TraceListTraceListener.cs" />
+    <Compile Include="Modules\TraceList\TraceListView.xaml.cs">
+      <DependentUpon>TraceListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\TraceList\TraceListViewModel.cs" />
+    <Compile Include="Modules\TraceList\TraceSourceOptionsView.xaml.cs">
+      <DependentUpon>TraceSourceOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\TraceList\TraceSourceOptionsViewModel.cs" />
+    <Compile Include="Modules\TraceList\TraceSourceSetting.cs" />
+    <Compile Include="Modules\TraceList\TraceSourceSettings.cs" />
+    <Compile Include="ProtoData\Civs\CivEditorView.xaml.cs">
+      <DependentUpon>CivEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Civs\CivEditorViewModel.cs" />
+    <Compile Include="ProtoData\Civs\CivsCommandDefinitions.cs" />
+    <Compile Include="ProtoData\Civs\CivsCommandHandlers.cs" />
+    <Compile Include="ProtoData\Civs\CivsExplorerView.xaml.cs">
+      <DependentUpon>CivsExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Civs\CivsExplorerViewModel.cs" />
+    <Compile Include="ProtoData\Leaders\LeadersCommandDefinitions.cs" />
+    <Compile Include="ProtoData\Leaders\LeadersCommandHandlers.cs" />
+    <Compile Include="ProtoData\Leaders\LeadersExplorerView.xaml.cs">
+      <DependentUpon>LeadersExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Leaders\LeadersExplorerViewModel.cs" />
+    <Compile Include="ProtoData\Objects\ObjectsCommandDefinitions.cs" />
+    <Compile Include="ProtoData\Objects\ObjectsCommandHandlers.cs" />
+    <Compile Include="ProtoData\Objects\ObjectsExplorerView.xaml.cs">
+      <DependentUpon>ObjectsExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Objects\ObjectsExplorerViewModel.cs" />
+    <Compile Include="ProtoData\Powers\PowersExplorerView.xaml.cs">
+      <DependentUpon>PowersExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Powers\PowersCommandDefinitions.cs" />
+    <Compile Include="ProtoData\Powers\PowersCommandHandlers.cs" />
+    <Compile Include="ProtoData\Powers\PowersExplorerViewModel.cs" />
+    <Compile Include="ProtoData\Squads\SquadsCommandDefinitions.cs" />
+    <Compile Include="ProtoData\Squads\SquadsCommandHandlers.cs" />
+    <Compile Include="ProtoData\Squads\SquadsExplorerView.xaml.cs">
+      <DependentUpon>SquadsExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Squads\SquadsExplorerViewModel.cs" />
+    <Compile Include="ProtoData\Techs\TechsCommandDefinitions.cs" />
+    <Compile Include="ProtoData\Techs\TechsCommandHandlers.cs" />
+    <Compile Include="ProtoData\Techs\TechsExplorerView.xaml.cs">
+      <DependentUpon>TechsExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProtoData\Techs\TechsExplorerViewModel.cs" />
+    <Compile Include="UI\ViewModels\FileTreeView\FileItemViewModel.cs" />
+    <Compile Include="UI\ViewModels\FileTreeView\FolderItemViewModel.cs" />
+    <Compile Include="UI\ViewModels\FileTreeView\ITreeViewItem.cs" />
+    <Compile Include="UI\ViewModels\FileTreeView\TreeViewItemBase.cs" />
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\FileIconsLoader.cs" />
+    <Compile Include="Utils\PhxStudioUtils.cs" />
+    <Compile Include="Utils\Results\ResultBase.cs" />
+    <Compile Include="Utils\TypeExtensionsPhxStudio.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Modules\Project\PhxStudioProject.cs" />
+    <Compile Include="Modules\Project\PhxStudioProjectSettingsViewModel.cs" />
+    <Compile Include="Modules\Project\PhxStudioProjectViewModel.cs" />
+    <Compile Include="Modules\Project\ProjectClosingEventArgs.cs" />
+    <Compile Include="Modules\Project\ProjectOpeningEventArgs.cs" />
+    <Compile Include="Modules\Startup\StartupModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(VitaRootDir)KSoft\KSoft\KSoft.csproj">
+      <Project>{eb07f515-e27c-4768-8bd8-2829f657807e}</Project>
+      <Name>KSoft</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)KSoft\KSoft.Compression\KSoft.Compression.csproj">
+      <Project>{0b27603c-ceb1-4a3a-b56f-cbc14b8c06e7}</Project>
+      <Name>KSoft.Compression</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)KSoft\KSoft.IO.TagElementStreams\KSoft.IO.TagElementStreams.csproj">
+      <Project>{18f32228-8351-4f99-992f-78e9d1ce83d9}</Project>
+      <Name>KSoft.IO.TagElementStreams</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)KSoft\KSoft.Math\KSoft.Math.csproj">
+      <Project>{423f13fc-da0c-4c82-b75e-60a1bfea7bb6}</Project>
+      <Name>KSoft.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)KSoft\KSoft.Security\KSoft.Security.csproj">
+      <Project>{0632a00b-de9e-4350-a3f8-3a82f9c780af}</Project>
+      <Name>KSoft.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)KSoft\KSoft.WPF\KSoft.WPF.csproj">
+      <Project>{8BC67689-8BAA-480E-B2C1-03590AB79259}</Project>
+      <Name>KSoft.WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)Games\Wwise\KSoft.Wwise\KSoft.Wwise.csproj">
+      <Project>{bddec955-6d39-4058-92e5-f1bf170f860f}</Project>
+      <Name>KSoft.Wwise</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(VitaRootDir)Games\Phoenix\KSoft.Phoenix\KSoft.Phoenix.csproj">
+      <Project>{3fd3a05a-4451-49d1-b38e-b897f3444754}</Project>
+      <Name>KSoft.Phoenix</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Modules\Main\ShellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\BitmapSourceEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\CheckBoxEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\CollapsibleGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\ColorEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\EnumEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\Point3DEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\ProtoDataReferenceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\RangeEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\SlimMathVector4View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\Inspectors\TextBoxEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\PhxInspectorsResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\PhxInspectors\PhxInspectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ProjectExplorer\ProjectExplorerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Project\PhxStudioProjectSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ProtoData\ProtoDataObjectEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ProtoData\ProtoDataObjectExplorerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\TraceList\Inspectors\TraceDataArrayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\TraceList\Inspectors\TraceDataEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\TraceList\TraceListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\TraceList\TraceSourceOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProtoData\Civs\CivEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProtoData\Civs\CivsExplorerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProtoData\Leaders\LeadersExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProtoData\Objects\ObjectsExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProtoData\Powers\PowersExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProtoData\Squads\SquadsExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProtoData\Techs\TechsExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Images\Logos\Logos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Images\Logos\PhxLogo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scenario\" />
+    <Folder Include="Terrain\" />
+    <Folder Include="TriggerSystem\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Modules\ProjectExplorer\Images\Folder_Closed16.png" />
+    <Resource Include="Modules\ProjectExplorer\Images\Folder_Open16.png" />
+    <Resource Include="Modules\TraceList\Images\Start.png" />
+    <Resource Include="Modules\TraceList\Images\Resume.png" />
+    <Resource Include="Modules\TraceList\Images\Stop.png" />
+    <Resource Include="Modules\TraceList\Images\Suspend.png" />
+    <Resource Include="Modules\TraceList\Images\Transfer.png" />
+    <Resource Include="Modules\TraceList\Images\Error.png" />
+    <Resource Include="Modules\TraceList\Images\Information.png" />
+    <Resource Include="Modules\TraceList\Images\Verbose.png" />
+    <Resource Include="Modules\TraceList\Images\Warning.png" />
+    <Resource Include="Modules\TraceList\Images\Critical.png" />
+    <Resource Include="Modules\TraceList\Images\Tail.png" />
+    <Resource Include="Modules\TraceList\Images\Clear.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Activity_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Backward_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Bug_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Cancel_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Cancel_disable_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\ContinuousFolder_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\FileExclude_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\FileGroup_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\FileWarning_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Filter_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Folder_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\FolderOpen_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Forward_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\GoToBottom_color_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Help_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\HistoryTable_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Hourglass_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\InputParameter_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\NewScript_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Open_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\OpenFolder_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\OutputParameter_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Parameter_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Pause_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\PinnedItem_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\ProjectFolderOpen_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Property_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Pushpin_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Pushpin_disabled_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\PushpinUnpin_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\PushpinUnpin_disabled_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Refresh_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Run_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\RunExclude_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Save_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\SaveAll_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Script_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\ScriptGroup_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Search_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Settings_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\SettingsFile_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusAlert_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusBlocked_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusCriticalError_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusHelp_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusInformation_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusInvalid_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusOK_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusPause_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusRun_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusStop_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusUpdate_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\StatusWarning_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Stop_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\TriggeredFolder_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\TriggerScript_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\Uninstall_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\XMLFile_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\ZoomIn_32x.png" />
+    <Resource Include="UI\Images\2015_VSIcon\ZoomOut_32x.png" />
+    <Resource Include="UI\Images\ImageCatalog\ClearWindowContent.16.16.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
