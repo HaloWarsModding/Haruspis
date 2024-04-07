@@ -1,1 +1,0 @@
-Commonly shared external libraries should be present here. Or, you know, I should get on the nuget train. Someday. Choo choo.
