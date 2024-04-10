@@ -1,6 +1,13 @@
-﻿using System.Diagnostics;
+﻿//-----------------------------------------------------------------------------
+// File: GameProcess.cs
+// Description: Contains the GameProcess class responsible for managing the game process in Halo Wars.
+//    This class provides functionality to start the game process and handle game events.
+//-----------------------------------------------------------------------------
 
-namespace EtherealEngine.HaloWars
+using Ethereal.Core.Logging;
+using System.Diagnostics;
+
+namespace Ethereal.Core.HaloWars
 {
     internal interface IGameProcess
     {
@@ -14,12 +21,13 @@ namespace EtherealEngine.HaloWars
 
     public class GameProcess(LogWriter logWriter) : IGameProcess
     {
-        public static string? GameExecutablePath;
-        private static Process? HaloWarsProcess;
+        public string? GameExecutablePath;
+        public Process? HaloWarsProcess;
         private bool silent = false;
         public readonly LogWriter logWriter = logWriter;
-        public static event Action GameExited = () => { };
-        public static event Action GameStarted = () => { };
+
+        public event Action GameExited = () => { };
+        public event Action GameStarted = () => { };
 
         public async Task StartGame(bool silent, string distribution)
         {
@@ -31,18 +39,14 @@ namespace EtherealEngine.HaloWars
                 return;
             }
 
-            await StartGameProcess(distribution);
-        }
-
-        private async Task StartGameProcess(string distribution, string gameExecutablePath = "")
-        {
-            HaloWarsProcess = new Process();
             logWriter.Log(LogLevel.Information, "Starting the game process...");
+
+            HaloWarsProcess = new Process();
             HaloWarsProcess.StartInfo.CreateNoWindow = true;
 
-            if (!string.IsNullOrEmpty(gameExecutablePath))
+            if (!string.IsNullOrEmpty(GameExecutablePath))
             {
-                HaloWarsProcess.StartInfo.FileName = gameExecutablePath;
+                HaloWarsProcess.StartInfo.FileName = GameExecutablePath;
             }
             else
             {
@@ -56,55 +60,48 @@ namespace EtherealEngine.HaloWars
                 };
             }
 
-            HaloWarsProcess.Start();
+            _ = HaloWarsProcess.Start();
             logWriter.Log(LogLevel.Information, "Game process started.");
 
-            await ScanForGameProcess();
-        }
-
-        private async Task<string> ScanForGameProcess()
-        {
             logWriter.Log(LogLevel.Information, "Scanning for game process...");
-            Process gameProcess = await GetGameProcess();
-            HandleGameProcessFound(gameProcess);
-            if (silent)
-            {
-                string exePath = gameProcess.MainModule!.FileName;
-                GameExecutablePath = exePath;
-                logWriter.Log(LogLevel.Information, "Game process found and killed silently.");
-                gameProcess.Kill();
 
-                return exePath;
+            Process? gameProcess = null;
+            for (int attempts = 0; attempts < 70; attempts++)
+            {
+                Thread.Sleep(100);
+                Process[] processes = Process.GetProcessesByName("xgameFinal");
+                if (processes.Length > 0)
+                {
+                    gameProcess = processes[0];
+                    break;
+                }
             }
 
-            logWriter.Log(LogLevel.Information, "Game process found and running.");
-            return gameProcess.MainModule!.FileName;
-        }
-
-        private async Task<Process> GetGameProcess()
-        {
-            logWriter.Log(LogLevel.Information, "Getting game process...");
-            Process gameProcess = null!;
-            int attempts = 0;
-            while (gameProcess == null && attempts < 70)
+            if (gameProcess != null)
             {
-                await Task.Delay(100);
-                gameProcess = Process.GetProcessesByName("xgameFinal").FirstOrDefault()!;
-                attempts++;
+                logWriter.Log(LogLevel.Information, "Game process found.");
+                if (!this.silent)
+                {
+                    GameStarted?.Invoke();
+                    gameProcess.EnableRaisingEvents = true;
+                    gameProcess.Exited += (sender, e) =>
+                    {
+                        GameExited?.Invoke();
+                    };
+                }
+
+                if (this.silent)
+                {
+                    string exePath = gameProcess.MainModule!.FileName;
+                    GameExecutablePath = exePath;
+                    logWriter.Log(LogLevel.Information, "Game process found and killed silently.");
+                    gameProcess.Kill();
+                }
+                else
+                {
+                    logWriter.Log(LogLevel.Information, "Game process found and running.");
+                }
             }
-            return gameProcess ?? throw new Exception("Game process not found.");
-        }
-
-        private void HandleGameProcessFound(Process gameProcess)
-        {
-            logWriter.Log(LogLevel.Information, "Game process found.");
-            GameStarted?.Invoke();
-
-            gameProcess.EnableRaisingEvents = true;
-            gameProcess.Exited += (sender, e) =>
-            {
-                GameExited?.Invoke();
-            };
         }
     }
 }

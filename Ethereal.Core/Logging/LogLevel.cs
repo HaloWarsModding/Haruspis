@@ -1,4 +1,9 @@
-﻿namespace EtherealEngine
+﻿//-----------------------------------------------------------------------------
+// File: LogLevel.cs
+// Description: Contains the LogLevel enum representing different levels of logging.
+//-----------------------------------------------------------------------------
+
+namespace Ethereal.Core
 {
     /// <summary>
     /// Represents different levels of logging:

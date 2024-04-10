@@ -1,6 +1,13 @@
-﻿using DiscordRPC;
+﻿//-----------------------------------------------------------------------------
+// File: DiscordRichPresence.cs
+// Description: Contains the DiscordRichPresence class responsible for managing Discord Rich Presence.
+//    This class provides functionality to update and clear Discord Rich Presence details.
+//-----------------------------------------------------------------------------
 
-namespace EtherealEngine
+using DiscordRPC;
+using Ethereal.Core.Logging;
+
+namespace Ethereal.Core.Utils
 {
     public interface IDiscordRichPresence
     {
@@ -32,7 +39,7 @@ namespace EtherealEngine
             this.logWriter = logWriter;
             try
             {
-                client.Initialize();
+                _ = client.Initialize();
             }
             catch (Exception ex)
             {
@@ -58,9 +65,9 @@ namespace EtherealEngine
                         Start = DateTime.UtcNow
                     },
                     Buttons =
-                  [
-            new Button { Label = buttonLabel, Url = buttonUrl }
-                  ]
+                    [
+                        new Button { Label = buttonLabel, Url = buttonUrl }
+                    ]
                 });
 
                 logWriter.Log(LogLevel.Information, "Updating Discord Rich Presence with details: " + details);

@@ -1,6 +1,11 @@
-﻿using System.IO;
+﻿//-----------------------------------------------------------------------------
+// File: LogWriter.cs
+// Description: Contains the LogWriter class responsible for logging messages with the specified log level.
+//-----------------------------------------------------------------------------
 
-namespace EtherealEngine
+using System.IO;
+
+namespace Ethereal.Core.Logging
 {
     public interface ILogger
     {
@@ -56,7 +61,6 @@ namespace EtherealEngine
             }
             catch (Exception ex)
             {
-
                 throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
             }
         }

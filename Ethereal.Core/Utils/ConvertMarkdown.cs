@@ -1,6 +1,12 @@
-﻿using System.Windows.Documents;
+﻿//-----------------------------------------------------------------------------
+// File: ConvertMarkdown.cs
+// Description: Contains the ConvertMarkdown class responsible for converting Markdown text to a FlowDocument.
+//    This class provides functionality to convert Markdown text to a FlowDocument object.
+//-----------------------------------------------------------------------------
 
-namespace EtherealEngine
+using System.Windows.Documents;
+
+namespace Ethereal.Core.Utils
 {
     public interface IMarkdownConverter
     {
@@ -19,7 +25,7 @@ namespace EtherealEngine
             if (!string.IsNullOrEmpty(markdownText))
             {
                 Markdown.Xaml.Markdown markdown = new();
-                var flowDocument = markdown.Transform(markdownText);
+                FlowDocument flowDocument = markdown.Transform(markdownText);
                 return flowDocument;
             }
 

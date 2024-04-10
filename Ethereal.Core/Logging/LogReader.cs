@@ -1,9 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using DiscordRPC;
+﻿//-----------------------------------------------------------------------------
+// File: LogReader.cs
+// Description: Contains the LogReader class responsible for reading the content of the latest modified log file.
+//-----------------------------------------------------------------------------
 
-namespace EtherealEngine
+using System.IO;
+
+namespace Ethereal.Core.Logging
 {
     public interface ILogReader
     {

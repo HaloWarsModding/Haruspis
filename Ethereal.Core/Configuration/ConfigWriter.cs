@@ -1,8 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿//-----------------------------------------------------------------------------
+// File: ConfigWriter.cs
+// Description: Contains the ConfigWriter class responsible for writing configuration files.
+//              This class provides functionality to write a configuration file with the specified configuration object.
+//-----------------------------------------------------------------------------
+
+using Ethereal.Core.Logging;
+using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
 
-namespace EtherealEngine
+namespace Ethereal.Core.Configuration
 {
     internal interface IConfigWriter
     {

@@ -15,7 +15,7 @@
 
     public class GameConfig
     {
-        public string ModsDirectory { get; set; } = "TODO";
+        public string ModsDirectory { get; set; } = string.Empty;
         public string CurrentDistribution { get; set; } = "Steam";
         public string GameExecutablePath { get; set; } = string.Empty;
     }

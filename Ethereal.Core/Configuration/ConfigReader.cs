@@ -1,8 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using Ethereal.Core.Logging;
+using Newtonsoft.Json;
 using System.IO;
 
-namespace EtherealEngine
+namespace Ethereal.Core.Configuration
 {
+    //-----------------------------------------------------------------------------
+    // File: ConfigReader.cs
+    // Description: Contains the implementation of the ConfigReader class for reading and deserializing configuration files.
+    //-----------------------------------------------------------------------------
+
     internal interface IConfigReader
     {
         /// <summary>

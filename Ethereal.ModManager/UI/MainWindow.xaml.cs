@@ -1,7 +1,12 @@
-﻿using EtherealEngine;
-using EtherealEngine.HaloWars;
+﻿using Ethereal.Core;
+using Ethereal.Core.Configuration;
+using Ethereal.Core.HaloWars;
+using Ethereal.Core.Logging;
+using Ethereal.Core.Utils;
+using Ethereal.ModManager.Data;
 using Ethereal.ModManager.Dialogs;
 using Ethereal.ModManager.UI;
+using Microsoft.Win32;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -23,6 +28,8 @@ namespace Ethereal.ModManager
         public static DiscordRichPresence discord;
         public static GameProcess gameProcess;
         public static ConvertMarkdown convertMarkdown;
+        public static Manifest manifest;
+        public static Manager manager;
 
         public MainWindow()
         {
@@ -42,35 +49,35 @@ namespace Ethereal.ModManager
             }
             if (configReader.IsConfigFileValid())
             {
-                configReader.ReadConfigFile<Configuration>();
+                _ = configReader.ReadConfigFile<Configuration>();
             }
             else
             {
                 configWriter.WriteConfigFile(CurrentConfiguration);
-                configReader.ReadConfigFile<Configuration>();
+                _ = configReader.ReadConfigFile<Configuration>();
             }
 
             CurrentConfiguration = (Configuration)ConfigReader.ConfigObject;
 
-            GameProcess.GameExited += OnGameExited;
-            GameProcess.GameStarted += OnGameStarted;
+            gameProcess.GameExited += OnGameExited;
+            gameProcess.GameStarted += OnGameStarted;
 
-            var culture = new CultureInfo(CurrentConfiguration.Settings.Language);
+            CultureInfo culture = new(CurrentConfiguration.Settings.Language);
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
             if (CurrentConfiguration.Boxes.ShowWelcomeBox)
             {
-                var welcomeBox = DBoxes.CreateDialogBox(DBoxType.Welcome);
-                welcomeBox.ShowDialog();
+                EtherealBox welcomeBox = DBoxes.CreateDialogBox(DBoxType.Welcome);
+                _ = welcomeBox.ShowDialog();
 
                 CurrentConfiguration.Boxes.ShowWelcomeBox = false;
                 configWriter.WriteConfigFile(CurrentConfiguration);
             }
             if (CurrentConfiguration.Boxes.ShowDistributionBox)
             {
-                var distributionBox = DBoxes.CreateDialogBox(DBoxType.Distribution);
-                distributionBox.ShowDialog();
+                EtherealBox distributionBox = DBoxes.CreateDialogBox(DBoxType.Distribution);
+                _ = distributionBox.ShowDialog();
 
                 if (distributionBox.DialogResult == true)
                 {
@@ -86,6 +93,20 @@ namespace Ethereal.ModManager
                 CurrentConfiguration.Boxes.ShowDistributionBox = false;
                 configWriter.WriteConfigFile(CurrentConfiguration);
             }
+
+            if (dynamicProperties.TryGetProperty("modsDir", out object modDir))
+            {
+                CurrentConfiguration.Game.ModsDirectory = (string)modDir;
+            }
+
+            if (dynamicProperties.TryGetProperty("modManifest", out object path))
+            {
+                manifest = new Manifest((string)path, logWriter);
+            }
+
+            InitializeGame().Wait();
+
+            manager = new Manager(CurrentConfiguration.Game.GameExecutablePath, manifest, logWriter);
         }
 
         private void OnGameStarted()
@@ -94,7 +115,7 @@ namespace Ethereal.ModManager
             {
                 if (CurrentConfiguration.Settings.DiscordRichPresence)
                 {
-                    discord.UpdatePresence($"Playing ", "Halo Wars: Definitive Edition", "ethereal", "Ethereal", "VIP", "https://github.com/HaloWarsModding/Ethereal");
+                    discord.UpdatePresence($"Playing {manager.CurrentMod.Name}", "Halo Wars: Definitive Edition", "ethereal", "Ethereal", "VIP", "https://github.com/HaloWarsModding/Ethereal");
                 }
             });
         }
@@ -125,9 +146,12 @@ namespace Ethereal.ModManager
             SetWindowState(WindowState.Minimized, false, true);
         }
 
-        private void BtnModsWindow_Click(object sender, RoutedEventArgs e) => ShowModsPage();
+        private void BtnModsWindow_Click(object sender, RoutedEventArgs e)
+        {
+            manager = new Manager(CurrentConfiguration.Game.GameExecutablePath, manifest, logWriter);
 
-        private static void ShowModsPage() => new ModsPage().ShowDialog();
+            _ = new ModsPage().ShowDialog();
+        }
 
         private void PnlDragWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -137,43 +161,44 @@ namespace Ethereal.ModManager
             }
         }
 
-        private void TxBoxChangelog_Loaded(object sender, RoutedEventArgs e) => TxBoxChangelog.Document = convertMarkdown.ToFlowDocument(Changelog);
+        private void TxBoxChangelog_Loaded(object sender, RoutedEventArgs e)
+        {
+            TxBoxChangelog.Document = convertMarkdown.ToFlowDocument(Changelog);
+        }
 
         private async void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
+            await InitializeGame();
+            await gameProcess.StartGame(false, CurrentConfiguration.Game.CurrentDistribution);
+            SetPlayingState();
+        }
+
+        private static async Task InitializeGame()
+        {
             if (string.IsNullOrWhiteSpace(CurrentConfiguration.Game.GameExecutablePath))
             {
-                var gameNotFoundDialog = DBoxes.CreateDialogBox(DBoxType.GameNotFound);
-                gameNotFoundDialog.ShowDialog();
+                EtherealBox gameNotFoundDialog = DBoxes.CreateDialogBox(DBoxType.GameNotFound);
+                _ = gameNotFoundDialog.ShowDialog();
 
                 if (gameNotFoundDialog.DialogResult == true)
                 {
                     await gameProcess.StartGame(true, CurrentConfiguration.Game.CurrentDistribution);
-
-                    CurrentConfiguration.Game.GameExecutablePath = GameProcess.GameExecutablePath;
+                    manifest.Uninstall();
+                    CurrentConfiguration.Game.GameExecutablePath = gameProcess.GameExecutablePath;
                     configWriter.WriteConfigFile(CurrentConfiguration);
-                    return;
                 }
-
-                var gameExecutable = DFiles.CreateDialogFile(DFileType.GameExecutable);
-                var selectedFilePath = gameExecutable.ShowDialog() == true ? gameExecutable.FileName : string.Empty;
-
-                if (!string.IsNullOrWhiteSpace(selectedFilePath))
+                else
                 {
-                    CurrentConfiguration.Game.GameExecutablePath = selectedFilePath;
-                    configWriter.WriteConfigFile(CurrentConfiguration);
+                    OpenFileDialog gameExecutable = DFiles.CreateDialogFile(DFileType.GameExecutable);
+                    string selectedFilePath = gameExecutable.ShowDialog() == true ? gameExecutable.FileName : string.Empty;
+
+                    if (!string.IsNullOrWhiteSpace(selectedFilePath))
+                    {
+                        CurrentConfiguration.Game.GameExecutablePath = selectedFilePath;
+                        configWriter.WriteConfigFile(CurrentConfiguration);
+                    }
                 }
             }
-            else
-            {
-                StartGame();
-            }
-        }
-
-        private async void StartGame()
-        {
-            await gameProcess.StartGame(false, CurrentConfiguration.Game.CurrentDistribution);
-            SetPlayingState();
         }
 
         private void UpdateButtonContent(object content, bool isHitTestVisible)

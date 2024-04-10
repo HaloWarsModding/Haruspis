@@ -1,4 +1,5 @@
-﻿using Ethereal.ModManager.Data;
+﻿using Ethereal.Core.HaloWars;
+using Ethereal.Core.Logging;
 using System.Windows;
 using System.Windows.Input;
 
@@ -6,35 +7,41 @@ namespace Ethereal.ModManager.UI
 {
     public partial class ModsPage : Window
     {
+        private readonly LogWriter writer = MainWindow.logWriter;
+        private readonly Manager manager = MainWindow.manager;
         private readonly List<Mod> mods;
-        private readonly string yes = "Yes";
+        private readonly string modPath = MainWindow.CurrentConfiguration.Game.ModsDirectory?.ToString();
         public ModsPage()
         {
             InitializeComponent();
 
-            mods = ETHManager.GetMods(yes);
-            foreach (var mod in mods)
+            modPath ??= (MainWindow.dynamicProperties.TryGetProperty("modsDir", out object path) ? (string)path : null);
+
+            mods = manager.GetMods(modPath);
+            foreach (Mod mod in mods)
             {
-                ListBoxMods.Items.Add(mod.Name);
+                _ = ListBoxMods.Items.Add(mod.Name);
             }
 
             Mod vanilla = new() { Name = "Vanilla" };
-            ListBoxMods.Items.Add(vanilla.Name);
+            _ = ListBoxMods.Items.Add(vanilla.Name);
 
             ListBoxMods.MouseDoubleClick += ListBoxMods_MouseDoubleClick;
         }
 
         private void ListBoxMods_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
             string selectedModTitle = (string)ListBoxMods.SelectedItem;
 
-            Mod selectedMod = mods.FirstOrDefault(mod => mod.Name == selectedModTitle);
+            writer.Log(Core.LogLevel.Information, $"User double-clicked on mod: {selectedModTitle}");
+
+            Mod selectedMod = mods.Find(mod => mod.Name == selectedModTitle);
 
             if (selectedMod != null)
             {
-                ETHManager eth = new(yes);
-                eth.SetCurrentMod(selectedMod);
+                writer.Log(Core.LogLevel.Information, $"Selected mod details - Name: {selectedMod.Name}, Version: {selectedMod.Version}");
+
+                manager.SetCurrentMod(selectedMod);
             }
         }
 

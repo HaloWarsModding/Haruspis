@@ -1,4 +1,10 @@
-﻿namespace EtherealEngine
+﻿//-----------------------------------------------------------------------------
+// File: DynamicProperties.cs
+// Description: Contains the DynamicProperties class responsible for managing dynamic properties.
+//    This class provides functionality to add, retrieve, remove, and check for the existence of dynamic properties.
+//-----------------------------------------------------------------------------
+
+namespace Ethereal.Core.Utils
 {
     public interface IDynamicProperties
     {
@@ -31,7 +37,7 @@
         bool ContainsProperty(string propertyName);
     }
 
-    public class DynamicProperties() : IDynamicProperties
+    public class DynamicProperties : IDynamicProperties
     {
         private static readonly Dictionary<string, object> dynamicProperties = [];
 
@@ -42,19 +48,17 @@
 
         public bool TryGetProperty(string propertyName, out object? value)
         {
-            bool result = dynamicProperties.TryGetValue(propertyName, out value);
-            return result;
+            return dynamicProperties.TryGetValue(propertyName, out value);
         }
 
         public void RemoveProperty(string propertyName)
         {
-            dynamicProperties.Remove(propertyName);
+            _ = dynamicProperties.Remove(propertyName);
         }
 
         public bool ContainsProperty(string propertyName)
         {
-            bool result = dynamicProperties.ContainsKey(propertyName);
-            return result;
+            return dynamicProperties.ContainsKey(propertyName);
         }
     }
 }
