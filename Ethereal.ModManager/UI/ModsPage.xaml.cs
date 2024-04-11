@@ -49,5 +49,13 @@ namespace Ethereal.ModManager.UI
         {
             DialogResult = false;
         }
+
+        private void PnlDragWindow_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
     }
 }

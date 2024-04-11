@@ -124,7 +124,7 @@ namespace Ethereal.ModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Store.
+        ///   Looks up a localized string similar to MS.
         /// </summary>
         public static string DistributionNo {
             get {
@@ -187,7 +187,7 @@ namespace Ethereal.ModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changelog.
+        ///   Looks up a localized string similar to Timeline.
         /// </summary>
         public static string LblChangelog {
             get {

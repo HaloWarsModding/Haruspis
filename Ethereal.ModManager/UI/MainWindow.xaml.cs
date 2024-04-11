@@ -94,11 +94,6 @@ namespace Ethereal.ModManager
                 configWriter.WriteConfigFile(CurrentConfiguration);
             }
 
-            if (dynamicProperties.TryGetProperty("modsDir", out object modDir))
-            {
-                CurrentConfiguration.Game.ModsDirectory = (string)modDir;
-            }
-
             if (dynamicProperties.TryGetProperty("modManifest", out object path))
             {
                 manifest = new Manifest((string)path, logWriter);
@@ -125,7 +120,6 @@ namespace Ethereal.ModManager
             Dispatcher.Invoke(() =>
             {
                 ResetPlayButton();
-                ResetWindowState();
                 discord.ClearPresence();
             });
         }
@@ -135,15 +129,10 @@ namespace Ethereal.ModManager
             UpdateButtonContent(Properties.Resources.BtnPlay, true);
         }
 
-        private void ResetWindowState()
-        {
-            SetWindowState(WindowState.Normal, true, false);
-        }
 
         private void SetPlayingState()
         {
             UpdateButtonContent(Properties.Resources.BtnPlaying, false);
-            SetWindowState(WindowState.Minimized, false, true);
         }
 
         private void BtnModsWindow_Click(object sender, RoutedEventArgs e)
@@ -205,13 +194,6 @@ namespace Ethereal.ModManager
         {
             BtnPlay.Content = content;
             BtnPlay.IsHitTestVisible = isHitTestVisible;
-        }
-
-        private void SetWindowState(WindowState windowState, bool isTopmost, bool isNormal)
-        {
-            WindowState = windowState;
-            Topmost = isTopmost;
-            Topmost = isNormal;
         }
 
         private void BtnExitMainWindow_Click(object sender, RoutedEventArgs e)

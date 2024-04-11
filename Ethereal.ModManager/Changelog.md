@@ -1,3 +1,3 @@
-# v2024.04.01b
+# v2024.04.11b
 
 The Beta release for the Etheral Mod Manager!

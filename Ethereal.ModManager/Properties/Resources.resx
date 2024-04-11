@@ -139,7 +139,7 @@
     <value>Please select your distributed version of the game. \nYou can change your distribution in the settings.</value>
   </data>
   <data name="DistributionNo" xml:space="preserve">
-    <value>Microsoft Store</value>
+    <value>MS</value>
   </data>
   <data name="DistributionTitle" xml:space="preserve">
     <value>Distribution</value>
@@ -160,7 +160,7 @@
     <value>Automatic</value>
   </data>
   <data name="LblChangelog" xml:space="preserve">
-    <value>Changelog</value>
+    <value>Timeline</value>
   </data>
   <data name="SelectGameExecutable" xml:space="preserve">
     <value>Select the game executable</value>

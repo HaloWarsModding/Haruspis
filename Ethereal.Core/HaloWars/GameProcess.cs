@@ -29,7 +29,9 @@ namespace Ethereal.Core.HaloWars
         public event Action GameExited = () => { };
         public event Action GameStarted = () => { };
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task StartGame(bool silent, string distribution)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             this.silent = silent;
             logWriter.Log(LogLevel.Information, "Starting the game...");

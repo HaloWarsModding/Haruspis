@@ -1,4 +1,6 @@
-﻿namespace Ethereal.ModManager
+﻿using System.IO;
+
+namespace Ethereal.ModManager
 {
     public class Configuration
     {
@@ -15,7 +17,8 @@
 
     public class GameConfig
     {
-        public string ModsDirectory { get; set; } = string.Empty;
+        static readonly string baseDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        public string ModsDirectory { get; set; } = Path.Combine(baseDirectory, "mods");
         public string CurrentDistribution { get; set; } = "Steam";
         public string GameExecutablePath { get; set; } = string.Empty;
     }
