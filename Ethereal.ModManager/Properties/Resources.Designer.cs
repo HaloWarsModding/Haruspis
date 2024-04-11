@@ -61,11 +61,56 @@ namespace Ethereal.ModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a mod.
+        /// </summary>
+        public static string AddModDialog {
+            get {
+                return ResourceManager.GetString("AddModDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string BtnHelp {
             get {
                 return ResourceManager.GetString("BtnHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string BtnModPageAdd {
+            get {
+                return ResourceManager.GetString("BtnModPageAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play this mod.
+        /// </summary>
+        public static string BtnModPagePlayThis {
+            get {
+                return ResourceManager.GetString("BtnModPagePlayThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string BtnModPageRefresh {
+            get {
+                return ResourceManager.GetString("BtnModPageRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string BtnModPageRemove {
+            get {
+                return ResourceManager.GetString("BtnModPageRemove", resourceCulture);
             }
         }
         
@@ -115,7 +160,7 @@ namespace Ethereal.ModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select your distributed version of the game. \nYou can change your distribution in the settings..
+        ///   Looks up a localized string similar to Please select your distributed version of the game. {0}You can change your distribution in the settings..
         /// </summary>
         public static string DistributionContent {
             get {
@@ -147,6 +192,15 @@ namespace Ethereal.ModManager.Properties {
         public static string DistributionYes {
             get {
                 return ResourceManager.GetString("DistributionYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the game executable.
+        /// </summary>
+        public static string GameExecutableDialog {
+            get {
+                return ResourceManager.GetString("GameExecutableDialog", resourceCulture);
             }
         }
         
@@ -196,16 +250,70 @@ namespace Ethereal.ModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the game executable.
+        ///   Looks up a localized string similar to Want to set your mod directory? Head to the settings tab..
         /// </summary>
-        public static string SelectGameExecutable {
+        public static string LblModPageHelp {
             get {
-                return ResourceManager.GetString("SelectGameExecutable", resourceCulture);
+                return ResourceManager.GetString("LblModPageHelp", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a simple mod manager for Halo Wars: Definitive Edition. You can use this tool to install, update, and remove mods with ease. Enjoy!.
+        ///   Looks up a localized string similar to You need to select a mod to remove!.
+        /// </summary>
+        public static string RemoveModContent {
+            get {
+                return ResourceManager.GetString("RemoveModContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Mod.
+        /// </summary>
+        public static string RemoveModTitle {
+            get {
+                return ResourceManager.GetString("RemoveModTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Got it!.
+        /// </summary>
+        public static string RemoveModYes {
+            get {
+                return ResourceManager.GetString("RemoveModYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sucessfully imported {0}.
+        /// </summary>
+        public static string SelectModContent {
+            get {
+                return ResourceManager.GetString("SelectModContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Mod.
+        /// </summary>
+        public static string SelectModTitle {
+            get {
+                return ResourceManager.GetString("SelectModTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Got it!.
+        /// </summary>
+        public static string SelectModYes {
+            get {
+                return ResourceManager.GetString("SelectModYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a simple mod manager for Halo Wars: Definitive Edition. {0}You can use this tool to install, update, and remove mods with ease. Enjoy!.
         /// </summary>
         public static string WelcomeContent {
             get {

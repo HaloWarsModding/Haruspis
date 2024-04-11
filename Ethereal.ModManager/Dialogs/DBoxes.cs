@@ -4,7 +4,7 @@ namespace Ethereal.ModManager.Dialogs
 {
     public class DBoxes
     {
-        public static EtherealBox CreateDialogBox(DBoxType type)
+        public static EtherealBox CreateDialogBox(DBoxType type, string value = "")
         {
             return type switch
             {
@@ -17,14 +17,24 @@ namespace Ethereal.ModManager.Dialogs
                 DBoxType.Welcome => new EtherealBox(
                                         EtherealBox.EtherealBoxDialog.Yes,
                                         Properties.Resources.WelcomeTitle,
-                                        Properties.Resources.WelcomeContent,
+                                        string.Format(Properties.Resources.WelcomeContent, value),
                                         Properties.Resources.WelcomeYes),
                 DBoxType.Distribution => new EtherealBox(
                                         EtherealBox.EtherealBoxDialog.YesNo,
                                         Properties.Resources.DistributionTitle,
-                                        Properties.Resources.DistributionContent,
+                                        string.Format(Properties.Resources.DistributionContent, value),
                                         Properties.Resources.DistributionYes,
                                         Properties.Resources.DistributionNo),
+                DBoxType.SelectMod => new EtherealBox(
+                                        EtherealBox.EtherealBoxDialog.Yes,
+                                        Properties.Resources.SelectModTitle,
+                                        string.Format(Properties.Resources.SelectModContent, value),
+                                        Properties.Resources.SelectModYes),
+                DBoxType.RemoveMod => new EtherealBox(
+                                        EtherealBox.EtherealBoxDialog.Yes,
+                                        Properties.Resources.RemoveModTitle,
+                                        Properties.Resources.RemoveModContent,
+                                        Properties.Resources.RemoveModYes),
                 _ => throw new ArgumentException("Invalid box type"),
             };
         }
@@ -34,7 +44,9 @@ namespace Ethereal.ModManager.Dialogs
     {
         GameNotFound,
         Welcome,
-        Distribution
+        Distribution,
+        SelectMod,
+        RemoveMod
     }
 
 }

@@ -23,16 +23,10 @@ namespace Ethereal.Core.HaloWars
         void Uninstall();
     }
 
-    public class Manifest : IManifestManager
+    public class Manifest(string path, LogWriter writer) : IManifestManager
     {
-        private readonly string _path;
-        private readonly LogWriter _writer;
-
-        public Manifest(string path, LogWriter writer)
-        {
-            _path = path;
-            _writer = writer;
-        }
+        private readonly string _path = path;
+        private readonly LogWriter _writer = writer;
 
         public void Install(Mod mod)
         {
@@ -60,7 +54,22 @@ namespace Ethereal.Core.HaloWars
                 throw;
             }
         }
+        public string Read()
+        {
+            _writer.Log(LogLevel.Information, "Reading manifest...");
 
+            try
+            {
+                string manifest = File.ReadAllText(_path);
+
+                return manifest.Length > 0 ? manifest : "Vanilla";
+            }
+            catch (Exception ex)
+            {
+                _writer.Log(LogLevel.Error, $"Error reading manifest: {ex.Message}");
+                return "Vanilla";
+            }
+        }
         public void Uninstall()
         {
             _writer.Log(LogLevel.Information, "Uninstalling manifest...");

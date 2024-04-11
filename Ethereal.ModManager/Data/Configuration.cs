@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Ethereal.ModManager
+namespace Ethereal.ModManager.Data
 {
     public class Configuration
     {
@@ -11,16 +11,17 @@ namespace Ethereal.ModManager
 
     public class AppConfig
     {
-        public string Language { get; set; } = "fr_FR";
+        public string Language { get; set; } = "en_GB";
         public bool DiscordRichPresence { get; set; } = true;
     }
 
     public class GameConfig
     {
-        static readonly string baseDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        private static readonly string baseDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         public string ModsDirectory { get; set; } = Path.Combine(baseDirectory, "mods");
         public string CurrentDistribution { get; set; } = "Steam";
         public string GameExecutablePath { get; set; } = string.Empty;
+        public bool CustomManifest { get; set; } = false;
     }
 
     public class BoxesConfig

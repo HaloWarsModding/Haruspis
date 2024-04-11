@@ -46,36 +46,40 @@ namespace Ethereal.Core.HaloWars
 
             DirectoryInfo modsDirectory = new(modsPath);
             List<Mod> mods = modsDirectory.GetDirectories()
-                .Select(dir =>
-                {
-                    Mod mod = new() { Name = dir.Name, Path = dir.FullName };
+       .Select(dir =>
+       {
+           Mod mod = new() { Name = dir.Name, Path = dir.FullName };
 
-                    FileInfo hwModFile = new(Path.Combine(dir.FullName, ".hwmod"));
-                    if (hwModFile.Exists)
-                    {
-                        mod.HWModPath = hwModFile.FullName;
+           FileInfo hwModFile = new(Path.Combine(dir.FullName, ".hwmod"));
+           if (hwModFile.Exists)
+           {
+               mod.HWModPath = hwModFile.FullName;
 
-                        XDocument hwModXml = XDocument.Load(hwModFile.FullName);
-                        XElement? requiredData = hwModXml.Root?.Element("RequiredData");
-                        if (requiredData != null)
-                        {
-                            XAttribute? title = requiredData.Attribute("Title");
-                            if (title != null)
-                            {
-                                mod.Name = title.Value;
-                            }
-                        }
-                    }
+               XDocument hwModXml = XDocument.Load(hwModFile.FullName);
+               XElement? requiredData = hwModXml.Root?.Element("RequiredData");
+               if (requiredData != null)
+               {
+                   XAttribute? title = requiredData.Attribute("Title");
+                   if (title != null)
+                   {
+                       mod.Name = title.Value;
+                   }
+               }
 
-                    DirectoryInfo modDataDir = new(Path.Combine(dir.FullName, "ModData"));
-                    if (modDataDir.Exists)
-                    {
-                        mod.Path = modDataDir.FullName;
-                    }
+               DirectoryInfo modDataDir = new(Path.Combine(dir.FullName, "ModData"));
+               if (modDataDir.Exists)
+               {
+                   mod.Path = modDataDir.FullName;
+               }
 
-                    return mod;
-                })
-                .ToList();
+               return mod;
+           }
+
+           return mod;
+       })
+       .Where(mod => mod != null)
+       .ToList();
+
 
             Writer.Log(LogLevel.Information, $"Retrieved {mods.Count} mods from the directory");
 
@@ -111,5 +115,12 @@ namespace Ethereal.Core.HaloWars
 
             CurrentMod = mod;
         }
+
+        public Mod? FindMod(string path, string modsPath)
+        {
+            return GetMods(modsPath)
+                .FirstOrDefault(mod => mod.Path.Equals(path, StringComparison.OrdinalIgnoreCase));
+        }
+
     }
 }

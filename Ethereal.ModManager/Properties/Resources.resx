@@ -117,8 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddModDialog" xml:space="preserve">
+    <value>Select a mod</value>
+  </data>
   <data name="BtnHelp" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="BtnModPageAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="BtnModPagePlayThis" xml:space="preserve">
+    <value>Play this mod</value>
+  </data>
+  <data name="BtnModPageRefresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="BtnModPageRemove" xml:space="preserve">
+    <value>Remove</value>
   </data>
   <data name="BtnMods" xml:space="preserve">
     <value>My Mods</value>
@@ -136,7 +151,7 @@
     <value>Workshop</value>
   </data>
   <data name="DistributionContent" xml:space="preserve">
-    <value>Please select your distributed version of the game. \nYou can change your distribution in the settings.</value>
+    <value>Please select your distributed version of the game. {0}You can change your distribution in the settings.</value>
   </data>
   <data name="DistributionNo" xml:space="preserve">
     <value>MS</value>
@@ -146,6 +161,9 @@
   </data>
   <data name="DistributionYes" xml:space="preserve">
     <value>Steam</value>
+  </data>
+  <data name="GameExecutableDialog" xml:space="preserve">
+    <value>Select the game executable</value>
   </data>
   <data name="GameNotFoundContent" xml:space="preserve">
     <value>The game was not found. The program can attempt to automatically detect the game by running it for a few seconds.</value>
@@ -162,11 +180,29 @@
   <data name="LblChangelog" xml:space="preserve">
     <value>Timeline</value>
   </data>
-  <data name="SelectGameExecutable" xml:space="preserve">
-    <value>Select the game executable</value>
+  <data name="LblModPageHelp" xml:space="preserve">
+    <value>Want to set your mod directory? Head to the settings tab.</value>
+  </data>
+  <data name="RemoveModContent" xml:space="preserve">
+    <value>You need to select a mod to remove!</value>
+  </data>
+  <data name="RemoveModTitle" xml:space="preserve">
+    <value>Remove Mod</value>
+  </data>
+  <data name="RemoveModYes" xml:space="preserve">
+    <value>Got it!</value>
+  </data>
+  <data name="SelectModContent" xml:space="preserve">
+    <value>Sucessfully imported {0}</value>
+  </data>
+  <data name="SelectModTitle" xml:space="preserve">
+    <value>Selected Mod</value>
+  </data>
+  <data name="SelectModYes" xml:space="preserve">
+    <value>Got it!</value>
   </data>
   <data name="WelcomeContent" xml:space="preserve">
-    <value>This is a simple mod manager for Halo Wars: Definitive Edition. You can use this tool to install, update, and remove mods with ease. Enjoy!</value>
+    <value>This is a simple mod manager for Halo Wars: Definitive Edition. {0}You can use this tool to install, update, and remove mods with ease. Enjoy!</value>
   </data>
   <data name="WelcomeTitle" xml:space="preserve">
     <value>Welcome to Ethereal Mod Manager!</value>

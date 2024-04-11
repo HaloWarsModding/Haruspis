@@ -1,3 +1,4 @@
-# v2024.04.11b
+# v2024.04.12b
 
-The Beta release for the Etheral Mod Manager!
+- Automatic Detection for Discord Rich Presence
+- More Buttons to handle the Mod Page

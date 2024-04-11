@@ -110,7 +110,14 @@ namespace Ethereal.ModManager
             {
                 if (CurrentConfiguration.Settings.DiscordRichPresence)
                 {
-                    discord.UpdatePresence($"Playing {manager.CurrentMod.Name}", "Halo Wars: Definitive Edition", "ethereal", "Ethereal", "VIP", "https://github.com/HaloWarsModding/Ethereal");
+                    if (CurrentConfiguration.Game.CustomManifest)
+                    {
+                        string modTitle = manifest.Read();
+                       Mod currentmod = manager.FindMod(modTitle, CurrentConfiguration.Game.ModsDirectory);
+                        manager.SetCurrentMod(currentmod);
+                    }
+
+                    discord.UpdatePresence($"Playing {manager.CurrentMod.Name}", "Halo Wars: Definitive Edition", "ethereal", "Ethereal: Mod Manager", "VIP", "https://github.com/HaloWarsModding/Ethereal");
                 }
             });
         }
@@ -174,11 +181,12 @@ namespace Ethereal.ModManager
                     await gameProcess.StartGame(true, CurrentConfiguration.Game.CurrentDistribution);
                     manifest.Uninstall();
                     CurrentConfiguration.Game.GameExecutablePath = gameProcess.GameExecutablePath;
+                    CurrentConfiguration.Game.CustomManifest = true;
                     configWriter.WriteConfigFile(CurrentConfiguration);
                 }
                 else
                 {
-                    OpenFileDialog gameExecutable = DFiles.CreateDialogFile(DFileType.GameExecutable);
+                    FileDialog gameExecutable = DDialogs.CreateDialogFile(DFileType.GameExecutable);
                     string selectedFilePath = gameExecutable.ShowDialog() == true ? gameExecutable.FileName : string.Empty;
 
                     if (!string.IsNullOrWhiteSpace(selectedFilePath))
