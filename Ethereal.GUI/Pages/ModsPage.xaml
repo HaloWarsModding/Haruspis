@@ -1,0 +1,49 @@
+﻿<Window x:Class="Ethereal.GUI.Box.ModsPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ethereal.GUI.Box"
+          xmlns:properties="clr-namespace:Ethereal.GUI.Properties"
+        mc:Ignorable="d"
+        Title="ModsPage" Height="450" Width="800" Foreground="White" WindowStyle="None" AllowsTransparency="True">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#00000000" Offset="1"/>
+            <GradientStop Color="#FF0078B7" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Window.OpacityMask>
+        <ImageBrush ImageSource="/Assets/OpacityMask.png"/>
+    </Window.OpacityMask>
+    <Grid>
+        <StackPanel x:Name="PnlDragWindow" Margin="10,0,55,425" PreviewMouseDown="PnlDragWindow_PreviewMouseDown" Background="Black" Opacity="0" Cursor="SizeAll"/>
+        <ListBox x:Name="ListBoxMods" Margin="25,46,22,56" Foreground="White" BorderBrush="{x:Null}" Background="{x:Null}" SelectionChanged="ListBoxMods_SelectionChanged"/>
+        <Button x:Name="BtnExit" Content="" HorizontalAlignment="Left" Margin="760,10,0,0" VerticalAlignment="Top" Height="30" Width="30 " BorderBrush="{x:Null}" Click="BtnExit_Click" Foreground="{x:Null}" Cursor="Hand" RenderTransformOrigin="8.067,-0.267">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Exit.png" Stretch="Uniform"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="BtnAddMod" Content="{x:Static properties:Resources.BtnModPageAdd}" HorizontalAlignment="Left" Margin="25,399,0,28" Width="92" Foreground="White" BorderBrush="{x:Null}" Click="BtnAddMod_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Box.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="BtnRemoveMod" Content="{x:Static properties:Resources.BtnModPageRemove}" HorizontalAlignment="Left" Margin="122,399,0,28" Width="92" Foreground="White" BorderBrush="{x:Null}" Click="BtnRemoveMod_Click" IsEnabled="False">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Box.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="BtnRefresh" Content="{x:Static properties:Resources.BtnModPageRefresh}" HorizontalAlignment="Left" Margin="219,399,0,28" Width="92" Foreground="White" BorderBrush="{x:Null}" Click="BtnRefresh_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Box.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="BtnPlayThis" Content="{x:Static properties:Resources.BtnModPagePlayThis}" HorizontalAlignment="Left" Margin="686,399,0,28" Width="92" Foreground="White" BorderBrush="{x:Null}" Click="BtnModPagePlayThis_Click" IsEnabled="False">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Box.png"/>
+            </Button.Background>
+        </Button>
+        <Label x:Name="LblHelp" Content="{x:Static properties:Resources.LblModPageHelp}" HorizontalAlignment="Left" Margin="316,398,0,0" VerticalAlignment="Top" Width="318" Foreground="White"/>
+    </Grid>
+</Window>
