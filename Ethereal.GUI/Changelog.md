@@ -1,4 +1,6 @@
-# v2024.04.12b
+# v2024.04.14b
 
-- Automatic Detection for Discord Rich Presence
-- More Buttons to handle the Mod Page
+- Modulization of the entire project
+- Refactor of the entire source code
+- Usage of Instances and Events
+- More stable game detection
