@@ -36,6 +36,7 @@ namespace Ethereal.Config
         public class ModsConfig
         {
             public string Path { get; set; } = System.IO.Path.Combine(baseDirectory, "mods");
+            public bool customManifest { get; set; } = false;
             public string LastPlayedMod { get; set; } = "Vanilla";
         }
 
@@ -86,6 +87,7 @@ namespace Ethereal.Config
                     {
                         Settings = configObject.Settings;
                         HaloWars = configObject.HaloWars;
+                        Mods = configObject.Mods;
                     }
                     else
                     {

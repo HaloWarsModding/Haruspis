@@ -9,6 +9,9 @@ namespace Ethereal.GUI
     public partial class MainWindow : Window
     {
         public string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "config.xml");
+        private readonly string ManifestPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Halo Wars", "ModManifest.txt");
+
+        public static Manifest manifest = new();
         public static Configuration config = new();
 
         public MainWindow()
@@ -18,6 +21,7 @@ namespace Ethereal.GUI
             InitializeConfig();
             InitializeDiscord();
             InitializeChangelog();
+            InitializeManifest();
 
             ShowWelcomeBox();
             ShowDistributionBox();
@@ -27,6 +31,66 @@ namespace Ethereal.GUI
             HWProcess.GetInstance().GameExited += HandleGameExited;
             HWProcess.GetInstance().FoundProcessExecutable += HandleProcessExecutableFound;
         }
+
+        private void InitializeManifest()
+        {
+            if (!File.Exists(ManifestPath) || config.Mods.customManifest == false)
+            {
+                manifest.FromFile(ManifestPath);
+
+                config.Mods.customManifest = true;
+                config.ToFile(configPath);
+                return;
+            }
+
+            manifest.FromFile(ManifestPath);
+
+            Mod mod = new();
+            mod.FromPath(manifest.Content);
+
+            config.Mods.LastPlayedMod = mod.Name;
+            config.ToFile(configPath);
+        }
+
+        #region Initializations
+
+        private void InitializeDiscord()
+        {
+            Utility.GetInstance().InitializeDiscord();
+        }
+
+        private void InitializeChangelog()
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "changelog.md");
+            string changelog = File.ReadAllText(path);
+            LblChangelog.Content = Utility.GetInstance().MarkdownToFlowDocument(changelog);
+        }
+
+        private void InitializeFolderStructure()
+        {
+            string data = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
+            _ = Directory.CreateDirectory(data);
+
+            string logs = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+            _ = Directory.CreateDirectory(logs);
+            Logger.GetInstance().SetPath(logs);
+
+            string mods = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mods");
+            _ = Directory.CreateDirectory(mods);
+        }
+
+        private void InitializeConfig()
+        {
+            if (!File.Exists(configPath))
+            {
+                config.ToFile(configPath);
+                return;
+            }
+
+            config.FromFile(configPath);
+        }
+
+        #endregion
 
         #region Boxes
 
@@ -105,46 +169,6 @@ namespace Ethereal.GUI
             }
 
             config.ToFile(configPath);
-        }
-
-        #endregion
-
-        #region Initializations
-
-        private void InitializeDiscord()
-        {
-            Utility.GetInstance().InitializeDiscord();
-        }
-
-        private void InitializeChangelog()
-        {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "changelog.md");
-            string changelog = File.ReadAllText(path);
-            LblChangelog.Content = Utility.GetInstance().MarkdownToFlowDocument(changelog);
-        }
-
-        private void InitializeFolderStructure()
-        {
-            string data = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
-            _ = Directory.CreateDirectory(data);
-
-            string logs = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
-            _ = Directory.CreateDirectory(logs);
-            Logger.GetInstance().SetPath(logs);
-
-            string mods = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mods");
-            _ = Directory.CreateDirectory(mods);
-        }
-
-        private void InitializeConfig()
-        {
-            if (!File.Exists(configPath))
-            {
-                config.ToFile(configPath);
-                return;
-            }
-
-            config.FromFile(configPath);
         }
 
         #endregion
