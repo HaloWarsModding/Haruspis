@@ -21,12 +21,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>full</DebugType>
+    <DebugType>none</DebugType>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
+    <DebugType>none</DebugType>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
@@ -45,6 +45,9 @@
     <None Remove="Assets\OpacityMask.png" />
     <None Remove="Background" />
     <None Remove="Ethereal.png" />
+    <None Remove="Pages\ModsBackground.png" />
+    <None Remove="TimelineBody.png" />
+    <None Remove="TimelineHeader.png" />
     <None Remove="Untitled.png" />
   </ItemGroup>
 
@@ -72,21 +75,9 @@
     <Resource Include="Assets\MenuBar.png" />
     <Resource Include="Assets\Ethereal.png" />
     <Resource Include="Assets\OpacityMask.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Resource Include="Pages\ModsBackground.png" />
+    <Resource Include="TimelineBody.png" />
+    <Resource Include="TimelineHeader.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -108,7 +99,6 @@
     <ProjectReference Include="..\Ethereal.HaloWars\Ethereal.HaloWars.csproj" />
     <ProjectReference Include="..\Ethereal.IO\Ethereal.Config.csproj" />
     <ProjectReference Include="..\Ethereal.Logging\Ethereal.Logging.csproj" />
-    <ProjectReference Include="..\Ethereal.Updater\Ethereal.Updater.csproj" />
     <ProjectReference Include="..\Ethereal.Utils\Ethereal.Utils.csproj" />
   </ItemGroup>
 

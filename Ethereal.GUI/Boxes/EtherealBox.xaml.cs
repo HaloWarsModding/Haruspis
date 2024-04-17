@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Ethereal.GUI.Box
+namespace Ethereal.GUI.Pages
 {
     public partial class EtherealBox : Window
     {

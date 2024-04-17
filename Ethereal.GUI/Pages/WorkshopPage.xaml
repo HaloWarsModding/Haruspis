@@ -1,0 +1,27 @@
+﻿<Window x:Class="Ethereal.GUI.Pages.WorkshopPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ethereal.GUI.Pages"
+        mc:Ignorable="d"
+        Title="SettingsPage" Height="391" Width="682" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="True">
+    <Window.OpacityMask>
+        <ImageBrush ImageSource="/Assets/OpacityMask.png"/>
+    </Window.OpacityMask>
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#7F0090FF"/>
+            <GradientStop Color="#00000000" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <StackPanel x:Name="PnlDragWindow" Margin="10,0,55,366" PreviewMouseDown="DragPage" Background="Black" Opacity="0" Cursor="SizeAll"/>
+        <Button x:Name="BtnExitPage" Content="" HorizontalAlignment="Left" Margin="642,10,0,0" VerticalAlignment="Top" Height="30" Width="30 " BorderBrush="{x:Null}" Foreground="{x:Null}" Cursor="Hand" Click="ExitPage">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Exit.png" Stretch="Uniform"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>

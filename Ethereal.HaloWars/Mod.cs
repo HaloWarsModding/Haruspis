@@ -1,4 +1,6 @@
 ﻿using Ethereal.Logging;
+using System;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace Ethereal.HaloWars
@@ -6,7 +8,7 @@ namespace Ethereal.HaloWars
     public sealed class Mod
     {
         #region Properties
-        public string? Name { get; set; }
+        public string? Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public string Version { get; set; } = string.Empty;
@@ -14,6 +16,7 @@ namespace Ethereal.HaloWars
         public string HWModPath { get; set; } = string.Empty;
         public string CustomVideoPath { get; set; } = string.Empty;
         public string CustomSavePath { get; set; } = string.Empty;
+        public bool IsMod { get; set; } = true;
         #endregion
 
         private static Mod? _instance;
@@ -36,18 +39,59 @@ namespace Ethereal.HaloWars
         {
             ModPath = path;
 
+            Logger.GetInstance().Log(LogLevel.Information, $"Loading mod from path: {ModPath}");
+
             if (!Directory.Exists(ModPath))
             {
                 Logger.GetInstance().Log(LogLevel.Error, "Specified path does not exist.");
                 return;
             }
 
+            if (!IsValid())
+            {
+                IsMod = false;
+                Logger.GetInstance().Log(LogLevel.Warning, "Mod is not valid.");
+                return;
+            }
+
+            Logger.GetInstance().Log(LogLevel.Information, "Mod is valid.");
+
+            IsMod = true;
+
             HandleModData();
             HandleHWMOD();
+            HandleEmpty();
+        }
 
-            if(Name == string.Empty)
+        private bool IsValid()
+        {
+            DirectoryInfo info = new(ModPath);
+
+            bool isValid = !info.Name.StartsWith('.');
+
+            if (!isValid)
             {
-                Name = Path.GetDirectoryName(ModPath);
+                Logger.GetInstance().Log(LogLevel.Warning, "Mod directory name starts with a dot.");
+            }
+
+            return isValid;
+        }
+
+        private void HandleEmpty()
+        {
+            if (Name == string.Empty)
+            {
+                DirectoryInfo info = new(ModPath);
+
+                if (info.Name == "ModData")
+                {
+                    Name = Directory.GetParent(info.FullName)!.Name;
+                    Logger.GetInstance().Log(LogLevel.Information, "Mod name set from parent directory.");
+                    return;
+                }
+
+                Name = info.Name;
+                Logger.GetInstance().Log(LogLevel.Information, "Mod name set from directory name.");
             }
         }
 
@@ -57,6 +101,7 @@ namespace Ethereal.HaloWars
             if (Directory.Exists(modDataPath))
             {
                 ModPath = modDataPath;
+                Logger.GetInstance().Log(LogLevel.Information, "Mod data directory found and set as mod path.");
             }
         }
 
@@ -77,14 +122,18 @@ namespace Ethereal.HaloWars
 
                 try
                 {
+                    Logger.GetInstance().Log(LogLevel.Information, $"Loading HWMod from file: {hwModFilePath}");
+
                     XmlSerializer serializer = new(typeof(HWMod));
                     using FileStream fileStream = new(hwModFilePath, FileMode.Open);
                     HWMod mod = (HWMod)serializer.Deserialize(fileStream)!;
 
                     Name = mod.RequiredData.Title;
-                    Description = mod.OptionalData.Description;
+                    Description = mod.OptionalData?.Description ?? string.Empty;
                     Author = mod.RequiredData.Author;
                     Version = mod.RequiredData.Version;
+
+                    Logger.GetInstance().Log(LogLevel.Information, "HWMod loaded successfully.");
                 }
                 catch (Exception ex)
                 {
@@ -103,25 +152,25 @@ namespace Ethereal.HaloWars
     public class HWMod
     {
         [XmlAttribute("ManifestVersion")]
-        public required int ManifestVersion { get; set; }
+        public int ManifestVersion { get; set; }
 
         [XmlAttribute("ModID")]
-        public required string ModID { get; set; }
+        public string ModID { get; set; }
 
-        public required RequiredData RequiredData { get; set; }
+        public RequiredData RequiredData { get; set; }
         public OptionalData? OptionalData { get; set; }
     }
 
     public class RequiredData
     {
         [XmlAttribute("Title")]
-        public required string Title { get; set; }
+        public string Title { get; set; }
 
         [XmlAttribute("Author")]
-        public required string Author { get; set; }
+        public string Author { get; set; }
 
         [XmlAttribute("Version")]
-        public required string Version { get; set; }
+        public string Version { get; set; }
     }
 
     public class OptionalData

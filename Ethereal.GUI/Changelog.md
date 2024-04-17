@@ -1,6 +1,3 @@
-# v2024.04.14b
+# v2024.04.15b
 
-- Modulization of the entire project
-- Refactor of the entire source code
-- Usage of Instances and Events
-- More stable game detection
+- Mod Managing system working, click into a mod and just press play. you're in!

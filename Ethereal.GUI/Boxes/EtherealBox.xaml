@@ -1,9 +1,9 @@
-﻿<Window x:Class="Ethereal.GUI.Box.EtherealBox"
+﻿<Window x:Class="Ethereal.GUI.Pages.EtherealBox"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Ethereal.GUI.Box"
+        xmlns:local="clr-namespace:Ethereal.GUI.Pages"
         mc:Ignorable="d"
         Title="EtherealBox" Height="187" Width="686" Foreground="White" WindowStyle="None" AllowsTransparency="True" Topmost="True" WindowStartupLocation="CenterScreen">
     <Window.Background>

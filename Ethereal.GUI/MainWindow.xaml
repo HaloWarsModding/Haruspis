@@ -3,26 +3,64 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:properties="clr-namespace:Ethereal.GUI.Properties"
         mc:Ignorable="d"
-        Title="Ethereal: Mod Manager" Height="720" Width="1280" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" Icon="/Assets/Ethereal.png" WindowStartupLocation="CenterScreen" Foreground="{x:Null}"
-   >
+        Title="Ethereal: Mod Manager" 
+        Height="720" 
+        Width="1280" 
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        ResizeMode="NoResize" 
+        Icon="/Assets/Ethereal.png" 
+        WindowStartupLocation="CenterScreen" 
+        Foreground="{x:Null}" MinWidth="1280" MinHeight="720" FontFamily="Bahnschrift SemiLight SemiCondensed" FontSize="16">
+
     <Window.OpacityMask>
         <ImageBrush ImageSource="/Assets/OpacityMask.png" Stretch="Fill"/>
     </Window.OpacityMask>
+
     <Window.Background>
         <ImageBrush ImageSource="/Assets/Background.png" Stretch="UniformToFill"/>
     </Window.Background>
+
     <Grid>
-        <Image Margin="0,450,0,28" Source="/Assets/MenuBar.png" RenderTransformOrigin="0.5,1" Width="1280" Stretch="UniformToFill" HorizontalAlignment="Center"/>
-        <Button x:Name="BtnExitMainWindow" Content="" HorizontalAlignment="Left" Margin="1242,10,0,0" VerticalAlignment="Top" Height="30" Width="30
-" BorderBrush="{x:Null}" Foreground="{x:Null}" Cursor="Hand" Click="ExitWindow">
+        <!-- Menu Bar -->
+        <Image Margin="0,450,0,28" 
+               Source="/Assets/MenuBar.png" 
+               RenderTransformOrigin="0.5,1" 
+               Width="1280" 
+               Stretch="UniformToFill" 
+               HorizontalAlignment="Center"/>
+
+        <!-- Exit Button -->
+        <Button x:Name="BtnExitMainWindow" 
+                Content="" 
+                HorizontalAlignment="Left" 
+                Margin="1242,10,0,0" 
+                VerticalAlignment="Top" 
+                Height="30" 
+                Width="30" 
+                BorderBrush="{x:Null}" 
+                Foreground="{x:Null}" 
+                Cursor="Hand" 
+                Click="ExitWindow">
             <Button.Background>
                 <ImageBrush ImageSource="/Assets/Exit.png" Stretch="Uniform"/>
             </Button.Background>
         </Button>
-        <StackPanel x:Name="PnlDragWindow" Margin="0,0,55,695" PreviewMouseDown="DragWindow" Background="Black" Opacity="0" Cursor="SizeAll"/>
-        <WrapPanel Margin="10,480,484,42" RenderTransformOrigin="0.5,0.5" Orientation="Vertical" Cursor="Hand">
+
+        <!-- Drag Window Panel -->
+        <StackPanel x:Name="PnlDragWindow" 
+                    Margin="0,0,55,695" 
+                    PreviewMouseDown="DragWindow" 
+                    Background="Black" 
+                    Opacity="0" 
+                    Cursor="SizeAll"/>
+
+        <!-- Main Menu Buttons -->
+        <WrapPanel Margin="10,484,484,40" 
+                   RenderTransformOrigin="0.503,0.6" 
+                   Orientation="Vertical" 
+                   Cursor="Hand">
             <WrapPanel.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -30,45 +68,122 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </WrapPanel.RenderTransform>
-            <Button x:Name="BtnModsWindow" Content="{x:Static properties:Resources.BtnMods}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+
+            <Button x:Name="BtnModsWindow" 
+                    Content="   My Mods" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top" 
+                    Height="48" 
+                    Width="319" 
+                    BorderBrush="{x:Null}" 
+                    Foreground="White" 
+                    FontSize="20" 
+                    Cursor="Hand" 
+                    Click="ShowModPage" HorizontalContentAlignment="Left">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="BtnWorkshop" Content="{x:Static properties:Resources.BtnWorkshop}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+
+            <Button x:Name="BtnWorkshop" 
+                    Content="   Workshop" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Height="48" 
+                    Width="319" 
+                    BorderBrush="{x:Null}" 
+                    Foreground="White" 
+                    FontSize="20" 
+                    Cursor="Hand" 
+                    Click="ShowWorkshopPage" HorizontalContentAlignment="Left">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="BtnSettingsWindow" Content="{x:Static properties:Resources.BtnSettings}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+
+            <Button x:Name="BtnSettingsWindow" 
+                    Content="   Settings" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Height="48" 
+                    Width="319" 
+                    BorderBrush="{x:Null}" 
+                    Foreground="White" 
+                    FontSize="20" 
+                    Cursor="Hand" 
+                    Click="ShowSettingsPage" HorizontalContentAlignment="Left">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="BtnHelp" Content="{x:Static properties:Resources.BtnHelp}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="48" Width="319" BorderBrush="{x:Null}" Foreground="White" FontSize="20" Cursor="Hand">
+
+            <Button x:Name="BtnHelp" 
+                    Content="   Help" 
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Height="48" 
+                    Width="319" 
+                    BorderBrush="{x:Null}" 
+                    Foreground="White" 
+                    FontSize="20" 
+                    Cursor="Hand" 
+                    Click="ShowHelp">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/MenuBackground.png" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
         </WrapPanel>
-        <Button x:Name="BtnPlay" HorizontalAlignment="Left" Margin="814,595,0,0" VerticalAlignment="Top" Height="66" Width="442" Foreground="White" FontSize="48" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Content="{x:Static properties:Resources.BtnPlay}" Click="BtnPlay_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="/Assets/MenuBackground.png"/>
-            </Button.Background>
-        </Button>
-        <Rectangle HorizontalAlignment="Left" Height="423" Margin="814,45,0,0" VerticalAlignment="Top" Width="442">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#7F0090FF"/>
-                    <GradientStop Color="#00000000" Offset="1"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-            <Rectangle.OpacityMask>
+
+        <!-- Play Button -->
+        <Button x:Name="BtnPlay" 
+                HorizontalAlignment="Left" 
+                Margin="814,595,0,0" 
+                VerticalAlignment="Top" 
+                Height="66" 
+                Width="442" 
+                Foreground="White" 
+                FontSize="48" 
+                BorderBrush="{x:Null}" 
+                RenderTransformOrigin="0.5,0.5" 
+                Cursor="Hand" 
+                Content="Launch" 
+                Click="BtnPlay_Click" HorizontalContentAlignment="Center" Background="Black">
+            <Button.OpacityMask>
                 <ImageBrush ImageSource="/Assets/ChangelogMask.png"/>
-            </Rectangle.OpacityMask>
-        </Rectangle>
-        <Label x:Name="LblChangelog" Content="{x:Static properties:Resources.LblChangelog}" HorizontalAlignment="Left" Margin="872,45,0,0" VerticalAlignment="Top" Width="326" Height="48" Foreground="White" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <RichTextBox x:Name="TxBoxChangelog" Margin="814,98,24,270" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="White" FontSize="18" IsDocumentEnabled="True" IsReadOnly="True" IsUndoEnabled="False" IsHitTestVisible="False">
+            </Button.OpacityMask>
+        </Button>
+
+        <!-- Changelog -->
+
+        <!-- Changelog Label -->
+        <Label x:Name="LblChangelog" 
+               Content="Timeline" 
+               HorizontalAlignment="Left" 
+               Margin="136,25,0,0" 
+               VerticalAlignment="Top" 
+               Width="326" 
+               Height="48" 
+               Foreground="White" 
+               FontSize="24" 
+               HorizontalContentAlignment="Center" 
+               VerticalContentAlignment="Center"/>
+
+        <!-- Changelog RichTextBox -->
+        <RichTextBox x:Name="TxBoxChangelog" 
+                     BorderBrush="{x:Null}" 
+                     SelectionBrush="{x:Null}" 
+                     SelectionTextBrush="{x:Null}" 
+                     Foreground="White" 
+                     FontSize="18" 
+                     IsDocumentEnabled="True" 
+                     IsReadOnly="True" 
+                     IsUndoEnabled="False" 
+                     IsHitTestVisible="False" Margin="32,47,462,251">
+            <RichTextBox.Background>
+                <ImageBrush ImageSource="/TimelineBody.png"/>
+            </RichTextBox.Background>
             <FlowDocument>
                 <Paragraph>
                     <Run Text=""/>

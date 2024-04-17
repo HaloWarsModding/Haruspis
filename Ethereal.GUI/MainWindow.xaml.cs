@@ -1,7 +1,9 @@
-﻿using Ethereal.GUI.Box;
+﻿using Ethereal.GUI.Pages;
 using Ookii.Dialogs.Wpf;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Ethereal.GUI
@@ -32,6 +34,8 @@ namespace Ethereal.GUI
             HWProcess.GetInstance().FoundProcessExecutable += HandleProcessExecutableFound;
         }
 
+        #region Initializations
+
         private void InitializeManifest()
         {
             if (!File.Exists(ManifestPath) || config.Mods.customManifest == false)
@@ -52,9 +56,7 @@ namespace Ethereal.GUI
             config.ToFile(configPath);
         }
 
-        #region Initializations
-
-        private void InitializeDiscord()
+        private static void InitializeDiscord()
         {
             Utility.GetInstance().InitializeDiscord();
         }
@@ -63,10 +65,11 @@ namespace Ethereal.GUI
         {
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "changelog.md");
             string changelog = File.ReadAllText(path);
-            LblChangelog.Content = Utility.GetInstance().MarkdownToFlowDocument(changelog);
+            FlowDocument document = Utility.GetInstance().MarkdownToFlowDocument(changelog);
+            TxBoxChangelog.Document = document;
         }
 
-        private void InitializeFolderStructure()
+        private static void InitializeFolderStructure()
         {
             string data = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
             _ = Directory.CreateDirectory(data);
@@ -101,7 +104,7 @@ namespace Ethereal.GUI
                 return;
             }
 
-            EtherealBox box = new(EtherealBox.EtherealBoxDialog.YesNo, Properties.Resources.GameDetectionTitle, Properties.Resources.GameDetectionContent, Properties.Resources.GameDetectionYes, Properties.Resources.GameDetectionNo);
+            EtherealBox box = new(EtherealBox.EtherealBoxDialog.YesNo, "Game Detection", "Ethereal can attempt to automatically detect the game by running it for a few seconds. \n(This feature is experimental and may not work)", "Automatic", "Manual");
 
             if (box.ShowDialog().Value == true)
             {
@@ -140,7 +143,8 @@ namespace Ethereal.GUI
                 return;
             }
 
-            EtherealBox box = new(EtherealBox.EtherealBoxDialog.YesNo, Properties.Resources.DistributionTitle, Properties.Resources.DistributionContent, Properties.Resources.DistributionYes, Properties.Resources.DistributionNo);
+            EtherealBox box = new(EtherealBox.EtherealBoxDialog.YesNo, "Distribution", "Please select your distributed version of the game. \nYou can change your distribution in the settings.", "Steam", "MS");
+
             if (box.ShowDialog().Value == true)
             {
                 config.Settings.ShowDistributionDialog = false;
@@ -162,7 +166,7 @@ namespace Ethereal.GUI
                 return;
             }
 
-            EtherealBox box = new(EtherealBox.EtherealBoxDialog.Yes, Properties.Resources.WelcomeTitle, Properties.Resources.WelcomeContent, Properties.Resources.WelcomeYes);
+            EtherealBox box = new(EtherealBox.EtherealBoxDialog.Yes, "Welcome Helljumper!", "Ethereal is a mod manager for Halo Wars: Definitive Edition. \nYou can use this tool to install, update, and remove mods with ease. Enjoy!", "Got it!");
             if (box.ShowDialog().Value == true)
             {
                 config.Settings.ShowWelcomeDialog = false;
@@ -196,6 +200,12 @@ namespace Ethereal.GUI
 
         #region UI Event Handlers
 
+        public void SetChangelogContent(string content)
+        {
+            FlowDocument document = Utility.GetInstance().MarkdownToFlowDocument(content);
+            TxBoxChangelog.Document = document;
+        }
+
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -215,6 +225,29 @@ namespace Ethereal.GUI
         {
             HWProcess.GetInstance().StartGame(config.HaloWars.CurrentDistribution, false);
             HWProcess.GetInstance().StartMonitoring();
+        }
+
+        private void ShowModPage(object sender, RoutedEventArgs e)
+        {
+            ModsPage modsPage = new(this);
+            _ = modsPage.ShowDialog();
+        }
+
+        private void ShowWorkshopPage(object sender, RoutedEventArgs e)
+        {
+            WorkshopPage workshopPage = new();
+            _ = workshopPage.ShowDialog();
+        }
+
+        private void ShowSettingsPage(object sender, RoutedEventArgs e)
+        {
+            SettingsPage settingsPage = new();
+            _ = settingsPage.ShowDialog();
+        }
+
+        private void ShowHelp(object sender, RoutedEventArgs e)
+        {
+            _ = Process.Start("cmd", "/c start https://github.com/HaloWarsModding/Ethereal/wiki");
         }
 
         #endregion

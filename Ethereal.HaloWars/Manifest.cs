@@ -27,15 +27,13 @@ namespace Ethereal.HaloWars
             {
                 using StreamReader streamReader = new(path);
                 Content = streamReader.ReadToEnd();
-                streamReader.Close();
-                Logger.GetInstance().Log(LogLevel.Information, "Manifest loaded successfully from file: " + path);
+                Logger.GetInstance().Log(LogLevel.Information, $"Manifest loaded successfully from file: {path}");
             }
             catch (Exception ex)
             {
-                Logger.GetInstance().Log(LogLevel.Error, "Error loading manifest from file: " + ex.Message);
+                Logger.GetInstance().Log(LogLevel.Error, $"Error loading manifest from file: {ex.Message}");
             }
         }
-
 
         public void ToFile(string path)
         {
@@ -43,13 +41,12 @@ namespace Ethereal.HaloWars
             {
                 using StreamWriter streamWriter = new(path, false);
                 streamWriter.Write(Content);
-                Logger.GetInstance().Log(LogLevel.Information, "Manifest saved successfully to file: " + path);
+                Logger.GetInstance().Log(LogLevel.Information, $"Manifest saved successfully to file: {path}");
             }
             catch (Exception ex)
             {
-                Logger.GetInstance().Log(LogLevel.Error, "Error saving manifest to file: " + ex.Message);
+                Logger.GetInstance().Log(LogLevel.Error, $"Error saving manifest to file: {ex.Message}");
             }
         }
-
     }
 }

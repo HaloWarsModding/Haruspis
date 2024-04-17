@@ -1,4 +1,8 @@
-﻿using System.Diagnostics;
+﻿using Ethereal.Logging;
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using static Ethereal.Config.Configuration;
 
 namespace Ethereal.HaloWars
@@ -47,11 +51,13 @@ namespace Ethereal.HaloWars
                         HwProcess = processes[0];
                         HwProcess.EnableRaisingEvents = true;
 
+                        Logger.GetInstance().Log(LogLevel.Information, "Game process detected. Monitoring started.");
                         OnGameStarted();
                         OnFoundProcessExecutable(HwProcess.MainModule!.FileName);
                     }
                     else if (processes.Length == 0 && HwProcess != null)
                     {
+                        Logger.GetInstance().Log(LogLevel.Information, "Game process exited. Monitoring stopped.");
                         OnGameExited();
                         HwProcess = null;
                     }
@@ -68,21 +74,25 @@ namespace Ethereal.HaloWars
 
         private void OnGameStarted()
         {
+            Logger.GetInstance().Log(LogLevel.Information, "Game started.");
             GameStarted?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnGameExited()
         {
+            Logger.GetInstance().Log(LogLevel.Information, "Game exited.");
             GameExited?.Invoke(this, EventArgs.Empty);
             StopMonitoring();
         }
 
         private void OnFoundProcessExecutable(string executablePath)
         {
+            Logger.GetInstance().Log(LogLevel.Information, $"Executable found: {executablePath}");
             FoundProcessExecutable?.Invoke(this, executablePath);
 
             if (IsSilent)
             {
+                Logger.GetInstance().Log(LogLevel.Information, "Silent mode enabled. Stopping monitoring and terminating process.");
                 StopMonitoring();
                 HwProcess?.Kill();
                 HwProcess = null;
