@@ -12,6 +12,7 @@ namespace Ethereal.HaloWars
         public string Description { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public string Version { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
         public string ModPath { get; set; } = string.Empty;
         public string HWModPath { get; set; } = string.Empty;
         public string CustomVideoPath { get; set; } = string.Empty;

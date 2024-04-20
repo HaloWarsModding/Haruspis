@@ -1,4 +1,5 @@
-﻿using Ethereal.GUI.Pages;
+﻿using Ethereal.GUI.Boxes;
+using Ethereal.GUI.Pages;
 using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,7 @@ namespace Ethereal.GUI
     {
         public string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "config.xml");
         private readonly string ManifestPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Halo Wars", "ModManifest.txt");
+        public static TimelineBox TimelineBox = new();
 
         public static Manifest manifest = new();
         public static Configuration config = new();
@@ -22,7 +24,7 @@ namespace Ethereal.GUI
             InitializeFolderStructure();
             InitializeConfig();
             InitializeDiscord();
-            InitializeChangelog();
+            InitializeChangelog(TimelineBox);
             InitializeManifest();
 
             ShowWelcomeBox();
@@ -61,12 +63,13 @@ namespace Ethereal.GUI
             Utility.GetInstance().InitializeDiscord();
         }
 
-        private void InitializeChangelog()
+        private void InitializeChangelog(TimelineBox changelogBox)
         {
+            MainTimeline = changelogBox;
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "changelog.md");
             string changelog = File.ReadAllText(path);
             FlowDocument document = Utility.GetInstance().MarkdownToFlowDocument(changelog);
-            TxBoxChangelog.Document = document;
+            changelogBox.TxBoxChangelog.Document = document;
         }
 
         private static void InitializeFolderStructure()
@@ -200,10 +203,10 @@ namespace Ethereal.GUI
 
         #region UI Event Handlers
 
-        public void SetChangelogContent(string content)
+        public static void SetChangelogContent(string content, TimelineBox box)
         {
             FlowDocument document = Utility.GetInstance().MarkdownToFlowDocument(content);
-            TxBoxChangelog.Document = document;
+            box.TxBoxChangelog.Document = document;
         }
 
         private void DragWindow(object sender, MouseButtonEventArgs e)
@@ -229,7 +232,7 @@ namespace Ethereal.GUI
 
         private void ShowModPage(object sender, RoutedEventArgs e)
         {
-            ModsPage modsPage = new(this);
+            ModsPage modsPage = new();
             _ = modsPage.ShowDialog();
         }
 

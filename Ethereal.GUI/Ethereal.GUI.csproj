@@ -42,10 +42,11 @@
     <None Remove="Assets\ChangelogMask.png" />
     <None Remove="Assets\Exit.png" />
     <None Remove="Assets\MenuBackground.png" />
+    <None Remove="Assets\ModsBackground.png" />
     <None Remove="Assets\OpacityMask.png" />
+    <None Remove="Assets\TimelineBody.png" />
     <None Remove="Background" />
     <None Remove="Ethereal.png" />
-    <None Remove="Pages\ModsBackground.png" />
     <None Remove="TimelineBody.png" />
     <None Remove="TimelineHeader.png" />
     <None Remove="Untitled.png" />
@@ -74,10 +75,10 @@
     <Resource Include="Assets\MenuBackground.png" />
     <Resource Include="Assets\MenuBar.png" />
     <Resource Include="Assets\Ethereal.png" />
+    <Resource Include="Assets\ModsBackground.png" />
     <Resource Include="Assets\OpacityMask.png" />
-    <Resource Include="Pages\ModsBackground.png" />
-    <Resource Include="TimelineBody.png" />
-    <Resource Include="TimelineHeader.png" />
+    <Resource Include="Assets\TimelineBody.png" />
+    <Resource Include="Assets\TimelineHeader.png" />
   </ItemGroup>
 
   <ItemGroup>

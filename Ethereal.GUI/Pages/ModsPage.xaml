@@ -12,7 +12,7 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="/Pages/ModsBackground.png"/>
+        <ImageBrush ImageSource="/Assets/ModsBackground.png"/>
     </Window.Background>
     <Window.OpacityMask>
         <ImageBrush ImageSource="/Assets/OpacityMask.png"/>
@@ -25,34 +25,8 @@
                     Background="Black" 
                     Opacity="0" 
                     Cursor="SizeAll"/>
-
-        <!-- ListView to handle columns -->
-        <ListView x:Name="ListViewMods" Margin="25,46,22,56" Foreground="White" BorderBrush="{x:Null}" SelectionChanged="ListViewMods_SelectionChanged">
-            <ListView.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#00000000" Offset="1"/>
-                    <GradientStop Color="#FF005173" Offset="0"/>
-                </LinearGradientBrush>
-            </ListView.Background>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="300"/>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="150"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Author}"/>
-                        <TextBlock Grid.Column="2" Text="{Binding Description}" TextTrimming="WordEllipsis"/>
-                        <TextBlock Grid.Column="3" Text="{Binding Version}"/>
-                        <TextBlock Grid.Column="4" Text="{Binding Update}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        
+        
 
         <!-- Exit Button -->
         <Button x:Name="BtnExitPage" 
@@ -76,22 +50,10 @@
                 Content="Add" 
                 HorizontalAlignment="Left" 
                 Margin="25,670,0,20" 
-                Width="150" 
+                Width="305" 
                 Foreground="White" 
                 BorderBrush="{x:Null}" 
                 Click="AddMod" Height="30">
-            <Button.Background>
-                <ImageBrush ImageSource="/Assets/Box.png"/>
-            </Button.Background>
-        </Button>
-        <Button x:Name="BtnRemoveMod" 
-                Content="Remove" 
-                HorizontalAlignment="Left" 
-                Margin="180,670,0,20" 
-                Width="150" 
-                Foreground="White" 
-                BorderBrush="{x:Null}" 
-                Click="RemoveMod" Height="30">
             <Button.Background>
                 <ImageBrush ImageSource="/Assets/Box.png"/>
             </Button.Background>
@@ -100,7 +62,7 @@
                 Content="Refresh" 
                 HorizontalAlignment="Left" 
                 Margin="335,670,0,20" 
-                Width="150" 
+                Width="285" 
                 Foreground="White" 
                 BorderBrush="{x:Null}" 
                 Click="InitializeModsList" Height="30">
@@ -113,9 +75,10 @@
         <Label x:Name="LblHelp" 
                Content="Want to set your mod directory? Head to the settings tab." 
                HorizontalAlignment="Left" 
-               Margin="490,674,0,0" 
+               Margin="940,685,0,0" 
                VerticalAlignment="Top" 
                Width="318" 
                Foreground="White"/>
+        <WrapPanel x:Name="ModList" Margin="25,77,45,102"/>
     </Grid>
 </Window>

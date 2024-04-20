@@ -1,4 +1,5 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using Ethereal.GUI.Boxes;
+using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -8,14 +9,11 @@ namespace Ethereal.GUI.Pages
     public partial class ModsPage : Window
     {
         public string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "config.xml");
-        private readonly string ManifestPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Halo Wars", "ModManifest.txt");
-        public readonly MainWindow window;
-        private readonly List<Mod> Mods = []; 
+        public readonly List<Mod> Mods = [];
 
-        public ModsPage(MainWindow window)
+        public ModsPage()
         {
             InitializeComponent();
-            this.window = window;
             InitializeModsList(this, new RoutedEventArgs());
         }
 
@@ -58,74 +56,41 @@ namespace Ethereal.GUI.Pages
             }
         }
 
-        public void RemoveMod(object sender, RoutedEventArgs e)
+        private async void InitializeModsList(object sender, RoutedEventArgs e)
         {
-            if (ListViewMods.SelectedItem is Mod selectedMod && selectedMod.Name != "Vanilla")
-            {
-                try
-                {
-                    Directory.Delete(selectedMod.ModPath, true);
-
-                    Logger.GetInstance().Log(LogLevel.Information, "Mod removed successfully: " + selectedMod.Name);
-
-                    InitializeModsList(this, new RoutedEventArgs());
-                }
-                catch (Exception ex)
-                {
-                    Logger.GetInstance().Log(LogLevel.Error, "Error removing mod: " + ex.Message);
-                }
-            }
-        }
-
-        private void InitializeModsList(object sender, RoutedEventArgs e)
-        {
-            ListViewMods.Items.Clear();
+            ModList.Children.Clear();
 
             string path = MainWindow.config.Mods.Path;
 
-            Mod vanillaMod = new() { Name = "Vanilla" };
-            _ = ListViewMods.Items.Add(vanillaMod); 
+            Mod vanillaMod = new() { Name = "Vanilla", Description = "The Spirit of Fire is sent to the ruined planet Harvest to investigate Covenant activity, where Cutter learns that the Covenant has excavated something at the planet's northern pole. When the UNSC's main outpost on Harvest is captured, Cutter orders Forge to retake it. Soon after, Forge scouts the Covenant excavation and discovers that they, under the direction of the Arbiter, have discovered a Forerunner facility. Forge's troops defeat the Covenant forces before they can destroy the installation, and Anders arrives. She determines that the facility is an interstellar map, and recognizes a set of coordinates that points to the human colony of Arcadia.", Author = "Ensemble Studios" };
+            Mods.Add(vanillaMod);
 
             Mods.Clear();
 
-            foreach (string directoryPath in Directory.GetDirectories(path))
+            await Task.Run(() =>
             {
-                Mod mod = new();
-                mod.FromPath(directoryPath);
-
-                if (mod.IsMod)
+                _ = Parallel.ForEach(Directory.EnumerateDirectories(path), directoryPath =>
                 {
-                    Mods.Add(mod);
-                    _ = ListViewMods.Items.Add(mod); 
-                }
+                    Mod mod = new();
+                    mod.FromPath(directoryPath);
+
+                    if (mod.IsMod)
+                    {
+                        Mods.Add(mod);
+                    }
+                });
+            });
+
+            foreach (Mod mod in Mods)
+            {
+                ModBox modBox = new(mod);
+                _ = ModList.Children.Add(modBox);
             }
         }
 
         private void ListViewMods_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (ListViewMods.SelectedItem is Mod selectedMod)
-            {
-                if (selectedMod.Name == "Vanilla")
-                {
-                    MainWindow.manifest.Content = string.Empty;
-                    MainWindow.manifest.ToFile(ManifestPath);
 
-                    MainWindow.config.Mods.LastPlayedMod = "Vanilla";
-                    MainWindow.config.ToFile(configPath);
-                    return;
-                }
-
-                MainWindow.manifest.Content = selectedMod.ModPath;
-                MainWindow.manifest.ToFile(ManifestPath);
-
-                MainWindow.config.Mods.LastPlayedMod = selectedMod.Name;
-                MainWindow.config.ToFile(configPath);
-
-                if (selectedMod.Description != string.Empty)
-                {
-                    window.SetChangelogContent(selectedMod.Description);
-                }
-            }
         }
 
         #endregion
