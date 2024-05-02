@@ -1,10 +1,6 @@
-﻿//-----------------------------------------------------------------------------
-// File: Configuration.cs
-// Description: Defines the Configuration class for managing application settings.
-//-----------------------------------------------------------------------------
+﻿using System.Xml.Serialization;
 
 using Ethereal.Logging;
-using System.Xml.Serialization;
 
 namespace Ethereal.Config
 {
@@ -20,11 +16,8 @@ namespace Ethereal.Config
         public class AppConfig
         {
             public string Language { get; set; } = "en_GB";
+            public int LastSelectedMod { get; set; } = 0;
             public bool DiscordRP { get; set; } = true;
-
-            public bool ShowWelcomeDialog { get; set; } = true;
-            public bool ShowDistributionDialog { get; set; } = true;
-            public bool ShowGameDetectionDialog { get; set; } = true;
         }
 
         public class GameConfig
@@ -36,7 +29,7 @@ namespace Ethereal.Config
         public class ModsConfig
         {
             public string Path { get; set; } = System.IO.Path.Combine(baseDirectory, "mods");
-            public bool customManifest { get; set; } = false;
+            public bool CustomManifest { get; set; } = false;
             public string LastPlayedMod { get; set; } = "Vanilla";
         }
 
@@ -58,23 +51,18 @@ namespace Ethereal.Config
                     serializer.Serialize(streamWriter, this);
                 }
 
-                Logger.GetInstance().Log(LogLevel.Information, "Config file successfully written to: " + path);
+                Logger.Log(LogLevel.Information, "Config file successfully written to: " + path);
             }
             catch (Exception ex)
             {
-                Logger.GetInstance().Log(LogLevel.Error, "Error writing config file: " + ex.Message);
-            }
-            finally
-            {
-                Logger.GetInstance().Log(LogLevel.Debug, "WriteConfigFile method finished executing");
+                Logger.Log(LogLevel.Error, "Error writing config file: " + ex.Message);
             }
         }
-
         public void FromFile(string path)
         {
             if (!ConfigFileExists(path))
             {
-                Logger.GetInstance().Log(LogLevel.Error, "Configuration file does not exist: " + path);
+                Logger.Log(LogLevel.Error, "Configuration file does not exist: " + path);
                 return;
             }
 
@@ -91,23 +79,19 @@ namespace Ethereal.Config
                     }
                     else
                     {
-                        Logger.GetInstance().Log(LogLevel.Error, "Failed to deserialize configuration object from file: " + path);
+                        Logger.Log(LogLevel.Error, "Failed to deserialize configuration object from file: " + path);
                     }
                 }
 
-                Logger.GetInstance().Log(LogLevel.Information, "Config file successfully read from: " + path);
+                Logger.Log(LogLevel.Information, "Config file successfully read from: " + path);
             }
             catch (Exception ex)
             {
-                Logger.GetInstance().Log(LogLevel.Error, "Error reading config file: " + ex.Message);
-            }
-            finally
-            {
-                Logger.GetInstance().Log(LogLevel.Debug, "ReadConfigFile method finished executing");
+                Logger.Log(LogLevel.Error, "Error reading config file: " + ex.Message);
             }
         }
 
-        private bool ConfigFileExists(string path)
+        private static bool ConfigFileExists(string path)
         {
             return File.Exists(path);
         }

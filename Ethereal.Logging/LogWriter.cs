@@ -1,11 +1,4 @@
-﻿//-----------------------------------------------------------------------------
-// File: LogWriter.cs
-// Description: Contains the LogWriter class responsible for writing log messages to files and the console.
-//    This class provides functionality to log messages with different log levels, write them to log files,
-//    manage log file limits, and output them to the console.
-//-----------------------------------------------------------------------------
-
-namespace Ethereal.Logging
+﻿namespace Ethereal.Logging
 {
     public class LogWriter
     {
@@ -38,7 +31,6 @@ namespace Ethereal.Logging
             logPath = logDir;
             this.fileLimit = fileLimit;
         }
-
         public void Log(LogLevel level, string message)
         {
             if (level < minimumLogLevel)
@@ -48,7 +40,7 @@ namespace Ethereal.Logging
 
             string logMessage = $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss.fff} [{level}] {message}";
             LogToFile(logMessage);
-            LogToConsole(level, message);
+            LogToConsole(level, logMessage);
         }
 
         private void LogToFile(string message)
@@ -69,7 +61,6 @@ namespace Ethereal.Logging
             }
             DeleteOldFilesIfLimitExceeded();
         }
-
         private void DeleteOldFilesIfLimitExceeded()
         {
             string[] logFiles = Directory.GetFiles(logPath, "*.ethlog");
@@ -89,8 +80,7 @@ namespace Ethereal.Logging
                 LogToConsole(LogLevel.Error, $"Error deleting log file: {ex.Message}");
             }
         }
-
-        private void LogToConsole(LogLevel level, string message)
+        private static void LogToConsole(LogLevel level, string message)
         {
             Console.ResetColor();
 

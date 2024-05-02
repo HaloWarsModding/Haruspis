@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Ethereal.GUI.Pages.UserControls.NotificationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ethereal.GUI.Pages.UserControls"
+             mc:Ignorable="d" d:DesignWidth="392" Height="50">
+    <Grid>
+        <Image x:Name="NotifImage" HorizontalAlignment="Left" Height="32" Margin="8,7,0,0" VerticalAlignment="Top" Width="32"/>
+        <Label x:Name="LblHeader" Content="Label" HorizontalAlignment="Left" Margin="46,4,0,0" VerticalAlignment="Top" Width="146" Foreground="White"/>
+        <Label x:Name="LblVersion" Content="Label" HorizontalAlignment="Left" Margin="47,0,0,9" VerticalAlignment="Bottom" Width="146" Foreground="#FF7B7B7B" FontSize="10"/>
+        <Button x:Name="BtnDownload" Content="Button" HorizontalAlignment="Left" Margin="287,17,0,0" VerticalAlignment="Top" Width="94" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Click="BtnDownload_Click"/>
+
+    </Grid>
+</UserControl>

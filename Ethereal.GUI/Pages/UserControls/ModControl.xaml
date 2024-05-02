@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="Ethereal.GUI.Pages.Mods.UserControls.ModControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ethereal.GUI.Pages.Mods.UserControls"
+             mc:Ignorable="d" d:DesignWidth="182" Width="182" Height="42">
+    <Grid Cursor="Hand" PreviewMouseLeftButtonDown="SelectMod">
+        <Image x:Name="ImgMod" Height="32" Width="32" HorizontalAlignment="Left" Stretch="UniformToFill" Margin="1,0,0,0" Source="/Assets/Icons/App.ico"/>
+        <Label x:Name="LblModName" Content="Label" HorizontalAlignment="Left" Margin="36,0,0,0" Foreground="White" Width="142" VerticalAlignment="Center" FontSize="10"/>
+
+    </Grid>
+</UserControl>

@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>App.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Icons\App.ico</ApplicationIcon>
     <Title>Ethereal Mod Manager</Title>
     <Version>$([System.DateTime]::Now.ToString("yyyy.MM.dd"))</Version>
     <Authors>CinderellaKuru</Authors>
@@ -18,15 +18,16 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <AssemblyName>Ethereal</AssemblyName>
     <StartupObject>Ethereal.GUI.App</StartupObject>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>embedded</DebugType>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>embedded</DebugType>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
@@ -38,13 +39,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Box.png" />
-    <None Remove="Assets\ChangelogMask.png" />
-    <None Remove="Assets\Exit.png" />
-    <None Remove="Assets\MenuBackground.png" />
-    <None Remove="Assets\ModsBackground.png" />
-    <None Remove="Assets\OpacityMask.png" />
-    <None Remove="Assets\TimelineBody.png" />
+    <None Remove="Assets\Background.png" />
+    <None Remove="Assets\Ethereal.png" />
+    <None Remove="Assets\Icons\Date.png" />
+    <None Remove="Assets\Icons\Maximize.png" />
+    <None Remove="Assets\Icons\Minus.png" />
+    <None Remove="Assets\Icons\NotifError.png" />
+    <None Remove="Assets\Icons\Notification.png" />
+    <None Remove="Assets\Icons\NotificationUp.png" />
+    <None Remove="Assets\Icons\NotifInformation.png" />
+    <None Remove="Assets\Icons\Plus.png" />
+    <None Remove="Assets\Icons\Time.png" />
+    <None Remove="Assets\Icons\Wrench.png" />
+    <None Remove="Assets\Icons\X.png" />
     <None Remove="Background" />
     <None Remove="Ethereal.png" />
     <None Remove="TimelineBody.png" />
@@ -53,7 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="App.ico" />
+    <Resource Include="Assets\Background.png" />
+    <Resource Include="Assets\Ethereal.png" />
+    <Resource Include="Assets\Icons\App.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,33 +71,13 @@
       <NoWarn>nu1701</NoWarn>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Octokit" Version="11.0.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Box.png" />
-    <Resource Include="Assets\ChangelogMask.png" />
-    <Resource Include="Assets\Background.png" />
-    <Resource Include="Assets\Exit.png" />
-    <Resource Include="Assets\MenuBackground.png" />
-    <Resource Include="Assets\MenuBar.png" />
-    <Resource Include="Assets\Ethereal.png" />
-    <Resource Include="Assets\ModsBackground.png" />
-    <Resource Include="Assets\OpacityMask.png" />
-    <Resource Include="Assets\TimelineBody.png" />
-    <Resource Include="Assets\TimelineHeader.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Assets\Ethereal.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="Changelog.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -104,10 +93,39 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Icons\Date.png" />
+    <Resource Include="Assets\Icons\Maximize.png" />
+    <Resource Include="Assets\Icons\Minus.png" />
+    <Resource Include="Assets\Icons\NotifError.png" />
+    <Resource Include="Assets\Icons\Notification.png" />
+    <Resource Include="Assets\Icons\NotificationUp.png" />
+    <Resource Include="Assets\Icons\NotifInformation.png" />
+    <Resource Include="Assets\Icons\Plus.png" />
+    <Resource Include="Assets\Icons\Time.png" />
+    <Resource Include="Assets\Icons\Wrench.png" />
+    <Resource Include="Assets\Icons\X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Ethereal.Config" />
     <Using Include="Ethereal.HaloWars" />
     <Using Include="Ethereal.Logging" />
     <Using Include="Ethereal.Utils" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
