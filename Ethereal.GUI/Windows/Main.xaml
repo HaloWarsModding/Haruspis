@@ -75,9 +75,6 @@
         </Grid>
         <Frame x:Name="MainFrame" Content="" Margin="0,79,0,38" Foreground="{x:Null}" NavigationUIVisibility="Hidden"/>
 
-
-        <Grid x:Name="NotificationGrid" Margin="0,8,68,0" Background="#FF18191B" Height="170" VerticalAlignment="Top" HorizontalAlignment="Right" Width="392" Visibility="Collapsed"/>
+        <Grid x:Name="NotificationGrid" Margin="0,8,68,0" Background="#FF18191B" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Width="392" Visibility="Collapsed"/>
     </Grid>
-
-
 </Window>

@@ -32,7 +32,11 @@ namespace Ethereal.GUI.Pages.UserControls
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(DownloadLink))
-                _ = Process.Start(DownloadLink);
+                _ = Process.Start(new ProcessStartInfo
+                {
+                    FileName = DownloadLink,
+                    UseShellExecute = true
+                });
         }
     }
 }
