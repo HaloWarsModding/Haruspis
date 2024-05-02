@@ -46,7 +46,7 @@ namespace Ethereal.GUI
 
                 string downloadUrl = latestRelease.Assets.Count > 0 ? latestRelease.Assets[0].BrowserDownloadUrl : "";
 
-                NotificationControl control = new(NotificationType.Information, "New Update Available!", latestVersion, downloadUrl);
+                NotificationControl control = new(this, NotificationType.Information, "New Update Available!", latestVersion, downloadUrl);
 
                 _ = NotificationGrid.Children.Add(control);
                 BtnNotif.Source = Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.NotificationUp.GetHbitmap(),
@@ -58,6 +58,11 @@ namespace Ethereal.GUI
             {
                 Logger.Log(LogLevel.Error, $"Error checking for updates: {ex.Message}");
             }
+        }
+
+        public void ClearNotifications()
+        {
+            NotificationGrid.Children.Clear();
         }
 
 

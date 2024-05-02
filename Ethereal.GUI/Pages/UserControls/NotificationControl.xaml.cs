@@ -9,8 +9,9 @@ namespace Ethereal.GUI.Pages.UserControls
     public partial class NotificationControl : UserControl
     {
         private readonly string DownloadLink;
+        private readonly Main CurrentMain;
 
-        public NotificationControl(NotificationType type, string header, Version version, string downloadLink = "")
+        public NotificationControl(Main main, NotificationType type, string header, Version version, string downloadLink = "")
         {
             InitializeComponent();
 
@@ -21,6 +22,7 @@ namespace Ethereal.GUI.Pages.UserControls
             DownloadLink = downloadLink;
 
             BtnDownload.Visibility = string.IsNullOrEmpty(downloadLink) ? Visibility.Hidden : Visibility.Visible;
+            CurrentMain = main;
         }
 
         public enum NotificationType
@@ -32,11 +34,15 @@ namespace Ethereal.GUI.Pages.UserControls
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(DownloadLink))
+            {
                 _ = Process.Start(new ProcessStartInfo
                 {
                     FileName = DownloadLink,
                     UseShellExecute = true
                 });
+            }
+
+            CurrentMain.ClearNotifications();
         }
     }
 }
