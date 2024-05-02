@@ -26,42 +26,40 @@ namespace Ethereal.GUI
             Core.config.HaloWars.CurrentDistribution = Configuration.DistributionType.Steam;
             Core.config.ToFile(Core.configPath);
             ShowGameDetection();
-            CheckForUpdate();
+            _ = CheckForUpdate();
         }
 
-        private async void CheckForUpdate()
+        private async Task CheckForUpdate()
         {
             try
             {
                 GitHubClient github = new(new ProductHeaderValue("Ethereal"));
                 IReadOnlyList<Release> releases = await github.Repository.Release.GetAll("HaloWarsModding", "Ethereal");
 
-                if (releases.Count > 0)
-                {
-                    Release latestRelease = releases[0];
+                if (releases.Count == 0) return;
 
-                    Version latestVersion = new(latestRelease.TagName.TrimStart('v'));
-                    Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                Release latestRelease = releases[0];
+                Version latestVersion = new(latestRelease.TagName.TrimStart('v'));
+                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-                    if (latestVersion > currentVersion)
-                    {
-                        string downloadUrl = latestRelease.Assets[0].BrowserDownloadUrl;
+                if (latestVersion <= currentVersion) return;
 
-                        NotificationControl control = new(NotificationType.Information, "New Update Available!", latestVersion, downloadUrl);
+                string downloadUrl = latestRelease.Assets.Count > 0 ? latestRelease.Assets[0].BrowserDownloadUrl : "";
 
-                        _ = NotificationGrid.Children.Add(control);
-                        BtnNotif.Source = Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.NotificationUp.GetHbitmap(),
-                                                                                  IntPtr.Zero,
-                                                                                  Int32Rect.Empty,
-                                                                                  BitmapSizeOptions.FromEmptyOptions());
-                    }
-                }
+                NotificationControl control = new(NotificationType.Information, "New Update Available!", latestVersion, downloadUrl);
+
+                _ = NotificationGrid.Children.Add(control);
+                BtnNotif.Source = Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.NotificationUp.GetHbitmap(),
+                                                                          IntPtr.Zero,
+                                                                          Int32Rect.Empty,
+                                                                          BitmapSizeOptions.FromEmptyOptions());
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "Error checking for updates: " + ex.Message);
+                Logger.Log(LogLevel.Error, $"Error checking for updates: {ex.Message}");
             }
         }
+
 
         private static void ShowGameDetection()
         {
