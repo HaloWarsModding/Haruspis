@@ -67,11 +67,11 @@
             <Grid>
                 <Image Margin="10,10,0,10" Source="/Assets/Icons/App.ico" HorizontalAlignment="Left" Width="22"/>
                 <Label Content="Ethereal - Mod Manager For Halo Wars : Definitive Edition" HorizontalAlignment="Left" Margin="36,7,0,8" Foreground="White"/>
-                <Image x:Name="BtnNotif" Margin="0,12,62,13" Source="/Assets/Icons/Notification.png" Cursor="Hand" Height="16" HorizontalAlignment="Right" Width="12" PreviewMouseDown="NotificationPopUp"/>
+                <Image x:Name="BtnNotif" Margin="0,8,76,0" Source="/Assets/Icons/Notification.png" Cursor="Hand" HorizontalAlignment="Right" Width="20" PreviewMouseDown="NotificationPopUp" Height="22" VerticalAlignment="Top"/>
             </Grid>
-            <Image Margin="0,12,10,13" Source="/Assets/Icons/X.png" Cursor="Hand" HorizontalAlignment="Right" Width="12" RenderTransformOrigin="0.94,0.597" Height="16" PreviewMouseLeftButtonDown="CloseWindow"/>
-            <Image Margin="0,12,27,13" Source="/Assets/Icons/Maximize.png" Cursor="Hand" RenderTransformOrigin="0.94,0.597" Height="16" HorizontalAlignment="Right" Width="12" PreviewMouseLeftButtonDown="MaximizeWindow"/>
-            <Image Margin="0,12,44,13" Source="/Assets/Icons/Minus.png" Cursor="Hand" RenderTransformOrigin="0.94,0.597" Height="16" HorizontalAlignment="Right" Width="12" PreviewMouseLeftButtonDown="MinimizeWindow"/>
+            <Image Margin="0,8,6,0" Source="/Assets/Icons/X.png" Cursor="Hand" HorizontalAlignment="Right" Width="20" RenderTransformOrigin="0.94,0.597" Height="22" PreviewMouseLeftButtonDown="CloseWindow" VerticalAlignment="Top"/>
+            <Image Margin="0,8,29,0" Source="/Assets/Icons/Maximize.png" Cursor="Hand" RenderTransformOrigin="0.94,0.597" Height="22" HorizontalAlignment="Right" Width="20" PreviewMouseLeftButtonDown="MaximizeWindow" VerticalAlignment="Top"/>
+            <Image Margin="0,8,53,0" Source="/Assets/Icons/Minus.png" Cursor="Hand" RenderTransformOrigin="0.94,0.597" PreviewMouseLeftButtonDown="MinimizeWindow" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20"/>
         </Grid>
         <Frame x:Name="MainFrame" Content="" Margin="0,79,0,38" Foreground="{x:Null}" NavigationUIVisibility="Hidden"/>
 
