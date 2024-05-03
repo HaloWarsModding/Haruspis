@@ -20,7 +20,7 @@
             </Grid>
             <Image Name="ImgBanner" Source="/Assets/Background.png"
                ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="204"
-               VerticalAlignment="Top" Stretch="UniformToFill" Margin="182,0,0,0"/>
+               VerticalAlignment="Top" Margin="182,0,0,0" Stretch="UniformToFill" StretchDirection="UpOnly"/>
             <Button x:Name="BtnStart" Content="Launch" 
         HorizontalAlignment="Left" 
         Margin="210,177,0,0" 
