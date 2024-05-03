@@ -65,7 +65,9 @@ namespace Ethereal.GUI.Pages
                 ModPath = Core.config.HaloWars.Path,
 
             };
-            vanillaMod.DataPath = Path.Combine(Path.GetDirectoryName(vanillaMod.ModPath), "data.eth");
+
+            if (vanillaMod.ModPath != null)
+                vanillaMod.DataPath = Path.Combine(Path.GetDirectoryName(vanillaMod.ModPath), "data.eth");
 
 
             Mods.Add(vanillaMod);

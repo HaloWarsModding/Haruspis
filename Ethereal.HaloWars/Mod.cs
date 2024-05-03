@@ -13,9 +13,9 @@ namespace Ethereal.HaloWars
         public string Author { get; set; } = string.Empty;
         public string Version { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
-        public string Banner {  get; set; } = string.Empty;
+        public string Banner { get; set; } = string.Empty;
         public string ModPath { get; set; } = string.Empty;
-        public string DataPath {  get; set; } = string.Empty;
+        public string DataPath { get; set; } = string.Empty;
         public string HWModPath { get; set; } = string.Empty;
         public string CustomVideoPath { get; set; } = string.Empty;
         public string CustomSavePath { get; set; } = string.Empty;
@@ -60,14 +60,14 @@ namespace Ethereal.HaloWars
 
             if (!Directory.Exists(ModPath))
             {
-                Logger.Log(LogLevel.Error, "Specified path does not exist.");
+                Logger.Log(LogLevel.Error, "Specified mod path does not exist.");
                 return;
             }
 
             if (!IsValid())
             {
                 IsMod = false;
-                Logger.Log(LogLevel.Warning, "Mod is not valid.");
+                Logger.Log(LogLevel.Warning, "The mod is not valid.");
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace Ethereal.HaloWars
             CompatibilityPatch();
             HandleEmpty();
 
-            DataPath = $"{ModPath}\\data.eth";
+            DataPath = Path.Combine(ModPath, "data.eth");
         }
 
         private bool IsValid()
@@ -90,7 +90,7 @@ namespace Ethereal.HaloWars
 
             if (!isValid)
             {
-                Logger.Log(LogLevel.Warning, "Mod directory name starts with a dot.");
+                Logger.Log(LogLevel.Warning, "Mod directory name starts with a dot, which may cause issues.");
             }
 
             return isValid;
@@ -109,7 +109,7 @@ namespace Ethereal.HaloWars
                 }
 
                 Name = info.Name;
-                Logger.Log(LogLevel.Information, "Mod name set from directory name.");
+                Logger.Log(LogLevel.Information, "Mod name set from the directory name.");
             }
         }
         private void HandleModData()
@@ -122,8 +122,7 @@ namespace Ethereal.HaloWars
             }
 
             ModPath = modDataPath;
-            Logger.Log(LogLevel.Information, "Mod data directory found and set as mod path.");
-
+            Logger.Log(LogLevel.Information, "Mod data directory found and set as the mod path.");
         }
         private void CompatibilityPatch()
         {
@@ -132,10 +131,10 @@ namespace Ethereal.HaloWars
                 return;
             }
 
-            string path = Directory.GetParent(ModPath)!.FullName;
+            string parentDirectory = Directory.GetParent(ModPath)!.FullName;
             Logger.Log(LogLevel.Information, "Navigated back one level in the directory tree.");
 
-            string[] hwModFiles = Directory.GetFiles(path, "*.hwmod");
+            string[] hwModFiles = Directory.GetFiles(parentDirectory, "*.hwmod");
             if (hwModFiles.Length == 0)
             {
                 Logger.Log(LogLevel.Information, "No .hwmod file found in the directory.");
@@ -152,13 +151,9 @@ namespace Ethereal.HaloWars
                 using FileStream fileStream = new(hwModFilePath, FileMode.Open);
                 HWMod mod = (HWMod)serializer.Deserialize(fileStream)!;
 
-                if (mod == null)
+                if (mod == null || mod.RequiredData == null)
                 {
-                    return;
-                }
-
-                if (mod.RequiredData == null)
-                {
+                    Logger.Log(LogLevel.Warning, "HWMod file is missing required data.");
                     return;
                 }
 
