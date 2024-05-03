@@ -19,11 +19,11 @@
                 <WrapPanel x:Name="ModPanel"/>
             </Grid>
             <Image Name="ImgBanner" Source="/Assets/Background.png"
-               ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="272"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="204"
                VerticalAlignment="Top" Stretch="UniformToFill" Margin="182,0,0,0"/>
             <Button x:Name="BtnStart" Content="Launch" 
         HorizontalAlignment="Left" 
-        Margin="212,246,0,0" 
+        Margin="210,177,0,0" 
         VerticalAlignment="Top" 
         Height="50" 
         Width="148" 
@@ -43,14 +43,14 @@
                 </Button.Template>
             </Button>
 
-            <Rectangle HorizontalAlignment="Left" Height="30" Margin="386,257,0,0" VerticalAlignment="Top" Width="92" Fill="#FF0C0D0E"/>
-            <Label x:Name="LblDate" Content="Today" HorizontalAlignment="Left" Margin="412,258,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
-            <Image HorizontalAlignment="Left" Height="24" Margin="391,260,0,0" VerticalAlignment="Top" Width="19" Source="/Assets/Icons/Date.png"/>
-            <Rectangle HorizontalAlignment="Left" Height="30" Margin="483,257,0,0" VerticalAlignment="Top" Width="117" Fill="#FF0C0D0E"/>
-            <Label x:Name="LblTime" Content="0.0 Hours" HorizontalAlignment="Left" Margin="508,259,0,0" VerticalAlignment="Top" Foreground="White" Width="88"/>
-            <Image HorizontalAlignment="Left" Height="24" Margin="488,263,0,0" VerticalAlignment="Top" Width="19" Source="/Assets/Icons/Time.png"/>
-            <Rectangle Height="24" Margin="0,259,13,0" VerticalAlignment="Top" Fill="#FF0C0D0E" HorizontalAlignment="Right" Width="25"/>
-            <Image Height="17" Margin="0,263,18,0" VerticalAlignment="Top" Source="/Assets/Icons/Wrench.png" Cursor="Hand" HorizontalAlignment="Right" Width="15" PreviewMouseDown="ShowModSettings"/>
+            <Rectangle HorizontalAlignment="Left" Height="30" Margin="384,188,0,0" VerticalAlignment="Top" Width="92" Fill="#FF0C0D0E"/>
+            <Label x:Name="LblDate" Content="Today" HorizontalAlignment="Left" Margin="410,189,0,0" VerticalAlignment="Top" Foreground="White" Width="64"/>
+            <Image HorizontalAlignment="Left" Height="24" Margin="390,191,0,0" VerticalAlignment="Top" Width="18" Source="/Assets/Icons/Date.png"/>
+            <Rectangle HorizontalAlignment="Left" Height="30" Margin="482,188,0,0" VerticalAlignment="Top" Width="116" Fill="#FF0C0D0E"/>
+            <Label x:Name="LblTime" Content="0.0 Hours" HorizontalAlignment="Left" Margin="506,190,0,0" VerticalAlignment="Top" Foreground="White" Width="88"/>
+            <Image HorizontalAlignment="Left" Height="24" Margin="486,192,0,0" VerticalAlignment="Top" Width="20" Source="/Assets/Icons/Time.png" RenderTransformOrigin="0.667,0.222"/>
+            <Rectangle Height="24" Margin="0,190,14,0" VerticalAlignment="Top" Fill="#FF0C0D0E" HorizontalAlignment="Right" Width="26"/>
+            <Image Height="17" Margin="0,194,20,0" VerticalAlignment="Top" Source="/Assets/Icons/Wrench.png" Cursor="Hand" HorizontalAlignment="Right" Width="14" PreviewMouseDown="ShowModSettings"/>
         </Grid>
     </Grid>
 </Page>
