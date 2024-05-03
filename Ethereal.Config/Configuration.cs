@@ -18,6 +18,7 @@ namespace Ethereal.Config
             public string Language { get; set; } = "en_GB";
             public int LastSelectedMod { get; set; } = 0;
             public bool DiscordRP { get; set; } = true;
+            public bool SendReportOnError { get; set; } = false;
         }
 
         public class GameConfig

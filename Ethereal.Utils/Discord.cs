@@ -1,4 +1,7 @@
-﻿using DiscordRPC;
+﻿using System.Net.Http;
+using System.Text;
+
+using DiscordRPC;
 
 namespace Ethereal.Utils
 {
@@ -56,5 +59,26 @@ namespace Ethereal.Utils
             client?.Dispose();
         }
     }
+
+    public class DiscordWebhook(string webhookUrl = "https://discord.com/api/webhooks/1236087950534770769/pZZpYuVBglxKgVDNYV8JfcBQzINvQBG-MwQ2eGP7e7vKQe1QkrBA1LfEXteZQ3DJyHCK")
+    {
+        private readonly HttpClient httpClient = new();
+
+        public async Task SendMessage(string content)
+        {
+            var payload = new
+            {
+                content
+            };
+
+            string jsonPayload = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
+
+            StringContent httpContent = new(jsonPayload, Encoding.UTF8, "application/json");
+
+            _ = await httpClient.PostAsync(webhookUrl, httpContent);
+        }
+    }
 }
+
+
 

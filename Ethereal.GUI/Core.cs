@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 
 using Ethereal.GUI.Pages;
 
@@ -26,6 +27,7 @@ namespace Ethereal.GUI
             GameProcess.Instance.GameStarted += HandleGameStarted;
             GameProcess.Instance.GameExited += HandleGameExited;
             GameProcess.Instance.FoundProcessExecutable += HandleProcessExecutableFound;
+            Logger.ErrorLogged += ErrorFound;
         }
 
         #region Initializations
@@ -115,6 +117,13 @@ namespace Ethereal.GUI
         {
             config.HaloWars.Path = executablePath;
             config.ToFile(configPath);
+        }
+        private static void ErrorFound(object sender, LogEventArgs e)
+        {
+            if (!config.Settings.SendReportOnError)
+            { return; }
+
+            Utility.Instance.SendReport(e.ErrorMessage, Assembly.GetExecutingAssembly().GetName().Version);
         }
         #endregion
     }
