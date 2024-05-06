@@ -86,7 +86,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ethereal.Config\Ethereal.Config.csproj" />
     <ProjectReference Include="..\Ethereal.HaloWars\Ethereal.HaloWars.csproj" />
     <ProjectReference Include="..\Ethereal.Logging\Ethereal.Logging.csproj" />
     <ProjectReference Include="..\Ethereal.Utils\Ethereal.Utils.csproj" />

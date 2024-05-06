@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ethereal.GUI", "Ethereal.GU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ethereal.HaloWars", "Ethereal.HaloWars\Ethereal.HaloWars.csproj", "{9C222A07-FD8A-4341-B75E-377641CAECD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ethereal.Config", "Ethereal.Config\Ethereal.Config.csproj", "{8870378B-575A-4D8A-96F2-50A7AE3A6D2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ethereal.Data", "Ethereal.Config\Ethereal.Data.csproj", "{8870378B-575A-4D8A-96F2-50A7AE3A6D2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
