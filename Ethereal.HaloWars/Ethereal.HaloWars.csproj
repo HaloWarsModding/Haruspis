@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ethereal.Config\Ethereal.Data.csproj" />
+    <ProjectReference Include="..\Ethereal.Data\Ethereal.Data.csproj" />
   </ItemGroup>
 
 </Project>
