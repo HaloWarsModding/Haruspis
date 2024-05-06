@@ -18,7 +18,6 @@ namespace Ethereal.Config
         }
         #endregion
 
-        private readonly XmlSerializer serializer = new(typeof(ETHData));
         private readonly string encryptionKey = "NtipEx0GJR9x6vJUT7pLsJCD8riFIu8X"; // Yes I'm keeping it here, I don't want kids to change their playtime to "flex". But if you go to the length of cloning the repo and checking the encryption yourself..I think you deserve it.
 
         public void ToFile(string path)
@@ -63,7 +62,8 @@ namespace Ethereal.Config
                 if (deserializedObject != null)
                 {
                     Data = deserializedObject.Data;
-                    Logger.Log(LogLevel.Information, "Data file successfully read from: " + path);
+                    Logger.Log(LogLevel.Information, $"Data file successfully read from: {path}");
+                    Logger.Log(LogLevel.Debug, $"PlayTime: {Data.PlayTime}, LastPlayed: {Data.LastPlayed}");
                 }
                 else
                 {
