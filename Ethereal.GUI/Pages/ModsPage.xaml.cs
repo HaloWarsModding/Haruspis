@@ -52,7 +52,7 @@ namespace Ethereal.GUI.Pages
             UpdateInfo(e.ChangedMod);
         }
 
-        private async void InitializeModList()
+        public async void InitializeModList()
         {
             ModPanel.Children.Clear();
             Mods.Clear();

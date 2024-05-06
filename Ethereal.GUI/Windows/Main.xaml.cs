@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -150,10 +151,71 @@ namespace Ethereal.GUI
         }
         #endregion
         #region Footer Handler's
-        private void AddMod(object sender, MouseButtonEventArgs e)
+        private async void AddMod(object sender, MouseButtonEventArgs e)
         {
-            _ = MessageBox.Show("TO-DO");
+            VistaFolderBrowserDialog folderDialog = new() { Multiselect = false };
+            bool? result = folderDialog.ShowDialog();
+
+            if (result.HasValue && result.Value)
+            {
+                await MoveFolder(folderDialog.SelectedPath, Core.config.Mods.Path);
+
+                if (MainFrame.Content is ModsPage page)
+                {
+                    page.InitializeModList();
+                }
+            }
         }
+        private static async Task MoveFolder(string sourceFolder, string destinationFolder)
+        {
+            destinationFolder = Path.Combine(destinationFolder, Path.GetFileName(sourceFolder));
+            _ = Directory.CreateDirectory(destinationFolder);
+
+            try
+            {
+                string[] files = Directory.GetFiles(sourceFolder);
+                string[] directories = Directory.GetDirectories(sourceFolder);
+
+                Logger.Log(LogLevel.Information, $"Found {files.Length} files in folder {sourceFolder}");
+
+                List<Task> fileTasks = [];
+                foreach (string file in files)
+                {
+                    string fileName = Path.GetFileName(file);
+                    string destFile = Path.Combine(destinationFolder, fileName);
+                    fileTasks.Add(Task.Run(() =>
+                    {
+                        Logger.Log(LogLevel.Information, $"Moving file: {file} to {destFile}");
+                        File.Move(file, destFile);
+                        Logger.Log(LogLevel.Information, $"File moved: {file} to {destFile}");
+                    }));
+                }
+                await Task.WhenAll(fileTasks);
+
+                Logger.Log(LogLevel.Information, $"Found {directories.Length} directories in folder {sourceFolder}");
+
+                List<Task> directoryTasks = [];
+                foreach (string directory in directories)
+                {
+                    string dirName = Path.GetFileName(directory);
+                    string destDir = Path.Combine(destinationFolder, dirName);
+                    directoryTasks.Add(MoveFolder(directory, destDir));
+                }
+                await Task.WhenAll(directoryTasks);
+
+                Logger.Log(LogLevel.Information, $"Deleting source folder: {sourceFolder}");
+                Directory.Delete(sourceFolder, true);
+                Logger.Log(LogLevel.Information, $"Source folder deleted: {sourceFolder}");
+
+                GC.Collect();
+            }
+            catch (IOException ex)
+            {
+                Logger.Log(LogLevel.Error, $"Failed to move folder {sourceFolder}: {ex.Message}");
+            }
+        }
+
+
         #endregion
         #region Pages Handler's
         private void ShowModsPage(object sender, RoutedEventArgs e)
