@@ -3,11 +3,11 @@
     public sealed class Logger : Singleton<Logger>
     {
         private static LogLevel MinimumLevel { get; set; } = LogLevel.Debug;
-        private static string LogPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+        private static string? LogPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
         private static int FileLimit { get; set; } = 10;
-        private static LogWriter _writer = new(MinimumLevel, LogPath, FileLimit);
+        private static LogWriter _writer = new(MinimumLevel, LogPath ?? throw new InvalidOperationException("Log directory is null."), FileLimit);
 
-        public static event ErrorLoggedEventHandler ErrorLogged
+        public static event ErrorLoggedEventHandler? ErrorLogged
         {
             add => _writer.ErrorLogged += value;
             remove => _writer.ErrorLogged -= value;
@@ -21,39 +21,25 @@
         public static void SetPath(string path)
         {
             LogPath = path;
-            _writer = new LogWriter(MinimumLevel, LogPath, FileLimit);
+            _writer = new LogWriter(MinimumLevel, LogPath ?? throw new InvalidOperationException("Log directory is null."), FileLimit);
         }
-    }
-
-    public enum LogLevel
-    {
-        Verbose,
-        Debug,
-        Information,
-        Warning,
-        Error
     }
 
     public delegate void ErrorLoggedEventHandler(object sender, LogEventArgs e);
 
-    public class LogEventArgs : EventArgs
+    public class LogEventArgs(string errorMessage) : EventArgs
     {
-        public string ErrorMessage { get; }
-
-        public LogEventArgs(string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
+        public string ErrorMessage { get; } = errorMessage;
     }
 
     public class LogWriter
     {
         private readonly LogLevel minimumLogLevel;
-        private readonly string logPath;
+        private readonly string? logPath;
         private readonly int fileLimit;
         private static readonly object fileWriteLock = new();
 
-        public event ErrorLoggedEventHandler ErrorLogged;
+        public event ErrorLoggedEventHandler? ErrorLogged;
 
         public LogWriter(LogLevel minimumLogLevel, string logDir, int fileLimit)
         {
@@ -99,6 +85,11 @@
 
         private void LogToFile(string message)
         {
+            if (logPath == null)
+            {
+                return;
+            }
+
             string logFileName = $"{DateTime.Now:yyyy-MM-dd}.ethlog";
             string logFilePath = Path.Combine(logPath, logFileName);
             lock (fileWriteLock)
@@ -118,6 +109,11 @@
 
         private void DeleteOldFilesIfLimitExceeded()
         {
+            if (logPath == null)
+            {
+                return;
+            }
+
             string[] logFiles = Directory.GetFiles(logPath, "*.ethlog");
             if (logFiles.Length <= fileLimit || logFiles.Length <= 0)
             {
@@ -136,7 +132,7 @@
             }
         }
 
-        private void LogToConsole(LogLevel level, string message)
+        private static void LogToConsole(LogLevel level, string message)
         {
             Console.ResetColor();
 
