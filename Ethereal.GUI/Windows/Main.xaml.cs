@@ -68,12 +68,12 @@ namespace Ethereal.GUI
 
         private static void ShowGameDetection()
         {
-            if (Core.config.HaloWars.Path != null)
+            if (Core.config.HaloWars.Path != string.Empty)
             {
                 return;
             }
 
-            if (MessageBox.Show("Game Detection", "Ethereal can attempt to automatically detect the game by running it for a few seconds. \n(This feature is experimental and may not work)", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Ethereal can attempt to automatically detect the game by running it for a few seconds. \n(This feature is experimental and may not work)", "Game Detection", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 GameProcess.Instance.StartGame(Core.config.HaloWars.CurrentDistribution, true);
                 GameProcess.Instance.StartMonitoring();
