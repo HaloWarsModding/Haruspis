@@ -5,7 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Ethereal.GUI.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="598" d:DesignWidth="1280"
+      d:DesignHeight="900
+      " d:DesignWidth="1600
+     "
       Title="Mods">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -15,15 +17,17 @@
 
 
         <Grid Grid.Column="1">
-            <Grid Grid.Column="0" Background="#BF0C0D0E" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="182">
-                <WrapPanel x:Name="ModPanel"/>
+            <Grid Grid.Column="0" Background="#BF0C0D0E" HorizontalAlignment="Left" Width="252">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="252">
+                    <WrapPanel x:Name="ModPanel"/>
+                </ScrollViewer>
             </Grid>
             <Image Name="ImgBanner" Source="/Assets/Background.png"
-               ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="204"
-               VerticalAlignment="Top" Margin="182,0,0,0" Stretch="UniformToFill" StretchDirection="UpOnly"/>
+               ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="240"
+               VerticalAlignment="Top" Margin="252,0,0,0" Stretch="UniformToFill" StretchDirection="UpOnly"/>
             <Button x:Name="BtnStart" Content="Launch" 
         HorizontalAlignment="Left" 
-        Margin="210,177,0,0" 
+        Margin="279,215,0,0" 
         VerticalAlignment="Top" 
         Height="50" 
         Width="148" 
@@ -43,14 +47,21 @@
                 </Button.Template>
             </Button>
 
-            <Rectangle HorizontalAlignment="Left" Height="30" Margin="384,188,0,0" VerticalAlignment="Top" Width="92" Fill="#FF0C0D0E"/>
-            <Label x:Name="LblDate" Content="Today" HorizontalAlignment="Left" Margin="410,189,0,0" VerticalAlignment="Top" Foreground="White" Width="64"/>
-            <Image HorizontalAlignment="Left" Height="24" Margin="390,191,0,0" VerticalAlignment="Top" Width="18" Source="/Assets/Icons/Date.png"/>
-            <Rectangle HorizontalAlignment="Left" Height="30" Margin="482,188,0,0" VerticalAlignment="Top" Width="116" Fill="#FF0C0D0E"/>
-            <Label x:Name="LblTime" Content="0.0 Hours" HorizontalAlignment="Left" Margin="506,190,0,0" VerticalAlignment="Top" Foreground="White" Width="88"/>
-            <Image HorizontalAlignment="Left" Height="24" Margin="486,192,0,0" VerticalAlignment="Top" Width="20" Source="/Assets/Icons/Time.png" RenderTransformOrigin="0.667,0.222"/>
-            <Rectangle Height="24" Margin="0,190,14,0" VerticalAlignment="Top" Fill="#FF0C0D0E" HorizontalAlignment="Right" Width="26"/>
-            <Image Height="17" Margin="0,194,20,0" VerticalAlignment="Top" Source="/Assets/Icons/Wrench.png" Cursor="Hand" HorizontalAlignment="Right" Width="14" PreviewMouseDown="ShowModSettings"/>
+            <Grid HorizontalAlignment="Left" Height="30" Margin="434,225,0,0" VerticalAlignment="Top" Width="92" Background="#FF0C0D0E">
+                <Label x:Name="LblDate" Content="Today" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" Width="64" Margin="26,0,0,0"/>
+                <Image HorizontalAlignment="Left" VerticalAlignment="Center" Width="18" Height="24" Margin="3,0,0,0" Source="/Assets/Icons/Date.png"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="30" Margin="533,225,0,0" VerticalAlignment="Top" Width="116" Background="#FF0C0D0E">
+                <Label x:Name="LblTime" Content="0.0 Hours" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" Width="86" Margin="26,0,0,0"/>
+                <Image HorizontalAlignment="Left" VerticalAlignment="Center" Width="20" Height="24" Margin="4,0,0,0" Source="/Assets/Icons/Time.png"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Right" Height="24" Margin="0,228,16,0" VerticalAlignment="Top" Width="26" Background="#FF0C0D0E">
+                <Image Height="18" VerticalAlignment="Center" Source="/Assets/Icons/Wrench.png" Cursor="Hand" HorizontalAlignment="Center" Width="14" PreviewMouseDown="ShowModSettings"/>
+            </Grid>
+
+
         </Grid>
     </Grid>
 </Page>
