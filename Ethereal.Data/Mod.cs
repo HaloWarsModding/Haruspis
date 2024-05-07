@@ -14,6 +14,7 @@ namespace Ethereal.HaloWars
         public string Version { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
         public string Banner { get; set; } = string.Empty;
+        public string ChangelogPath {  get; set; } = string.Empty;
         public string ModPath { get; set; } = string.Empty;
         public string DataPath { get; set; } = string.Empty;
         public string HWModPath { get; set; } = string.Empty;
@@ -80,6 +81,7 @@ namespace Ethereal.HaloWars
             HandleEmpty();
 
             DataPath = Path.Combine(ModPath, "data.eth");
+            ChangelogPath = Path.Combine(ModPath, "changelog.txt");
         }
 
         private bool IsValid()

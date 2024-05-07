@@ -141,9 +141,10 @@ namespace Ethereal.GUI.Pages
         private void UpdateInfo(Mod mod)
         {
             BitmapImage bitmap = new();
-            string path = "";
+            string bannerPath = mod.Banner;
+            string path = string.Empty;
 
-            switch (mod.Banner)
+            switch (bannerPath)
             {
                 case "":
                     using (MemoryStream stream = new())
@@ -156,11 +157,11 @@ namespace Ethereal.GUI.Pages
                         bitmap.EndInit();
                     }
                     break;
-                case string bannerPath when bannerPath.StartsWith("ModData\\"):
-                    path = Path.Combine(mod.ModPath, bannerPath["ModData\\".Length..]);
+                case string bPath when bPath.StartsWith("ModData\\"):
+                    path = Path.Combine(mod.ModPath, bPath["ModData\\".Length..]);
                     goto case "file";
-                case string bannerPath when File.Exists(bannerPath):
-                    path = bannerPath;
+                case string bPath when File.Exists(bPath):
+                    path = bPath;
                     goto case "file";
                 case "file":
                     if (!string.IsNullOrEmpty(path))
@@ -176,15 +177,6 @@ namespace Ethereal.GUI.Pages
                     }
                     break;
                 default:
-                    using (MemoryStream stream = new())
-                    {
-                        Properties.Resources.Background.Save(stream, ImageFormat.Png);
-                        stream.Position = 0;
-                        bitmap.BeginInit();
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.StreamSource = stream;
-                        bitmap.EndInit();
-                    }
                     break;
             }
 
@@ -202,7 +194,6 @@ namespace Ethereal.GUI.Pages
             data.FromFile(dataPath);
 
             TimeSpan playTime = data.Data.PlayTime;
-
             string playTimeString = playTime.TotalHours >= 1
                 ? $"{(int)playTime.TotalHours} Hours"
                 : playTime.TotalMinutes >= 1 ? $"{(int)playTime.TotalMinutes} Minutes" : "0 Hours";
@@ -218,7 +209,20 @@ namespace Ethereal.GUI.Pages
                         : lastPlayed.ToString("d MMMM");
             LblDate.Content = lastPlayedString;
 
+            string changelogPath = mod.ChangelogPath;
+            switch (changelogPath)
+            {
+                case string cPath when File.Exists(cPath):
+                    ChangelogGrid.Visibility = System.Windows.Visibility.Visible;
+                    ChangelogBox.Document = Utility.MarkdownToFlowDocument(File.ReadAllText(cPath));
+                    break;
+                default:
+                    ChangelogGrid.Visibility = System.Windows.Visibility.Collapsed;
+                    ChangelogBox.Document = new System.Windows.Documents.FlowDocument();
+                    break;
+            }
         }
+
 
         #region Event Handlers
         private void LaunchGame(object sender, System.Windows.RoutedEventArgs e)
