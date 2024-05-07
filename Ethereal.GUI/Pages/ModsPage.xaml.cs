@@ -23,12 +23,17 @@ namespace Ethereal.GUI.Pages
         public ModsPage()
         {
             InitializeComponent();
-            InitializeModList();
+            try
+            {
+                InitializeModList();
 
-            ModChanged += ModsPage_ModChanged;
-            timer.Interval = TimeSpan.FromSeconds(0.01);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+                ModChanged += ModsPage_ModChanged;
+                timer.Interval = TimeSpan.FromSeconds(0.01);
+                timer.Tick += Timer_Tick;
+                timer.Start();
+
+            }
+            catch (Exception ex) { Logger.Log(LogLevel.Error, ex.Message); }
         }
 
         private void Timer_Tick(object sender, object e)
@@ -66,7 +71,7 @@ namespace Ethereal.GUI.Pages
 
             };
 
-            if (vanillaMod.ModPath != null)
+            if (vanillaMod.ModPath != string.Empty)
                 vanillaMod.DataPath = Path.Combine(Path.GetDirectoryName(vanillaMod.ModPath), "data.eth");
 
 
