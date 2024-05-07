@@ -117,6 +117,10 @@ namespace Ethereal.GUI
         {
             config.HaloWars.Path = executablePath;
             config.ToFile(configPath);
+
+            Utility.Instance.ClearDiscordPresence();
+            GameProcess.Instance.StopMonitoring();
+            IsGameRunning = false;
         }
         private static void ErrorFound(object sender, LogEventArgs e)
         {

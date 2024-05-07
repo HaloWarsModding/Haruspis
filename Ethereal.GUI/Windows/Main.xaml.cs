@@ -79,6 +79,8 @@ namespace Ethereal.GUI
             {
                 GameProcess.Instance.StartGame(Core.config.HaloWars.CurrentDistribution, true);
                 GameProcess.Instance.StartMonitoring();
+
+               
             }
             else
             {
