@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 
 using Ethereal.GUI.Pages;
 using Ethereal.GUI.Pages.UserControls;
+using Ethereal.GUI.Windows;
 
 using Octokit;
 
@@ -231,7 +232,8 @@ namespace Ethereal.GUI
         }
         private void ShowSettingsPage(object sender, RoutedEventArgs e)
         {
-            _ = MessageBox.Show("TO-DO");
+            Settings settings = new Settings();
+            settings.Show();
         }
         #endregion
     }

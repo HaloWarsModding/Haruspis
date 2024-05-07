@@ -60,12 +60,9 @@
             <Grid HorizontalAlignment="Right" Height="24" Margin="0,228,16,0" VerticalAlignment="Top" Width="26" Background="#FF0C0D0E">
                 <Image Height="18" VerticalAlignment="Center" Source="/Assets/Icons/Wrench.png" Cursor="Hand" HorizontalAlignment="Center" Width="14" PreviewMouseDown="ShowModSettings"/>
             </Grid>
-            <Grid x:Name="ChangelogGrid" Margin="291,292,60,20" Background="#FF212121">
+            <Grid x:Name="ChangelogGrid" Margin="291,292,60,20">
                 <RichTextBox x:Name="ChangelogBox" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" IsReadOnly="True">
                     <FlowDocument>
-                        <Paragraph>
-                           
-                        </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
             </Grid>
