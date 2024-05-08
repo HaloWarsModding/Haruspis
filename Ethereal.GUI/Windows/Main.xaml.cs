@@ -80,7 +80,7 @@ namespace Ethereal.GUI
                 GameProcess.Instance.StartGame(Core.config.HaloWars.CurrentDistribution, true);
                 GameProcess.Instance.StartMonitoring();
 
-               
+
             }
             else
             {
@@ -232,10 +232,19 @@ namespace Ethereal.GUI
         {
 
         }
+        private Settings settingsPage;
         private void ShowSettingsPage(object sender, RoutedEventArgs e)
         {
-            Settings settings = new Settings(MainFrame.Content as ModsPage);
-            settings.Show();
+            if (settingsPage == null)
+            {
+                settingsPage = new Settings(MainFrame.Content as ModsPage);
+                settingsPage.Closed += (s, args) => settingsPage = null;
+                settingsPage.Show();
+            }
+            else
+            {
+                _ = settingsPage.Focus();
+            }
         }
         #endregion
     }
