@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
+using Ethereal.GUI.Pages;
 
 namespace Ethereal.GUI.Windows
 {
     public partial class Settings : Window
     {
-        public Settings()
+        private readonly ModsPage page;
+        public Settings(ModsPage modsPage)
         {
             InitializeComponent();
+            page = modsPage;
             ModsPathBox.Text = Core.config.Mods.Path;
             ErrorReportCheck.IsChecked = Core.config.Settings.SendReportOnError;
         }
@@ -38,6 +31,7 @@ namespace Ethereal.GUI.Windows
 
 
             Core.config.ToFile(Core.configPath);
+            page.InitializeModList();
             Close();
         }
     }

@@ -234,7 +234,7 @@ namespace Ethereal.GUI
         }
         private void ShowSettingsPage(object sender, RoutedEventArgs e)
         {
-            Settings settings = new Settings();
+            Settings settings = new Settings(MainFrame.Content as ModsPage);
             settings.Show();
         }
         #endregion
