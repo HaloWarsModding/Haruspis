@@ -1,13 +1,35 @@
-﻿<UserControl x:Class="Ethereal.GUI.Pages.Mods.UserControls.ModControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Ethereal.GUI.Pages.Mods.UserControls"
-             mc:Ignorable="d" d:DesignWidth="252" Width="252" Height="42">
-    <Grid Cursor="Hand" PreviewMouseLeftButtonDown="SelectMod" Width="252">
-        <Image x:Name="ImgMod" Height="32" Width="32" HorizontalAlignment="Left" Stretch="UniformToFill" Margin="1,0,0,0" Source="/Assets/Icons/App.ico"/>
-        <Label x:Name="LblModName" Content="Label" HorizontalAlignment="Left" Margin="36,0,0,0" Foreground="White" Width="209" VerticalAlignment="Center" FontSize="10"/>
+﻿<UserControl
+    x:Class="Ethereal.GUI.Pages.Mods.UserControls.ModControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Ethereal.GUI.Pages.Mods.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="252"
+    Height="42"
+    d:DesignWidth="252"
+    mc:Ignorable="d">
+    <Grid
+        Width="252"
+        Cursor="Hand"
+        PreviewMouseLeftButtonDown="SelectMod">
+        <Image
+            x:Name="ImgMod"
+            Width="32"
+            Height="32"
+            Margin="1,0,0,0"
+            HorizontalAlignment="Left"
+            Source="/Assets/Icons/App.ico"
+            Stretch="UniformToFill" />
+        <Label
+            x:Name="LblModName"
+            Width="209"
+            Margin="36,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Content="Label"
+            FontSize="10"
+            Foreground="White" />
 
     </Grid>
 </UserControl>
