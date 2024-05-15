@@ -17,14 +17,14 @@
             x:Name="ImgMod"
             Width="32"
             Height="32"
-            Margin="1,0,0,0"
+            Margin="8,5,0,5"
             HorizontalAlignment="Left"
             Source="/Assets/Icons/App.ico"
             Stretch="UniformToFill" />
         <Label
             x:Name="LblModName"
-            Width="209"
-            Margin="36,0,0,0"
+            Width="198"
+            Margin="47,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Content="Label"
