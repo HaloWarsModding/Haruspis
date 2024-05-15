@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
+using Ethereal.Data;
 using Ethereal.GUI.Pages;
 
 namespace Ethereal.GUI

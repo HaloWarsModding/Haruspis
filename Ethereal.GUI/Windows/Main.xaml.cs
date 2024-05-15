@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
+using Ethereal.Data;
 using Ethereal.GUI.Pages;
 using Ethereal.GUI.Pages.UserControls;
 using Ethereal.GUI.Windows;

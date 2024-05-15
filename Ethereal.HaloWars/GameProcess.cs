@@ -3,7 +3,7 @@
 using Ethereal.Logging;
 using Ethereal.Utils;
 
-using static Ethereal.Config.Configuration;
+using static Ethereal.Data.Configuration;
 
 namespace Ethereal.HaloWars
 {
