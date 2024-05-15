@@ -1,7 +1,7 @@
 ﻿<h1 align="center">Ethereal</h1>
 
 <p align="center">
-  <img src="https://i.imgur.com/3kNTWCm.png" alt="Logo" width="128" height="128">
+  <img src="https://i.imgur.com/tM44Q2t.png" alt="Logo" width="128" height="128">
 </p>
 
 <p align="center">
