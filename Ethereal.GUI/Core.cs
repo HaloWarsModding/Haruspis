@@ -128,7 +128,10 @@ namespace Ethereal.GUI
             if (!config.Settings.SendReportOnError)
             { return; }
 
-            Utility.Instance.SendReport(e.ErrorMessage, Assembly.GetExecutingAssembly().GetName().Version);
+            if (Utility.IsInternetAvailable())
+            {
+                Utility.Instance.SendReport(e.ErrorMessage, Assembly.GetExecutingAssembly().GetName().Version);
+            }
         }
         #endregion
     }

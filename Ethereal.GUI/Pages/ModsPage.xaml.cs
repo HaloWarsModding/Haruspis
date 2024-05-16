@@ -1,6 +1,8 @@
 ﻿using System.Drawing.Imaging;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -23,6 +25,9 @@ namespace Ethereal.GUI.Pages
         public ModsPage()
         {
             InitializeComponent();
+            ChangelogScrollViewer.ScrollChanged += ChangelogScrollViewer_ScrollChanged;
+            ChangelogScrollBar.ValueChanged += ChangelogScrollBar_ValueChanged;
+
             try
             {
                 InitializeModList();
@@ -34,6 +39,23 @@ namespace Ethereal.GUI.Pages
 
             }
             catch (Exception ex) { Logger.Log(LogLevel.Error, ex.Message); }
+        }
+
+        private void ChangelogScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (ChangelogScrollViewer.ExtentHeight != 0)
+            {
+                ChangelogScrollBar.Maximum = ChangelogScrollViewer.ExtentHeight - ChangelogScrollViewer.ViewportHeight;
+                ChangelogScrollBar.Value = ChangelogScrollViewer.VerticalOffset;
+            }
+        }
+
+        private void ChangelogScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (ChangelogScrollViewer.VerticalOffset != e.NewValue)
+            {
+                ChangelogScrollViewer.ScrollToVerticalOffset(e.NewValue);
+            }
         }
 
         private void Timer_Tick(object sender, object e)
@@ -218,11 +240,11 @@ namespace Ethereal.GUI.Pages
             switch (changelogPath)
             {
                 case string cPath when File.Exists(cPath):
-                    ChangelogGrid.Visibility = System.Windows.Visibility.Visible;
+                    ChangelogGrid.Visibility = Visibility.Visible;
                     ChangelogBox.Document = Utility.MarkdownToFlowDocument(File.ReadAllText(cPath));
                     break;
                 default:
-                    ChangelogGrid.Visibility = System.Windows.Visibility.Collapsed;
+                    ChangelogGrid.Visibility = Visibility.Collapsed;
                     ChangelogBox.Document = new System.Windows.Documents.FlowDocument();
                     break;
             }
@@ -230,7 +252,7 @@ namespace Ethereal.GUI.Pages
 
 
         #region Event Handlers
-        private void LaunchGame(object sender, System.Windows.RoutedEventArgs e)
+        private void LaunchGame(object sender, RoutedEventArgs e)
         {
             string modName = SelectedModControl.currentMod.Name;
             string modPath = SelectedModControl.currentMod.ModPath;
@@ -246,7 +268,7 @@ namespace Ethereal.GUI.Pages
         }
 
 
-        private void ShowModSettings(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ShowModSettings(object sender, MouseButtonEventArgs e)
         {
 
         }
