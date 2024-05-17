@@ -120,13 +120,20 @@ namespace Ethereal.GUI.Pages
                 modBox.MouseDown += ModBox_MouseDown;
                 _ = ModPanel.Children.Add(modBox);
             }
+            int lastSelectedIndex = Core.config.Settings.LastSelectedMod;
 
-            if (ModPanel.Children.Count >= Core.config.Settings.LastSelectedMod)
+            if (lastSelectedIndex >= ModPanel.Children.Count)
             {
-                SelectedModControl = (ModControl)ModPanel.Children[Core.config.Settings.LastSelectedMod];
+                lastSelectedIndex = 0; 
+            }
+
+            if (ModPanel.Children.Count > 0)
+            {
+                SelectedModControl = (ModControl)ModPanel.Children[lastSelectedIndex];
                 SelectedModControl.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x6C, 0x75, 0x7D));
                 SetCurrentMod(SelectedModControl.currentMod);
             }
+
         }
 
 
