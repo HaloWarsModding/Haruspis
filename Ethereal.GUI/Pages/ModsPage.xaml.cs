@@ -124,7 +124,7 @@ namespace Ethereal.GUI.Pages
 
             if (lastSelectedIndex >= ModPanel.Children.Count)
             {
-                lastSelectedIndex = 0; 
+                lastSelectedIndex = 0;
             }
 
             if (ModPanel.Children.Count > 0)
@@ -174,6 +174,16 @@ namespace Ethereal.GUI.Pages
 
         private void UpdateInfo(Mod mod)
         {
+            BitmapImage bitmap = LoadBannerImage(mod);
+            ImgBanner.Source = bitmap;
+
+            UpdateModData(mod);
+
+            UpdateChangelog(mod);
+        }
+
+        private BitmapImage LoadBannerImage(Mod mod)
+        {
             BitmapImage bitmap = new();
             string bannerPath = mod.Banner;
             string path = string.Empty;
@@ -181,41 +191,57 @@ namespace Ethereal.GUI.Pages
             switch (bannerPath)
             {
                 case "":
-                    using (MemoryStream stream = new())
-                    {
-                        Properties.Resources.Background.Save(stream, ImageFormat.Png);
-                        stream.Position = 0;
-                        bitmap.BeginInit();
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.StreamSource = stream;
-                        bitmap.EndInit();
-                    }
+                    bitmap = LoadDefaultImage();
                     break;
                 case string bPath when bPath.StartsWith("ModData\\"):
                     path = Path.Combine(mod.ModPath, bPath["ModData\\".Length..]);
-                    goto case "file";
+                    bitmap = LoadImageFromFile(path);
+                    break;
                 case string bPath when File.Exists(bPath):
                     path = bPath;
-                    goto case "file";
-                case "file":
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        using Image image = Image.FromFile(path);
-                        using MemoryStream stream = new();
-                        image.Save(stream, ImageFormat.Png);
-                        stream.Position = 0;
-                        bitmap.BeginInit();
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.StreamSource = stream;
-                        bitmap.EndInit();
-                    }
+                    bitmap = LoadImageFromFile(path);
                     break;
                 default:
                     break;
             }
 
-            ImgBanner.Source = bitmap;
+            return bitmap;
+        }
 
+        private BitmapImage LoadDefaultImage()
+        {
+            BitmapImage bitmap = new();
+            using (MemoryStream stream = new())
+            {
+                Properties.Resources.Background.Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+            }
+            return bitmap;
+        }
+
+        private BitmapImage LoadImageFromFile(string path)
+        {
+            BitmapImage bitmap = new();
+            if (!string.IsNullOrEmpty(path))
+            {
+                using Image image = Image.FromFile(path);
+                using MemoryStream stream = new();
+                image.Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+            }
+            return bitmap;
+        }
+
+        private void UpdateModData(Mod mod)
+        {
             string dataPath = mod.DataPath;
             ETHData data = new();
 
@@ -242,7 +268,10 @@ namespace Ethereal.GUI.Pages
                         ? "Yesterday"
                         : lastPlayed.ToString("d MMMM");
             LblDate.Content = lastPlayedString;
+        }
 
+        private void UpdateChangelog(Mod mod)
+        {
             string changelogPath = mod.ChangelogPath;
             switch (changelogPath)
             {
@@ -251,11 +280,20 @@ namespace Ethereal.GUI.Pages
                     ChangelogBox.Document = Utility.MarkdownToFlowDocument(File.ReadAllText(cPath));
                     break;
                 default:
-                    ChangelogGrid.Visibility = Visibility.Collapsed;
-                    ChangelogBox.Document = new System.Windows.Documents.FlowDocument();
+                    if (!string.IsNullOrEmpty(mod.Description))
+                    {
+                        ChangelogGrid.Visibility = Visibility.Visible;
+                        ChangelogBox.Document = Utility.MarkdownToFlowDocument(mod.Description);
+                    }
+                    else
+                    {
+                        ChangelogGrid.Visibility = Visibility.Collapsed;
+                        ChangelogBox.Document = new System.Windows.Documents.FlowDocument();
+                    }
                     break;
             }
         }
+
 
 
         #region Event Handlers

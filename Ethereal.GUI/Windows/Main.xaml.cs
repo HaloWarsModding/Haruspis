@@ -105,8 +105,6 @@ namespace Ethereal.GUI
             }
         }
 
-
-
         #region Header Handler's
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
@@ -131,7 +129,7 @@ namespace Ethereal.GUI
         }
         private void NotificationPopUp(object sender, MouseButtonEventArgs e)
         {
-            NotificationGrid.Visibility = Visibility.Visible;
+            NotificationBorder.Visibility = Visibility.Visible;
             if (NotificationGrid.Parent is UIElement parent)
                 parent.PreviewMouseDown += OutsideGridClickHandler;
 

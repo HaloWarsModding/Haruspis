@@ -217,14 +217,17 @@
             Source="/Pages/ModsPage.xaml" />
 
 
-        <Grid
-            x:Name="NotificationGrid"
+        <Border
+            x:Name="NotificationBorder"
             Width="392"
             Height="50"
             Margin="0,8,68,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="#FF18191B"
-            Visibility="Collapsed" />
+            CornerRadius="15"
+            Visibility="Collapsed">
+            <Grid x:Name="NotificationGrid" Background="Transparent" />
+        </Border>
     </Grid>
 </Window>

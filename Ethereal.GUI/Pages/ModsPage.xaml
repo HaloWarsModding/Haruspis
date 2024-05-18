@@ -134,7 +134,7 @@
                             x:Name="ChangelogBox"
                             MinWidth="1230"
                             MinHeight="560"
-                            Margin="15,50,15,15"
+                            Margin="15,15,15,15"
                             Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Focusable="False"
