@@ -26,8 +26,8 @@ namespace Ethereal.GUI
             Core.Initialize();
             LblVersion.Content = $"v{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}b";
 
-            Core.config.HaloWars.CurrentDistribution = Configuration.DistributionType.Steam;
-            Core.config.ToFile(Core.configPath);
+            Core.Config.HaloWars.CurrentDistribution = Configuration.DistributionType.Steam;
+            Core.Config.ToFile(Core.ConfigPath);
             ShowGameDetection();
             _ = CheckForUpdate();
         }
@@ -71,14 +71,14 @@ namespace Ethereal.GUI
 
         private static void ShowGameDetection()
         {
-            if (Core.config.HaloWars.Path != string.Empty)
+            if (Core.Config.HaloWars.Path != string.Empty)
             {
                 return;
             }
 
             if (MessageBox.Show("Ethereal can attempt to automatically detect the game by running it for a few seconds. \n(This feature is experimental and may not work)", "Game Detection", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                GameProcess.Instance.StartGame(Core.config.HaloWars.CurrentDistribution, true);
+                GameProcess.Instance.StartGame(Core.Config.HaloWars.CurrentDistribution, true);
                 GameProcess.Instance.StartMonitoring();
 
 
@@ -94,7 +94,7 @@ namespace Ethereal.GUI
 
                 if (dialog.ShowDialog().Value == true)
                 {
-                    Core.config.HaloWars.Path = dialog.FileName;
+                    Core.Config.HaloWars.Path = dialog.FileName;
                 }
                 else
                 {
@@ -160,11 +160,11 @@ namespace Ethereal.GUI
 
             if (result.HasValue && result.Value)
             {
-                await MoveFolder(folderDialog.SelectedPath, Core.config.Mods.Path);
+                await MoveFolder(folderDialog.SelectedPath, Core.Config.Mods.Path);
 
                 if (MainFrame.Content is ModsPage page)
                 {
-                    page.InitializeModList();
+                    page.PopulateModList();
                 }
             }
         }

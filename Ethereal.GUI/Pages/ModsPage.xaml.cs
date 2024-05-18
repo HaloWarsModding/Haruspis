@@ -1,15 +1,11 @@
-﻿using System.Drawing.Imaging;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using Ethereal.GUI.Pages.Mods.UserControls;
-
-using Image = System.Drawing.Image;
 
 namespace Ethereal.GUI.Pages
 {
@@ -17,7 +13,7 @@ namespace Ethereal.GUI.Pages
     {
         public static event EventHandler<ModChangedEventArgs> ModChanged;
         public readonly List<Mod> Mods = [];
-        public static ModControl selectedModControl;
+        public static ModControl SelectedModControl;
 
         private readonly DispatcherTimer timer = new();
         private bool wasGameRunning = false;
@@ -25,22 +21,15 @@ namespace Ethereal.GUI.Pages
         public ModsPage()
         {
             InitializeComponent();
+            PopulateModList();
 
-
-            try
-            {
-                InitializeModList();
-
-                ModChanged += ModsPage_ModChanged;
-                timer.Interval = TimeSpan.FromSeconds(0.01);
-                timer.Tick += Timer_Tick;
-                timer.Start();
-
-            }
-            catch (Exception ex) { Logger.Log(LogLevel.Error, ex.Message); }
+            ModChanged += ModsPage_ModChanged;
+            timer.Interval = TimeSpan.FromSeconds(0.01);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
-        private void Timer_Tick(object sender, object e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             BtnStart.IsEnabled = !Core.IsGameRunning;
             BtnStart.Content = Core.IsGameRunning ? "Launched" : "Launch";
@@ -49,7 +38,7 @@ namespace Ethereal.GUI.Pages
             {
                 if (wasGameRunning && !Core.IsGameRunning)
                 {
-                    UpdateInfo(SelectedModControl.currentMod);
+                    UpdateInfo(SelectedModControl.CurrentMod);
                 }
 
                 wasGameRunning = Core.IsGameRunning;
@@ -61,30 +50,41 @@ namespace Ethereal.GUI.Pages
             UpdateInfo(e.ChangedMod);
         }
 
-        public async void InitializeModList()
+        public async void PopulateModList()
         {
-            ModPanel.Children.Clear();
             Mods.Clear();
 
-            Mod vanillaMod = new()
-            {
-                Name = "Halo Wars: Definitive Edition",
-                Description = "The Spirit of Fire is sent to the ruined planet Harvest to investigate Covenant activity, where Cutter learns that the Covenant has excavated something at the planet's northern pole. When the UNSC's main outpost on Harvest is captured, Cutter orders Forge to retake it. Soon after, Forge scouts the Covenant excavation and discovers that they, under the direction of the Arbiter, have discovered a Forerunner facility. Forge's troops defeat the Covenant forces before they can destroy the installation, and Anders arrives. She determines that the facility is an interstellar map, and recognizes a set of coordinates that points to the human colony of Arcadia.",
-                Author = "Ensemble Studios",
-                ModPath = Core.config.HaloWars.Path,
-
-            };
-
-            if (vanillaMod.ModPath != string.Empty)
-                vanillaMod.DataPath = Path.Combine(Path.GetDirectoryName(vanillaMod.ModPath), "data.eth");
-
-
+            Mod vanillaMod = CreateVanillaMod();
             Mods.Add(vanillaMod);
             SelectedModControl = null;
 
+            await LoadModsFromDirectories();
+
+            modPanelControl.InitializeModList(Mods);
+            modPanelControl.SelectLastMod(Core.Config.Settings.LastSelectedMod);
+
+            SelectedModControl = modPanelControl.SelectedModControl;
+        }
+
+        private static Mod CreateVanillaMod()
+        {
+            return new Mod
+            {
+                Name = "Halo Wars: Definitive Edition",
+                Description = "The Spirit of Fire is sent to the ruined planet Harvest to investigate Covenant activity...",
+                Author = "Ensemble Studios",
+                ModPath = Core.Config.HaloWars.Path,
+                DataPath = Core.Config.HaloWars.Path != string.Empty
+                           ? Path.Combine(Path.GetDirectoryName(Core.Config.HaloWars.Path), "data.eth")
+                           : string.Empty
+            };
+        }
+
+        private async Task LoadModsFromDirectories()
+        {
             await Task.Run(() =>
             {
-                foreach (string directoryPath in Directory.EnumerateDirectories(Core.config.Mods.Path))
+                foreach (string directoryPath in Directory.EnumerateDirectories(Core.Config.Mods.Path))
                 {
                     Mod mod = new();
                     mod.FromPath(directoryPath);
@@ -95,58 +95,6 @@ namespace Ethereal.GUI.Pages
                     }
                 }
             });
-
-            foreach (Mod mod in Mods)
-            {
-                ModControl modBox = new(mod);
-                modBox.MouseDown += ModBox_MouseDown;
-                _ = ModPanel.Children.Add(modBox);
-            }
-            int lastSelectedIndex = Core.config.Settings.LastSelectedMod;
-
-            if (lastSelectedIndex >= ModPanel.Children.Count)
-            {
-                lastSelectedIndex = 0;
-            }
-
-            if (ModPanel.Children.Count > 0)
-            {
-                SelectedModControl = (ModControl)ModPanel.Children[lastSelectedIndex];
-                SelectedModControl.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x6C, 0x75, 0x7D));
-                SetCurrentMod(SelectedModControl.currentMod);
-            }
-
-        }
-
-
-        private void ModBox_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ModControl clickedModControl = (ModControl)sender;
-
-            if (clickedModControl != SelectedModControl)
-            {
-                SelectedModControl?.ResetBackgroundColor();
-
-                clickedModControl.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x6C, 0x75, 0x7D));
-
-                SelectedModControl = clickedModControl;
-
-                SetCurrentMod(clickedModControl.currentMod);
-                Core.config.Settings.LastSelectedMod = ModPanel.Children.IndexOf(clickedModControl);
-                Core.config.ToFile(Core.configPath);
-            }
-        }
-
-
-        public static ModControl SelectedModControl
-        {
-            get => selectedModControl;
-            set
-            {
-                selectedModControl?.ResetBackgroundColor();
-
-                selectedModControl = value;
-            }
         }
 
         public static void SetCurrentMod(Mod mod)
@@ -156,69 +104,11 @@ namespace Ethereal.GUI.Pages
 
         private void UpdateInfo(Mod mod)
         {
-            BitmapImage bitmap = LoadBannerImage(mod);
+            BitmapImage bitmap = ImageProcessing.LoadBannerImage(mod);
             ImgBanner.Source = bitmap;
 
             UpdateModData(mod);
-
             UpdateChangelog(mod);
-        }
-
-        private static BitmapImage LoadBannerImage(Mod mod)
-        {
-            BitmapImage bitmap = new();
-            string bannerPath = mod.Banner;
-            string path;
-            switch (bannerPath)
-            {
-                case "":
-                    bitmap = LoadDefaultImage();
-                    break;
-                case string bPath when bPath.StartsWith("ModData\\"):
-                    path = Path.Combine(mod.ModPath, bPath["ModData\\".Length..]);
-                    bitmap = LoadImageFromFile(path);
-                    break;
-                case string bPath when File.Exists(bPath):
-                    path = bPath;
-                    bitmap = LoadImageFromFile(path);
-                    break;
-                default:
-                    break;
-            }
-
-            return bitmap;
-        }
-
-        private static BitmapImage LoadDefaultImage()
-        {
-            BitmapImage bitmap = new();
-            using (MemoryStream stream = new())
-            {
-                Properties.Resources.Background.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.StreamSource = stream;
-                bitmap.EndInit();
-            }
-            return bitmap;
-        }
-
-        private static BitmapImage LoadImageFromFile(string path)
-        {
-            BitmapImage bitmap = new();
-            if (!string.IsNullOrEmpty(path))
-            {
-                using Image image = Image.FromFile(path);
-                using MemoryStream stream = new();
-                image.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.StreamSource = stream;
-                bitmap.EndInit();
-            }
-            return bitmap;
         }
 
         private void UpdateModData(Mod mod)
@@ -234,55 +124,45 @@ namespace Ethereal.GUI.Pages
 
             data.FromFile(dataPath);
 
-            TimeSpan playTime = data.Data.PlayTime;
-            playTimeControl.UpdatePlayTime(playTime);
-
-            DateTime lastPlayed = data.Data.LastPlayed;
-            lastPlayedControl.UpdateLastPlayedDate(lastPlayed);
+            playTimeControl.UpdatePlayTime(data.Data.PlayTime);
+            lastPlayedControl.UpdateLastPlayedDate(data.Data.LastPlayed);
         }
 
         private static void UpdateChangelog(Mod mod)
         {
             string changelogPath = mod.ChangelogPath;
-            switch (changelogPath)
+
+            if (!string.IsNullOrEmpty(changelogPath) && File.Exists(changelogPath))
             {
-                case string cPath when File.Exists(cPath):
-                    break;
-                default:
-                    if (!string.IsNullOrEmpty(mod.Description))
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
-                    break;
+                // Load and display the changelog
+            }
+            else if (!string.IsNullOrEmpty(mod.Description))
+            {
+                // Display the description as a fallback
             }
         }
-
-
 
         #region Event Handlers
         private void LaunchGame(object sender, RoutedEventArgs e)
         {
-            string modName = SelectedModControl.currentMod.Name;
-            string modPath = SelectedModControl.currentMod.ModPath;
+            if (SelectedModControl == null) return;
 
-            Core.manifest.Content = modName == "Halo Wars: Definitive Edition" ? string.Empty : modPath;
-            Core.config.Mods.LastPlayedMod = modName == "Halo Wars: Definitive Edition" ? "Vanilla" : modName;
+            string modName = SelectedModControl.CurrentMod.Name;
+            string modPath = SelectedModControl.CurrentMod.ModPath;
 
-            Core.manifest.ToFile(Core.ManifestPath);
-            Core.config.ToFile(Core.configPath);
+            Core.Manifest.Content = modName == "Halo Wars: Definitive Edition" ? string.Empty : modPath;
+            Core.Config.Mods.LastPlayedMod = modName == "Halo Wars: Definitive Edition" ? "Vanilla" : modName;
 
-            GameProcess.Instance.StartGame(Core.config.HaloWars.CurrentDistribution, false);
+            Core.Manifest.ToFile(Core.ManifestPath);
+            Core.Config.ToFile(Core.ConfigPath);
+
+            GameProcess.Instance.StartGame(Core.Config.HaloWars.CurrentDistribution, false);
             GameProcess.Instance.StartMonitoring();
         }
 
-
         private void ShowModSettings(object sender, MouseButtonEventArgs e)
         {
-
+            // Implement the event handler logic
         }
         #endregion
     }

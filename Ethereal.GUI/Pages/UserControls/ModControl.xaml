@@ -11,8 +11,7 @@
     mc:Ignorable="d">
     <Grid
         Width="252"
-        Cursor="Hand"
-        PreviewMouseLeftButtonDown="SelectMod">
+        Cursor="Hand">
         <Image
             x:Name="ImgMod"
             Width="32"

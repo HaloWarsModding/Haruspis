@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
 
 using Ethereal.Logging;
 using Ethereal.Utils;
@@ -14,7 +16,7 @@ namespace Ethereal.HaloWars
         public string Version { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
         public string Banner { get; set; } = string.Empty;
-        public string ChangelogPath {  get; set; } = string.Empty;
+        public string ChangelogPath { get; set; } = string.Empty;
         public string ModPath { get; set; } = string.Empty;
         public string DataPath { get; set; } = string.Empty;
         public string HWModPath { get; set; } = string.Empty;
@@ -22,6 +24,7 @@ namespace Ethereal.HaloWars
         public string CustomSavePath { get; set; } = string.Empty;
         public bool IsMod { get; set; } = true;
         #endregion
+
         #region Medstar's .hwmod
         public class HWMod
         {
@@ -34,6 +37,7 @@ namespace Ethereal.HaloWars
             public required RequiredData RequiredData { get; set; }
             public OptionalData? OptionalData { get; set; }
         }
+
         public class RequiredData
         {
             [XmlAttribute("Title")]
@@ -45,6 +49,7 @@ namespace Ethereal.HaloWars
             [XmlAttribute("Version")]
             public required string Version { get; set; }
         }
+
         public class OptionalData
         {
             public string? BannerArt { get; set; }
@@ -56,7 +61,6 @@ namespace Ethereal.HaloWars
         public void FromPath(string path)
         {
             ModPath = path;
-
             Logger.Log(LogLevel.Information, $"Loading mod from path: {ModPath}");
 
             if (!Directory.Exists(ModPath))
@@ -73,7 +77,6 @@ namespace Ethereal.HaloWars
             }
 
             Logger.Log(LogLevel.Information, "Mod is valid.");
-
             IsMod = true;
 
             HandleModData();
@@ -87,7 +90,6 @@ namespace Ethereal.HaloWars
         private bool IsValid()
         {
             DirectoryInfo info = new(ModPath);
-
             bool isValid = !info.Name.StartsWith('.');
 
             if (!isValid)
@@ -97,9 +99,10 @@ namespace Ethereal.HaloWars
 
             return isValid;
         }
+
         private void HandleEmpty()
         {
-            if (Name == string.Empty)
+            if (string.IsNullOrEmpty(Name))
             {
                 DirectoryInfo info = new(ModPath);
 
@@ -114,22 +117,26 @@ namespace Ethereal.HaloWars
                 Logger.Log(LogLevel.Information, "Mod name set from the directory name.");
             }
         }
+
         private void HandleModData()
         {
             string modDataPath = Path.Combine(ModPath, "ModData");
 
             if (!Directory.Exists(modDataPath))
             {
+                Logger.Log(LogLevel.Warning, "ModData directory does not exist.");
                 return;
             }
 
             ModPath = modDataPath;
             Logger.Log(LogLevel.Information, "Mod data directory found and set as the mod path.");
         }
+
         private void CompatibilityPatch()
         {
             if (Path.GetFileName(ModPath) != "ModData")
             {
+                Logger.Log(LogLevel.Information, "Mod path is not ModData. No compatibility patch needed.");
                 return;
             }
 

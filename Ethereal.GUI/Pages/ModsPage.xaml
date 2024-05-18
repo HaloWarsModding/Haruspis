@@ -15,20 +15,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-
         <Grid Grid.Column="1">
-            <Grid
-                Grid.Column="0"
-                Width="252"
-                HorizontalAlignment="Left"
-                Background="#BF0C0D0E">
-                <ScrollViewer
-                    Width="252"
-                    HorizontalAlignment="Left"
-                    VerticalScrollBarVisibility="Auto">
-                    <WrapPanel x:Name="ModPanel" />
-                </ScrollViewer>
-            </Grid>
             <Image
                 x:Name="ImgBanner"
                 Height="240"
@@ -86,7 +73,14 @@
                 Margin="434,225,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top" />
-            <UserControls:PlayTimeControl x:Name="playTimeControl" HorizontalAlignment="Left" Margin="533,225,0,0" VerticalAlignment="Top"/>
+            <UserControls:PlayTimeControl
+                x:Name="playTimeControl"
+                Margin="533,225,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top" />
+            <UserControls:ModListControl x:Name="modPanelControl"
+                Width="252"
+                HorizontalAlignment="Left" />
 
         </Grid>
     </Grid>

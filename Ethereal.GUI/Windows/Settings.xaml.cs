@@ -12,8 +12,8 @@ namespace Ethereal.GUI.Windows
         {
             InitializeComponent();
             page = modsPage;
-            ModsPathBox.Text = Core.config.Mods.Path;
-            ErrorReportCheck.IsChecked = Core.config.Settings.SendReportOnError;
+            ModsPathBox.Text = Core.Config.Mods.Path;
+            ErrorReportCheck.IsChecked = Core.Config.Settings.SendReportOnError;
         }
 
         private void DragWindow(object sender, MouseButtonEventArgs e)
@@ -26,12 +26,12 @@ namespace Ethereal.GUI.Windows
 
         private void CloseWindow(object sender, MouseButtonEventArgs e)
         {
-            Core.config.Mods.Path = ModsPathBox.Text;
-            Core.config.Settings.SendReportOnError = ErrorReportCheck.IsChecked ?? false;
+            Core.Config.Mods.Path = ModsPathBox.Text;
+            Core.Config.Settings.SendReportOnError = ErrorReportCheck.IsChecked ?? false;
 
 
-            Core.config.ToFile(Core.configPath);
-            page.InitializeModList();
+            Core.Config.ToFile(Core.ConfigPath);
+            page.PopulateModList();
             Close();
         }
     }
