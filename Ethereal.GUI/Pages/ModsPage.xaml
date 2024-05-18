@@ -65,30 +65,6 @@
             </Button>
 
             <Grid
-                Width="116"
-                Height="30"
-                Margin="533,225,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Background="#FF0C0D0E">
-                <Label
-                    x:Name="LblTime"
-                    Width="86"
-                    Margin="26,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Content="0.0 Hours"
-                    Foreground="White" />
-                <Image
-                    Width="20"
-                    Height="19"
-                    Margin="6,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Source="/Assets/Icons/Time.png" />
-            </Grid>
-
-            <Grid
                 Width="26"
                 Height="24"
                 Margin="0,227,26,0"
@@ -110,6 +86,7 @@
                 Margin="434,225,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top" />
+            <UserControls:PlayTimeControl x:Name="playTimeControl" HorizontalAlignment="Left" Margin="533,225,0,0" VerticalAlignment="Top"/>
 
         </Grid>
     </Grid>

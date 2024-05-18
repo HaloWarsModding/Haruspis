@@ -235,10 +235,7 @@ namespace Ethereal.GUI.Pages
             data.FromFile(dataPath);
 
             TimeSpan playTime = data.Data.PlayTime;
-            string playTimeString = playTime.TotalHours >= 1
-                ? $"{(int)playTime.TotalHours} Hours"
-                : playTime.TotalMinutes >= 1 ? $"{(int)playTime.TotalMinutes} Minutes" : "0 Hours";
-            LblTime.Content = playTimeString;
+            playTimeControl.UpdatePlayTime(playTime);
 
             DateTime lastPlayed = data.Data.LastPlayed;
             lastPlayedControl.UpdateLastPlayedDate(lastPlayed);
