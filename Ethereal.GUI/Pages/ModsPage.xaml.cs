@@ -25,8 +25,7 @@ namespace Ethereal.GUI.Pages
         public ModsPage()
         {
             InitializeComponent();
-            ChangelogScrollViewer.ScrollChanged += ChangelogScrollViewer_ScrollChanged;
-            ChangelogScrollBar.ValueChanged += ChangelogScrollBar_ValueChanged;
+
 
             try
             {
@@ -39,23 +38,6 @@ namespace Ethereal.GUI.Pages
 
             }
             catch (Exception ex) { Logger.Log(LogLevel.Error, ex.Message); }
-        }
-
-        private void ChangelogScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (ChangelogScrollViewer.ExtentHeight != 0)
-            {
-                ChangelogScrollBar.Maximum = ChangelogScrollViewer.ExtentHeight - ChangelogScrollViewer.ViewportHeight;
-                ChangelogScrollBar.Value = ChangelogScrollViewer.VerticalOffset;
-            }
-        }
-
-        private void ChangelogScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ChangelogScrollViewer.VerticalOffset != e.NewValue)
-            {
-                ChangelogScrollViewer.ScrollToVerticalOffset(e.NewValue);
-            }
         }
 
         private void Timer_Tick(object sender, object e)
@@ -182,12 +164,11 @@ namespace Ethereal.GUI.Pages
             UpdateChangelog(mod);
         }
 
-        private BitmapImage LoadBannerImage(Mod mod)
+        private static BitmapImage LoadBannerImage(Mod mod)
         {
             BitmapImage bitmap = new();
             string bannerPath = mod.Banner;
-            string path = string.Empty;
-
+            string path;
             switch (bannerPath)
             {
                 case "":
@@ -208,7 +189,7 @@ namespace Ethereal.GUI.Pages
             return bitmap;
         }
 
-        private BitmapImage LoadDefaultImage()
+        private static BitmapImage LoadDefaultImage()
         {
             BitmapImage bitmap = new();
             using (MemoryStream stream = new())
@@ -223,7 +204,7 @@ namespace Ethereal.GUI.Pages
             return bitmap;
         }
 
-        private BitmapImage LoadImageFromFile(string path)
+        private static BitmapImage LoadImageFromFile(string path)
         {
             BitmapImage bitmap = new();
             if (!string.IsNullOrEmpty(path))
@@ -260,35 +241,24 @@ namespace Ethereal.GUI.Pages
             LblTime.Content = playTimeString;
 
             DateTime lastPlayed = data.Data.LastPlayed;
-            string lastPlayedString = lastPlayed == DateTime.MinValue
-                ? "Never"
-                : lastPlayed.Date == DateTime.Today
-                    ? "Today"
-                    : lastPlayed.Date == DateTime.Today.AddDays(-1)
-                        ? "Yesterday"
-                        : lastPlayed.ToString("d MMMM");
-            LblDate.Content = lastPlayedString;
+            lastPlayedControl.UpdateLastPlayedDate(lastPlayed);
         }
 
-        private void UpdateChangelog(Mod mod)
+        private static void UpdateChangelog(Mod mod)
         {
             string changelogPath = mod.ChangelogPath;
             switch (changelogPath)
             {
                 case string cPath when File.Exists(cPath):
-                    ChangelogGrid.Visibility = Visibility.Visible;
-                    ChangelogBox.Document = Utility.MarkdownToFlowDocument(File.ReadAllText(cPath));
                     break;
                 default:
                     if (!string.IsNullOrEmpty(mod.Description))
                     {
-                        ChangelogGrid.Visibility = Visibility.Visible;
-                        ChangelogBox.Document = Utility.MarkdownToFlowDocument(mod.Description);
+
                     }
                     else
                     {
-                        ChangelogGrid.Visibility = Visibility.Collapsed;
-                        ChangelogBox.Document = new System.Windows.Documents.FlowDocument();
+
                     }
                     break;
             }

@@ -15,10 +15,14 @@ namespace Ethereal.GUI
         }
 
         [DllImport("user32.dll")]
+#pragma warning disable SYSLIB1054 
         private static extern bool SetProcessDPIAware();
+#pragma warning restore SYSLIB1054 
 
         [DllImport("shcore.dll")]
+#pragma warning disable SYSLIB1054 
         private static extern int SetProcessDpiAwareness(PROCESS_DPI_AWARENESS value);
+#pragma warning restore SYSLIB1054 
 
         private enum PROCESS_DPI_AWARENESS
         {
