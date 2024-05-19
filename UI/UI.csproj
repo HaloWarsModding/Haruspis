@@ -1,0 +1,151 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>Haruspis</AssemblyName>
+    <ApplicationIcon>Resources\App.ico</ApplicationIcon>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>none</ErrorReport>
+    <Title>Haruspis Mod Manager</Title>
+    <Version>$([System.DateTime]::Now.ToString("yyyy.MM.dd"))</Version>
+    <Company>HaloWarsModding</Company>
+    <Product>Project Haruspis</Product>
+    <Authors>CinderellaKuru</Authors>
+    <PackageProjectUrl>https://github.com/HaloWarsModding/Haruspis</PackageProjectUrl>
+    <PackageIcon>App.ico</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/HaloWarsModding/Haruspis</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <AssemblyVersion>$([System.DateTime]::Now.ToString("yyyy.MM.dd"))</AssemblyVersion>
+    <FileVersion>$([System.DateTime]::Now.ToString("yyyy.MM.dd"))</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>9999</WarningLevel>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>full</DebugType>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>9999</WarningLevel>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>full</DebugType>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>9999</WarningLevel>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebugType>full</DebugType>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>9999</WarningLevel>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Maximize.png" />
+    <None Remove="Minus.png" />
+    <None Remove="Plus.png" />
+    <None Remove="Resources\Background.png" />
+    <None Remove="Resources\Date.png" />
+    <None Remove="Resources\Maximize.png" />
+    <None Remove="Resources\Minus.png" />
+    <None Remove="Resources\NotifError.png" />
+    <None Remove="Resources\Notification.png" />
+    <None Remove="Resources\NotificationUp.png" />
+    <None Remove="Resources\NotifInformation.png" />
+    <None Remove="Resources\Plus.png" />
+    <None Remove="Resources\Time.png" />
+    <None Remove="Resources\Wrench.png" />
+    <None Remove="Resources\X.png" />
+    <None Remove="X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\App.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="SharpCompress" Version="0.37.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Discord\Discord.csproj" />
+    <ProjectReference Include="..\IO\IO.csproj" />
+    <ProjectReference Include="..\Process\Process.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Background.png" />
+    <Resource Include="Resources\Date.png" />
+    <Resource Include="Resources\Maximize.png" />
+    <Resource Include="Resources\Minus.png" />
+    <Resource Include="Resources\NotifError.png" />
+    <Resource Include="Resources\Notification.png" />
+    <Resource Include="Resources\NotificationUp.png" />
+    <Resource Include="Resources\NotifInformation.png" />
+    <Resource Include="Resources\Plus.png" />
+    <Resource Include="Resources\Time.png" />
+    <Resource Include="Resources\Wrench.png" />
+    <Resource Include="Resources\X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Common" />
+    <Using Include="Data" />
+    <Using Include="Discord" />
+    <Using Include="IO" />
+    <Using Include="Process" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\App.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

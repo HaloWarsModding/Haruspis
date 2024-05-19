@@ -1,24 +1,34 @@
-﻿<h1 align="center">Ethereal</h1>
+﻿<h1 align="center">Haruspis</h1>
 
 <p align="center">
   <img src="https://i.imgur.com/tM44Q2t.png" alt="Logo" width="128" height="128">
 </p>
 
 <p align="center">
-  A simple and efficient mod manager for Halo Wars: Definitive Edition
+  A mod manager for Halo Wars: Definitive Edition
 </p>
 
+### About
 
-## 💻 Development
+Haruspis is a mod manager designed specifically for **Halo Wars: Definitive Edition**. It provides a user-friendly interface to manage your mods, making it easy to install, organize, and switch between different mods seamlessly.
 
-Ethereal is built using C# and the .NET 8.0 framework. The user-friendly GUI is developed with WPF.
+### Development
 
+Haruspis is built using **C#** and the **.NET 8.0** framework. The graphical user interface (GUI) is developed with **Windows Presentation Foundation (WPF)**, ensuring a modern and intuitive user experience.
 
-## 🤝 Contributing
+### Contributing
 
-We welcome contributions from everyone. If you've got an idea or found a bug, please open an issue to discuss it before making a pull request.
+We welcome contributions from everyone. If you have an idea for a new feature or have found a bug, please open an issue to discuss it before making a pull request. Contributions help us improve Haruspis and make it more robust and feature-rich.
 
+###### How to Contribute
 
-## 📜 License
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a pull request to the `main` branch.
 
-This software is licensed under the MIT license. For more information, please refer to the `LICENSE.txt` file in the repository.
+###  License
+
+This software is licensed under the **MIT License**. For more information, please refer to the `LICENSE.txt` file in the repository.
