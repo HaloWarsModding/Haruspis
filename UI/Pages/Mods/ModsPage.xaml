@@ -29,7 +29,7 @@
             <Button
                 x:Name="BtnStart"
                 Width="148"
-                Height="50"
+                Height="50.2"
                 Margin="279,215,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
@@ -59,7 +59,8 @@
                 Margin="0,227,26,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Background="#FF0C0D0E" MouseEnter="ShowModSettings">
+                Background="#FF0C0D0E"
+                MouseEnter="ShowModSettings">
                 <Image
                     Width="16"
                     Height="16"
@@ -74,7 +75,7 @@
                 x:Name="lastPlayedControl"
                 Margin="434,225,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top" />
+                VerticalAlignment="Top" Width="90" />
             <UserControls:PlayTimeControl
                 x:Name="playTimeControl"
                 Margin="533,225,0,0"
@@ -88,12 +89,12 @@
             <Popup
                 x:Name="ModSettingPopUp"
                 Panel.ZIndex="100"
+                MouseLeave="HideModSettings"
                 Placement="MousePoint"
                 PopupAnimation="Slide"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 StaysOpen="True"
-                VerticalOffset="5" MouseLeave="HideModSettings">
-            </Popup>
+                VerticalOffset="5" />
 
         </Grid>
     </Grid>

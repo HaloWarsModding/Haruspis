@@ -20,15 +20,20 @@ namespace UI.Pages.Mods.UserControls
             set => SetValue(PlayTimeStringProperty, value);
         }
 
-        public void UpdatePlayTime(TimeSpan playTime)
+        public void UpdatePlayTime(long playTimeInSeconds)
         {
-            string playTimeString = playTime.TotalHours >= 1
-                ? $"{(int)playTime.TotalHours} Hours"
-                : playTime.TotalMinutes >= 1
-                    ? $"{(int)playTime.TotalMinutes} Minutes"
-                    : "0 Hours";
+            long hours = playTimeInSeconds / 3600;
+            long minutes = playTimeInSeconds % 3600 / 60;
+            long seconds = playTimeInSeconds % 60;
 
+            string playTimeString = hours >= 1
+                ? $"{hours} Hour{(hours > 1 ? "s" : string.Empty)}"
+                : minutes >= 1
+                    ? $"{minutes} Minute{(minutes > 1 ? "s" : string.Empty)}"
+                    : $"{seconds} Second{(seconds > 1 ? "s" : string.Empty)}";
             PlayTimeString = playTimeString;
         }
+
+
     }
 }

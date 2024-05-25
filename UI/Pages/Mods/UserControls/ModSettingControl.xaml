@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UI.Pages.Mods.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Height="96"
+    Height="130"
     d:DesignWidth="236"
     mc:Ignorable="d">
     <Grid Background="#FF0C0D0E">
@@ -34,6 +34,17 @@
                 Content="Modifiers"
                 Cursor="Hand"
                 Foreground="#FF7D7D7D" />
+            <Button
+                x:Name="BtnCompressMod"
+                Width="228"
+                Height="30"
+                Background="{x:Null}"
+                BorderBrush="{x:Null}"
+                Click="BtnCompressMod_Click"
+                Content="Compress"
+                Cursor="Hand"
+                Foreground="White"
+                RenderTransformOrigin="0.516,-0.744" />
             <Button
                 x:Name="BtnVersion"
                 Width="228"

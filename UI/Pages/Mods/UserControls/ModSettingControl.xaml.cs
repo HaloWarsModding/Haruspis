@@ -22,7 +22,7 @@ namespace UI.Pages.Mods.UserControls
             InitializeComponent();
             CurrentMod = mod;
             Page = modspage;
-            BtnVersion.Content = $"V{mod.Properties.Version}";
+            BtnVersion.Content = $"v{mod.Properties.Version}";
         }
 
         private void BtnDeleteMod_Click(object sender, RoutedEventArgs e)
@@ -35,5 +35,14 @@ namespace UI.Pages.Mods.UserControls
         {
 
         }
+
+        private void BtnCompressMod_Click(object sender, RoutedEventArgs e)
+        {
+            if (Application.Current.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.CompressMod(CurrentMod);
+            }
+        }
+
     }
 }

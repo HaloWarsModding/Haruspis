@@ -15,6 +15,9 @@ using SharpCompress.Common;
 
 using UI.Core;
 using UI.Pages.Mods;
+using UI.Pages.Workshop;
+
+using Mod = Data.Mod;
 
 namespace UI
 {
@@ -178,23 +181,21 @@ namespace UI
             /// </summary>
             private static void RecordTimers()
             {
-                string path = ModsPage.SelectedModControl.CurrentMod.Properties.DataPath;
-                InGameTimer data = new();
+                string modName = ModsPage.SelectedModControl.CurrentMod.Properties.Name;
+                string modVersion = ModsPage.SelectedModControl.CurrentMod.Properties.Version ?? "1.0.0";
 
-                if (!File.Exists(path))
-                {
-                    data.ToFile(path);
-                    return;
-                }
+                ModsDatabase data = new();
+                data.LoadData(modName, modVersion);
 
-                data.FromFile(path);
+                long playTimeInSeconds = (long)(DateTime.Now - _gameStartTime).TotalSeconds;
 
-                TimeSpan playTime = DateTime.Now - _gameStartTime;
-                data.Data.LastPlayed = DateTime.Now;
-                data.Data.PlayTime += playTime;
+                data.Data.LastPlayedDate = DateTime.Now;
+                data.Data.CurrentPlayTime += playTimeInSeconds;
 
-                data.ToFile(path);
+                data.SaveData();
             }
+
+
         }
     }
 
@@ -269,8 +270,42 @@ namespace UI
             Application.Current.Shutdown();
         }
 
+        public async void CompressMod(Mod mod)
+        {
+            string folderPath = mod.Properties.ModPath;
+
+            try
+            {
+                MainProgressBar.Visibility = Visibility.Visible;
+                MainProgressBarLabel.Content = "Compressing Mod...";
+
+                Progress<double> progressReporter = new(value =>
+                {
+                    _ = Dispatcher.Invoke(() => MainProgressBar.Value = value);
+                });
+
+                (bool success, string output, string error, double compressionProgress) = await Compacting.CompressFolderAsync(folderPath, progressReporter);
+
+                _ = success
+                    ? MessageBox.Show($"Compression successful. Progress: {compressionProgress}%\nOutput: {output}", "Success", MessageBoxButton.OK, MessageBoxImage.Information)
+                    : MessageBox.Show($"Compression failed. Error: {error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show($"An error occurred: {ex.Message}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                MainProgressBarLabel.Content = "";
+                MainProgressBar.Visibility = Visibility.Hidden;
+            }
+        }
+
+
+
         private async void AddMod(object sender, MouseButtonEventArgs e)
         {
+
             MessageBoxResult choice = MessageBox.Show("Do you want to select an archive (zip/rar)?", "Select Type", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
 
             if (choice == MessageBoxResult.Cancel)
@@ -329,26 +364,13 @@ namespace UI
                         string fileExtension = Path.GetExtension(sourcePath).ToLower();
                         if (fileExtension == ".zip")
                         {
-                            string extractPath = Path.Combine(Path.GetDirectoryName(sourcePath), Path.GetFileNameWithoutExtension(sourcePath));
-                            ZipFile.ExtractToDirectory(sourcePath, extractPath);
-                            File.Delete(sourcePath);
-                            sourcePath = extractPath;
+                            sourcePath = ExtractZipFile(sourcePath);
                         }
                         else if (fileExtension == ".rar")
                         {
-                            string extractPath = Path.Combine(Path.GetDirectoryName(sourcePath), Path.GetFileNameWithoutExtension(sourcePath));
-                            using (RarArchive archive = RarArchive.Open(sourcePath))
-                            {
-                                foreach (RarArchiveEntry entry in archive.Entries.Where(entry => !entry.IsDirectory))
-                                {
-                                    entry.WriteToDirectory(extractPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                                }
-                            }
-                            File.Delete(sourcePath);
-                            sourcePath = extractPath;
+                            sourcePath = ExtractRarFile(sourcePath);
                         }
                     }
-
 
                     if (Directory.Exists(sourcePath))
                     {
@@ -364,15 +386,49 @@ namespace UI
                 MainProgressBarLabel.Content = "";
                 MainProgressBar.Visibility = Visibility.Hidden;
             }
+
+        }
+
+
+        public static string ExtractZipFile(string sourcePath)
+        {
+            string extractPath = Path.Combine(Path.GetDirectoryName(sourcePath), Path.GetFileNameWithoutExtension(sourcePath));
+            if (!Directory.Exists(extractPath))
+            {
+                _ = Directory.CreateDirectory(extractPath);
+            }
+            ZipFile.ExtractToDirectory(sourcePath, extractPath);
+            File.Delete(sourcePath);
+            return extractPath;
+        }
+
+        public static string ExtractRarFile(string sourcePath)
+        {
+            string extractPath = Path.Combine(Path.GetDirectoryName(sourcePath), Path.GetFileNameWithoutExtension(sourcePath));
+            if (!Directory.Exists(extractPath))
+            {
+                _ = Directory.CreateDirectory(extractPath);
+            }
+            using (RarArchive archive = RarArchive.Open(sourcePath))
+            {
+                foreach (RarArchiveEntry entry in archive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory(extractPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                }
+            }
+            File.Delete(sourcePath);
+            return extractPath;
         }
 
         /// <summary>
         /// Shows the workshop page.
         /// </summary>
+        private readonly WorkshopPage workshop = new();
         private void ShowWorkshopPage(object sender, RoutedEventArgs e)
         {
-            // Implement workshop page navigation
+            MainFrame.Content = workshop;
         }
+
 
         /// <summary>
         /// Shows the settings page.
@@ -383,6 +439,12 @@ namespace UI
             // var settingsPage = new Settings(MainFrame.Content as ModsPage);
             // settingsPage.Closed += (s, args) => settingsPage = null;
             // settingsPage.ShowDialog();
+        }
+
+        private readonly ModsPage modsPage = new();
+        private void ShowModsPage(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = modsPage;
         }
     }
 }

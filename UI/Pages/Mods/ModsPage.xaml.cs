@@ -146,13 +146,12 @@ namespace UI.Pages.Mods
                 ModSettingControl modSettingControl = new(mod, this)
                 {
                     Width = 236,
-                    Height = 96,
+                    Height = 130,
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top
+                    VerticalAlignment = VerticalAlignment.Top,
+                    CurrentMod = mod,
+                    Page = this
                 };
-
-                modSettingControl.CurrentMod = mod;
-                modSettingControl.Page = this;
 
                 ModSettingPopUp.Child = modSettingControl;
             }
@@ -166,18 +165,16 @@ namespace UI.Pages.Mods
         /// </summary>
         private void UpdateModData(Mod mod)
         {
-            string dataPath = mod.Properties.DataPath;
-            InGameTimer data = new();
+            string modName = mod.Properties.Name;
+            string modVersion = mod.Properties.Version;
+            ModsDatabase data = new();
 
-            if (!File.Exists(dataPath))
-            {
-                data.ToFile(dataPath);
-                return;
-            }
+            // Load data from the database
+            data.LoadData(modName, modVersion);
 
-            data.FromFile(dataPath);
-            playTimeControl.UpdatePlayTime(data.Data.PlayTime);
-            lastPlayedControl.UpdateLastPlayedDate(data.Data.LastPlayed);
+            // Update play time and last played date controls
+            playTimeControl.UpdatePlayTime(data.Data.CurrentPlayTime);
+            lastPlayedControl.UpdateLastPlayedDate(data.Data.LastPlayedDate);
         }
 
         /// <summary>
@@ -196,6 +193,7 @@ namespace UI.Pages.Mods
                 // Display the description as a fallback
             }
         }
+
 
         #region Event Handlers
 

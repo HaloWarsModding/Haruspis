@@ -1,49 +1,85 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
 
 namespace IO
 {
-    internal partial class Compacting
+    public partial class Compacting
     {
-        [LibraryImport("kernel32.dll", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static partial bool Compact(
-            string lpFileName,
-            ushort CompressionType,
-            IntPtr lpReserved,
-            uint dwReserved
-        );
-
-        private const ushort COMPRESSION_FORMAT_XPRESS16K = 5;
-
-        public static (bool, string) CompressDirectory(string directoryPath)
+        public static async Task<(bool Success, string Output, string Error, double Progress)> CompressFolderAsync(string FolderPath, IProgress<double> progress)
         {
-            if (!Directory.Exists(directoryPath))
+            try
             {
-                return (false, "The specified directory does not exist.");
-            }
-
-            string[] files = Directory.GetFiles(directoryPath);
-            List<string> failedFiles = [];
-
-            foreach (string file in files)
-            {
-                if (!CompressFile(file))
+                if (!Directory.Exists(FolderPath))
                 {
-                    failedFiles.Add(file);
+                    return (false, string.Empty, "The directory does not exist.", 0);
+                }
+
+                string quotedFolderPath = $"\"{FolderPath}\"";
+
+                ProcessStartInfo processStartInfo = new()
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/C compact /c /i /s:{quotedFolderPath}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using Process process = new()
+                {
+                    StartInfo = processStartInfo
+                };
+
+                _ = process.Start();
+
+                // Periodically check the compression progress
+                Task progressTask = Task.Run(() =>
+                {
+                    while (!process.HasExited)
+                    {
+                        double progressValue = CalculateCompressionProgress(FolderPath);
+                        progress.Report(progressValue);
+                        Thread.Sleep(1000); // Check every second
+                    }
+                });
+
+                string output = await process.StandardOutput.ReadToEndAsync();
+                string error = await process.StandardError.ReadToEndAsync();
+
+                await process.WaitForExitAsync();
+                await progressTask; // Ensure progress task completes
+
+                if (process.ExitCode == 0)
+                {
+                    double finalProgress = CalculateCompressionProgress(FolderPath);
+                    return (true, output, string.Empty, finalProgress);
+                }
+                else
+                {
+                    return (false, string.Empty, error, 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, string.Empty, ex.Message, 0);
+            }
+        }
+
+        private static double CalculateCompressionProgress(string folderPath)
+        {
+            int totalFiles = Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories).Length;
+            int compressedFiles = 0;
+
+            foreach (string file in Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories))
+            {
+                FileInfo fileInfo = new(file);
+                if ((fileInfo.Attributes & FileAttributes.Compressed) != 0)
+                {
+                    compressedFiles++;
                 }
             }
 
-            return failedFiles.Count == 0
-                ? (true, "All files were successfully compressed.")
-                : (false, "Failed to compress the following files: " + string.Join(", ", failedFiles));
-        }
-
-        private static bool CompressFile(string filePath)
-        {
-            IntPtr lpReserved = IntPtr.Zero;
-            uint dwReserved = 0;
-
-            return Compact(filePath, COMPRESSION_FORMAT_XPRESS16K, lpReserved, dwReserved);
+            return totalFiles > 0 ? (double)compressedFiles / totalFiles * 100 : 0;
         }
     }
 }

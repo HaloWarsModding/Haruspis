@@ -91,6 +91,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="SharpCompress" Version="0.37.2" />
   </ItemGroup>
@@ -100,6 +101,7 @@
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Discord\Discord.csproj" />
     <ProjectReference Include="..\IO\IO.csproj" />
+    <ProjectReference Include="..\Nexus\Nexus.csproj" />
     <ProjectReference Include="..\Process\Process.csproj" />
   </ItemGroup>
 
