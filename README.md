@@ -1,3 +1,6 @@
+Commits are on PAUSE until DEV-13 is finished
+[DEV-13 : Rewrite Into Backend/Frontend](https://linear.app/haruspis/issue/DEV-13/rewrite-into-backendfrontend)
+
 ﻿<h1 align="center">Haruspis</h1>
 
 <p align="center">
